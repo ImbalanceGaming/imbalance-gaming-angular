@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html ng-app="baseApp">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Base Site</title>
+	<!-- meta tag needed for bootstrap to detect mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Styling -->
+	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap-theme.css">
+	<link rel="stylesheet" href="resources/css/style.css">
+
+	<!-- Main scripts -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/angular-route/angular-route.min.js"></script>
+	<script src="bower_components/angular-resource/angular-resource.min.js"></script>
+
+	<!-- App scripts -->
+	<script src="app/app.js"></script>
+	<!--<script src="app/controllers/homeController.js"></script>-->
+</head>
+
+<body ng-app="baseApp">
+
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" ui-sref="#">AngularUI Router</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a ui-sref="home">Home</a></li>
+            <li><a ui-sref="about">About</a></li>
+        </ul>
+    </nav>
+
+	<div class="container">
+        <div ng-view></div>
+    </div>
+</body>
+</html>
