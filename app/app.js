@@ -1,4 +1,4 @@
-var baseApp = angular.module('baseApp', ['ngRoute', 'ngResource', 'apiService']);
+var baseApp = angular.module('baseApp', ['ngRoute', 'ngResource', 'apiService', 'homeCtrl']);
 
 baseApp.config(['$routeProvider',
     function ($routeProvider) {
