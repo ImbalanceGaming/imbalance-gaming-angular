@@ -20,12 +20,12 @@ If installing with laravel.
 
 1. Setup laravel as described in the readme for the laravel base project.
 2. Go into the public folder.
-3. Run the below commands.  <br />
+3. Run the below commands. 
 ```
-    git init  <br />
-    git remote add origin git@github.com:ImbalanceGaming/<Repo Name>.git  <br />
-    git fetch  <br />
-    git checkout -t origin/master  <br />
+    git init  
+    git remote add origin git@github.com:ImbalanceGaming/<Repo Name>.git  
+    git fetch  
+    git checkout -t origin/master  
 ```
 4. Run **_bower install_**.
 
