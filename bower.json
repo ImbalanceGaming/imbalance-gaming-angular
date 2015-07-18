@@ -1,7 +1,7 @@
 {
   "name": "project_dependencies",
   "version": "0.0.1",
-  "homepage": "https://github.com/ImbalanceGaming/laravel-angular-base",
+  "homepage": "https://github.com/ImbalanceGaming",
   "authors": [
     "Christopher Pratt <chrispratt1985@gmail.com>"
   ],
@@ -10,7 +10,7 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
+    "lib",
     "test",
     "tests"
   ],
