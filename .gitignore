@@ -5,3 +5,7 @@ lib/
 tmp
 .DS_Store
 .idea
+.htaccess
+robots.txt
+favicon.ico
+index.php
