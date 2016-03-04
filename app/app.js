@@ -11,8 +11,8 @@ baseApp.config(['$routeProvider',
             });
     }
 ]).constant('config', {
-    'backendURL': 'http://192.168.0.20/base/',
-    'dev': 'public/index.php/',
+    'backendURL': 'http://192.168.0.10/imbalance/',
+    'devMode': true,
     'site': 'base',
     'version': 0.1
 });
