@@ -2,7 +2,8 @@ logs/*
 !.gitkeep
 node_modules/
 lib/
-a_old/
+typings/
+api/
 tmp
 .DS_Store
 .idea
