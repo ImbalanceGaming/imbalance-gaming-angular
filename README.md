@@ -1,34 +1,21 @@
-# Angular Base Project
-Base setup for projects using an angular frontend.
+# Angular Imbalance Project
+Angular frontend for Imbalance website.
 
-Make sure not to use this base project directly instead follow the instructions at [this page](https://help.github.com/articles/duplicating-a-repository/).
-This will create a duplicate of this repo in a new repo that wont effect this repo.
+Makes use of a REST API to get data and perform server side operations.
 
 ## Server Requirements
 * Node
 * npm
-* Bower
+
+## Development Requirements
+* IDE that understands typescript i.e. PhpStorm or MS Visual Studios.
 
 ## Installation
-If installing separate from laravel.
-
 1. Clone repo to desired location.
-2. Run **_bower install_**.
-3. Change config options in app.js.
-
-If installing with laravel.
-
-1. Setup laravel as described in the readme for the laravel base project.
-2. Go into the public folder.
-3. Run the below commands. 
-```
-    git init  
-    git remote add origin git@github.com:ImbalanceGaming/<Repo Name>.git  
-    git fetch  
-    git checkout -t origin/master  
-```
-4. Run **_bower install_**.
+2. Run **_npm install_**.
+3. Change the URL in the **_app/services/api.service.ts_** file to point to the correct point for the REST API.
+4. Run **_npm start_** to run the server that will compile the changes made then close it.
 
 ## Resources
-* [Angular docs](https://angularjs.org/)
-* [Bower docs](http://bower.io/)
+* [Angular 2 docs](https://angular.io/docs/ts/latest/)
+* [NPM docs](https://docs.npmjs.com/)

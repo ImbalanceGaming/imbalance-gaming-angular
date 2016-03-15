@@ -2,42 +2,54 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Base Site</title>
+    <title>IGMS</title>
 	<!-- meta tag needed for bootstrap to detect mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/imbalance/">
 
 	<!-- Styling -->
-	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap-theme.css">
-	<link rel="stylesheet" href="resources/css/style.css">
+	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap-theme.css">
+	<link rel="stylesheet" href="app/resources/css/style.css">
+	<link rel="stylesheet" href="app/resources/css/forms.css">
 
-	<!-- Main scripts -->
-    <script src="lib/jquery/dist/jquery.min.js"></script>
-    <script src="lib/angular/angular.min.js"></script>
-	<script src="lib/angular-route/angular-route.min.js"></script>
-	<script src="lib/angular-resource/angular-resource.min.js"></script>
+    <!-- IE required polyfills, in this exact order -->
+    <script src="node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
+    <script src="node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
 
-	<!-- App scripts -->
-	<script src="app/app.js"></script>
-	<script src="app/controllers/homeController.js"></script>
-	<script src="public/app/services/apiServices.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="node_modules/angular2/bundles/router.dev.js"></script>
+    <script src="node_modules/angular2/bundles/http.dev.js"></script>
+
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
+    <!-- 2. Configure SystemJS -->
+    <script>
+        System.config({
+            packages: {
+                app: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                }
+            },
+            map: {
+                'services/api.service' : 'app/services/api.service.js',
+                'services/user.service' : 'app/services/user.service.js',
+
+                'models/user' : 'app/models/user.js'
+            }
+        });
+        System.import('app/main')
+                .then(null, console.error.bind(console));
+    </script>
 </head>
 
-<body ng-app="baseApp">
-
-    <!-- NAVIGATION -->
-    <nav class="navbar navbar-inverse" role="navigation">
-        <div class="navbar-header">
-            <a class="navbar-brand" ui-sref="#">AngularUI Router</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a ui-sref="home">Home</a></li>
-            <li><a ui-sref="about">About</a></li>
-        </ul>
-    </nav>
-
-	<div class="container">
-        <div ng-view></div>
-    </div>
+<body>
+    <IGMS>Loading...</IGMS>
 </body>
 </html>

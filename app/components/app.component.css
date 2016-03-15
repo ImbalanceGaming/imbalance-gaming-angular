@@ -1,0 +1,17 @@
+.navbar-blue {
+    background: #0092FF none;
+}
+
+.navbar-blue a {
+    color: #FFFFFF;
+    font-size: 14px;
+}
+
+.navbar-blue .dropdown-menu li a {
+    color: #000000;
+    font-size: 14px;
+}
+
+.navbar-blue .navbar-brand {
+    font-size: 20px;
+}

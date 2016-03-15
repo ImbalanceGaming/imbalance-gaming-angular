@@ -2,6 +2,7 @@ logs/*
 !.gitkeep
 node_modules/
 lib/
+a_old/
 tmp
 .DS_Store
 .idea
