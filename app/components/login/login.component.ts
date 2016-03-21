@@ -1,27 +1,34 @@
 import {Component}  from 'angular2/core';
 import {NgForm}     from 'angular2/common';
-import {Router}     from 'angular2/router';
+import {Router, ROUTER_DIRECTIVES}     from 'angular2/router';
 
-import {UserService}    from 'services/user.service';
-import {ApiService}     from "services/api.service";
-import {User}           from "models/user";
+import {UserService}    from '../../services/user.service';
+import {ApiService}     from '../../services/api.service';
+import {User}           from '../../models/user';
+import {HelpersService} from "../../services/helpers.service";
 
 @Component({
     selector: 'my-login',
     templateUrl: 'app/components/login/login.component.html',
-    styleUrls: ['app/components/login/login.component.css']
+    styleUrls: ['app/components/login/login.component.css'],
+    directives: [ROUTER_DIRECTIVES]
 })
 
 export class LoginComponent {
 
     public title        : string;
-    public loginError   : any;
     public userPassword : string;
     public userEmail    : string;
+    public loginError   : any;
 
     private _submitted:boolean;
 
-    constructor(private _apiService:ApiService, private _router:Router, private _userService:UserService) {
+    constructor(
+        private _apiService:ApiService,
+        private _router:Router,
+        private _userService:UserService,
+        private _helpersService:HelpersService
+    ) {
         this.title = 'Login';
         this._submitted = false;
         this.loginError = {
@@ -31,32 +38,27 @@ export class LoginComponent {
 
     onSubmit() {
         this._submitted = true;
-        this._apiService.authenticate({email: this.userEmail, password: this.userPassword})
+        let data = {
+            email: this.userEmail,
+            password: this.userPassword
+        };
+
+        this._apiService.post('login', data)
             .subscribe(
                 data => this.saveJwt(data.token),
-                err => this.processErrors(err),
+                error => this.loginError = this._helpersService.processErrors(error),
                 () => this.loginError.error = false
             );
 
     }
 
-    private processErrors(err) {
-
-        this.loginError = {
-            error: true,
-            message: err.message,
-            code: err.code
-        };
-
-    }
-
     private saveJwt(jwt) {
-        if (jwt) {
-            localStorage.setItem('id_token', jwt);
-            this._apiService.getAuthenticatedUser()
+        if (jwt != null) {
+            localStorage.setItem('jwt', jwt);
+            this._apiService.getWithAuth('loginUser')
                 .subscribe(
                     data => this._userService.setBasicUserDetails(data),
-                    err => this.processErrors(err),
+                    error => this.loginError = this._helpersService.processErrors(error),
                     () => this._router.navigate(['Dashboard'])
                 );
         }

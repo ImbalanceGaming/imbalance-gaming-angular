@@ -1,80 +1,118 @@
-import {Component, View, OnInit} from 'angular2/core';
-import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Router} from 'angular2/router';
-import {HTTP_PROVIDERS} from 'angular2/http';
-import {AuthHttp, AuthConfig} from 'angular2-jwt';
+import {Component, OnInit, ViewEncapsulation}   from 'angular2/core';
+import {ROUTER_DIRECTIVES, Router, RouteConfig} from 'angular2/router';
 
-import {ApiService} from "services/api.service";
-import {UserService}    from 'services/user.service';
+import {ApiService}     from '../services/api.service';
+import {UserService}    from '../services/user.service';
+import {NavService}     from '../services/nav.service';
+import {ModuleService}  from '../services/module.service';
+import {HelpersService} from "../services/helpers.service";
 
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {LoginComponent} from "./login/login.component";
+import {DashboardComponent}         from './dashboard/dashboard.component';
+import {LoginComponent}             from './login/login.component';
+import {NavComponent}               from './navigation/nav.component';
+import {UserManagementComponent}    from './userManagement/user.management.component';
+import {RegistrationComponent}      from "./registration/registration.component";
+import {UserManagementComponent}    from "./userManagement/user.management.component";
+
+import {Module} from "../models/module";
+import {Menu}   from "../models/menu";
 
 @Component({
     selector: 'IGMS',
+    viewProviders: [NavService],
     templateUrl: 'app/components/app.component.html',
-    styleUrls: ['app/components/app.component.css'],
-    directives: [ROUTER_DIRECTIVES],
+    encapsulation: ViewEncapsulation.None,
+    directives: [
+        NavComponent,
+        ROUTER_DIRECTIVES
+    ],
     providers: [
-        ROUTER_PROVIDERS,
-        HTTP_PROVIDERS,
         ApiService,
-        UserService
+        UserService,
+        ModuleService,
+        HelpersService
     ]
 })
 
 @RouteConfig([
     {
         path: '/dashboard',
-        name: 'Dashboard',
-        component: DashboardComponent
+        as: 'Dashboard',
+        component: DashboardComponent,
+        useAsDefault: true
     },
     {
         path: '/login',
-        name: 'Login',
+        as: 'Login',
         component: LoginComponent
-    }
+    },
+    {
+        path: '/signup',
+        as: 'Signup',
+        component: RegistrationComponent
+    },
+    {
+        path: '/activate/:id',
+        as: 'Activate',
+        component: RegistrationComponent
+    },
+    {
+        path: '/usermanagement/...',
+        as: 'UserManagement',
+        component: UserManagementComponent
+    },
 ])
 
-export class AppComponent implements OnInit {
+//Main class for application
+export class AppComponent {
 
-    public title    : string;
-    public userKey  : any;
-    public loggedIn : boolean;
-    public error    : any;
+    public appRoutes : string[][];
+    public error     : any;
+    public user      : any;
 
-    constructor(private _apiService:ApiService, private _router: Router, private _userService:UserService) {
-        this.title = 'IGMS';
-        this.userKey = localStorage.getItem('id_token');
-        this.loggedIn = false;
+    constructor(
+        private _navService:NavService,
+        private _apiService:ApiService,
+        private _userService:UserService,
+        private _moduleService:ModuleService
+    ) {
+        this.appRoutes = this.getAppRoutes();
     }
 
     ngOnInit() {
-        //this._userService.user$.subscribe(user => this.user = user);
-        this.loggedInCheck();
+        this._userService.user$.subscribe(user => this.user = user);
+        this.getModules();
     }
 
-    private loggedInCheck() {
-        if (this.userKey == 'undefined' || this.userKey == null) {
-            this._router.navigate(['Login']);
-        } else {
-            this._apiService.getAuthenticatedUser()
-                .subscribe(
-                    data => this._userService.setBasicUserDetails(data),
-                    error => this._router.navigate(['Login']),
-                    () => {
-                        this._router.navigate(['Dashboard']);
-                        this.loggedIn = true;
-                    }
-                );
-        }
+    // Load information for modules
+    private getModules() {
+        this._apiService.get('modules')
+            .subscribe(
+                data => this._moduleService.createModules(data.data),
+                error => console.log(error)
+            );
     }
 
-    //getData() {
-    //    this._apiService.get('users').subscribe(
-    //        data => this.data = data,
-    //        err => console.error(err)
-    //    );
-    //}
+    // Needs further work to get the component part of the route converted from a string to a type
+    private buildMainMenus() {
+        this._moduleService.modules.forEach(function(module:Module) {
+            module.menus.forEach(function(menu:Menu) {
+                if (menu.link) {
+                    let route = {path: menu.link, component: window[menu.component], as: menu.name};
+                    console.log(route);
+                    this._navService.addRoute(this.constructor, route);
+                    this.appRoutes = this.getAppRoutes();
+                }
+            }, this);
+        }, this);
+    }
+
+    // Get routes currently set in the nav service
+    private getAppRoutes():string[][] {
+        return this._navService.getRoutes(this.constructor).configs.map(route => {
+                return {path: [`/${route.path}`], name: route.as};
+            });
+    }
 
 }
 

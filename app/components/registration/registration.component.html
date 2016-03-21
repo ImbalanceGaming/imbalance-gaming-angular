@@ -1,0 +1,77 @@
+<div [hidden]="regSuccess || activating" class="container reg">
+    <h3>{{title}}</h3>
+
+    <div [hidden]="!regError.error" class="alert alert-danger">
+        {{regError.message}}
+    </div>
+    <form class="reg-form" (ngSubmit)="onSubmit()" #regForm="ngForm">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input id="username" type="text" class="form-control" required [(ngModel)]="user.username" ngControl="username"
+                   #username="ngForm">
+
+            <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
+                Username is required
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" type="text" class="form-control" required [(ngModel)]="user.email" ngControl="email"
+                   #email="ngForm">
+
+            <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+                Email is required
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" class="form-control" required [(ngModel)]="regPassword"
+                   ngControl="password" #password="ngForm">
+
+            <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+                Password is required
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="forename">Forename</label>
+            <input id="forename" type="text" class="form-control" required [(ngModel)]="user.forename"
+                   ngControl="forename" #forename="ngForm">
+
+            <div [hidden]="forename.valid || forename.pristine" class="alert alert-danger">
+                Forename is required
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="surname">Surname</label>
+            <input id="surname" type="text" class="form-control" required [(ngModel)]="user.surname"
+                   ngControl="surname" #surname="ngForm">
+
+            <div [hidden]="surname.valid || surname.pristine" class="alert alert-danger">
+                Surname is required
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-default" [disabled]="!regForm.form.valid">Signup</button>
+        </div>
+    </form>
+</div>
+<div [hidden]="!regSuccess || activating" class="container reg">
+    <h3>{{title}}</h3>
+    <div class="alert alert-success">
+        Please check your email for activation link
+    </div>
+</div>
+<div [hidden]="!activating" class="container reg">
+    <h3>{{title}}</h3>
+    <div [hidden]="!regError.error" class="alert alert-danger">
+        {{regError.message}}
+    </div>
+    <div [hidden]="regError.error" class="alert alert-success">
+        Your account is now activated.
+    </div>
+</div>

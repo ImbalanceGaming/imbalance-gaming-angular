@@ -1,0 +1,17 @@
+<div class="container-fluid">
+    <div class="row header-row">
+        <div class="header col-md-12">
+            <h3>{{title}}</h3>
+        </div>
+    </div>
+    <div class="row user-management">
+        <div class="col-md-2 nav-row">
+            <a [routerLink]="['Users']">Users</a> <br />
+            <a href="#">Groups</a> <br />
+            <a href="#">Permissions</a> <br />
+        </div>
+        <div class="col-md-10">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

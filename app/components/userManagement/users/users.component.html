@@ -1,0 +1,142 @@
+<div class="row">
+    <div class="col-md-12">
+        <h4>Create new users</h4>
+    </div>
+    <div class="col-md-12">
+        <div class="row">
+            <div *ngFor="#message of messages" class="message col-md-5">
+                <div [hidden]="!message.error" class="alert alert-danger">
+                    {{message.error}}
+                </div>
+                <div [hidden]="!message.success" class="alert alert-success">
+                    {{message.success}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form class="users-form" (ngSubmit)="onSubmit()" #usersForm="ngForm" *ngIf="active">
+                    <div class="form-group form-inline">
+                        <label class="sr-only" for="user1Email">Email</label>
+                        <input id="user1Email" type="text" class="form-control" required ngControl="user1Email"
+                               #user1Email="ngForm" [(ngModel)]="user1.email" placeholder="Email Address">
+
+                        <label class="sr-only" for="user1Forename">Forename</label>
+                        <input id="user1Forename" type="text" class="form-control" required ngControl="user1Forename"
+                               #user1Forename="ngForm" [(ngModel)]="user1.forename" placeholder="Forename">
+
+                        <label class="sr-only" for="user1Surname">Surname</label>
+                        <input id="user1Surname" type="text" class="form-control" required ngControl="user1Surname"
+                               #user1Surname="ngForm" [(ngModel)]="user1.surname" placeholder="Surname">
+
+                        <div [hidden]="
+                    (user1Email.valid || user1Email.pristine) &&
+                    (user1Forename.valid || user1Forename.pristine) &&
+                    (user1Surname.valid || user1Surname.pristine)"
+                             class="alert alert-danger"
+                        >
+                            <div [hidden]="user1Email.valid || user1Email.pristine">
+                                Email is required
+                            </div>
+                            <div [hidden]="user1Forename.valid || user1Forename.pristine">
+                                Forename is required
+                            </div>
+                            <div [hidden]="user1Surname.valid || user1Surname.pristine">
+                                Surname is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label class="sr-only" for="user2Email">Email</label>
+                        <input id="user2Email" type="text" class="form-control" ngControl="user2Email"
+                               #user2Email="ngForm" [(ngModel)]="user2.email" placeholder="Email Address">
+
+                        <label class="sr-only" for="user2Forename">Forename</label>
+                        <input id="user2Forename" type="text" class="form-control" ngControl="user2Forename"
+                               #user2Forename="ngForm" [(ngModel)]="user2.forename" placeholder="Forename">
+
+                        <label class="sr-only" for="user2Surname">Surname</label>
+                        <input id="user2Surname" type="text" class="form-control" ngControl="user2Surname"
+                               #user2Surname="ngForm" [(ngModel)]="user2.surname" placeholder="Surname">
+
+                        <div [hidden]="
+                    (user2Email.valid || user2Email.pristine) &&
+                    (user2Forename.valid || user2Forename.pristine) &&
+                    (user2Surname.valid || user2Surname.pristine)"
+                             class="alert alert-danger"
+                        >
+                            <div [hidden]="user2Email.valid || user2Email.pristine">
+                                Email is required
+                            </div>
+                            <div [hidden]="user2Forename.valid || user2Forename.pristine">
+                                Forename is required
+                            </div>
+                            <div [hidden]="user2Surname.valid || user2Surname.pristine">
+                                Surname is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-inline">
+                        <label class="sr-only" for="user3Email">Email</label>
+                        <input id="user3Email" type="text" class="form-control" ngControl="user3Email"
+                               #user3Email="ngForm" [(ngModel)]="user3.email" placeholder="Email Address">
+
+                        <label class="sr-only" for="user3Forename">Forename</label>
+                        <input id="user3Forename" type="text" class="form-control" ngControl="user3Forename"
+                               #user3Forename="ngForm" [(ngModel)]="user3.forename" placeholder="Forename">
+
+                        <label class="sr-only" for="user3Surname">Surname</label>
+                        <input id="user3Surname" type="text" class="form-control" ngControl="user3Surname"
+                               #user3Surname="ngForm" [(ngModel)]="user3.surname" placeholder="Surname">
+
+                        <div [hidden]="
+                    (user3Email.valid || user3Email.pristine) &&
+                    (user3Forename.valid || user3Forename.pristine) &&
+                    (user3Surname.valid || user3Surname.pristine)"
+                             class="alert alert-danger"
+                        >
+                            <div [hidden]="user3Email.valid || user3Email.pristine">
+                                Email is required
+                            </div>
+                            <div [hidden]="user3Forename.valid || user3Forename.pristine">
+                                Forename is required
+                            </div>
+                            <div [hidden]="user3Surname.valid || user3Surname.pristine">
+                                Surname is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <td>Full Name</td>
+                    <td>Role</td>
+                    <td>Username</td>
+                    <td>Email</td>
+                    <td>Last Session</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="#user of users">
+                    <td><a [routerLink]="['UserDetail', {id: user.id}]">{{user.forename}} {{user.surname}}</a></td>
+                    <td>{{user.role}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.lastLogin}}</td>
+                    <td><a href="#">deactivate</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

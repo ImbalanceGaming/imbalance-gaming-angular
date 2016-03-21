@@ -1,0 +1,9 @@
+input {
+    width: 200px;
+}
+.users-form .alert {
+    max-width: 200px;
+}
+.messages .alert {
+
+}

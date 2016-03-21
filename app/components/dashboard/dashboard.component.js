@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'services/user.service'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../../services/user.service', "../../services/api.service", "../../common/auth-check"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,32 +10,50 @@ System.register(['angular2/core', 'services/user.service'], function(exports_1, 
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, user_service_1;
+    var core_1, router_1, user_service_1, api_service_1, auth_check_1;
     var DashboardComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
+            function (router_1_1) {
+                router_1 = router_1_1;
+            },
             function (user_service_1_1) {
                 user_service_1 = user_service_1_1;
+            },
+            function (api_service_1_1) {
+                api_service_1 = api_service_1_1;
+            },
+            function (auth_check_1_1) {
+                auth_check_1 = auth_check_1_1;
             }],
         execute: function() {
             DashboardComponent = (function () {
-                function DashboardComponent(_userService) {
+                function DashboardComponent(_userService, _apiService, _router) {
                     this._userService = _userService;
+                    this._apiService = _apiService;
+                    this._router = _router;
                     this.title = 'My Dashboard';
-                    this.user = this._userService.user;
                 }
+                DashboardComponent.prototype.ngOnInit = function () {
+                    var _this = this;
+                    this._userService.user$.subscribe(function (updatedUser) { return _this.user = updatedUser; });
+                    this._userService.loggedInCheck();
+                };
                 DashboardComponent = __decorate([
                     core_1.Component({
                         selector: 'my-dashboard',
-                        templateUrl: 'app/components/dashboard/dashboard.component.html'
+                        templateUrl: 'app/components/dashboard/dashboard.component.html',
+                        styleUrls: ['app/components/dashboard/dashboard.component.css']
+                    }),
+                    router_1.CanActivate(function (next, previous) {
+                        return auth_check_1.authCheck(next, previous);
                     }), 
-                    __metadata('design:paramtypes', [(typeof (_a = typeof user_service_1.UserService !== 'undefined' && user_service_1.UserService) === 'function' && _a) || Object])
+                    __metadata('design:paramtypes', [user_service_1.UserService, api_service_1.ApiService, router_1.Router])
                 ], DashboardComponent);
                 return DashboardComponent;
-                var _a;
             }());
             exports_1("DashboardComponent", DashboardComponent);
         }

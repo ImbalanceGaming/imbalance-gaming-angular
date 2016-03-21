@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'angular2/http', "services/api.service", 'services/user.service', './dashboard/dashboard.component', "./login/login.component"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../services/api.service', '../services/user.service', '../services/nav.service', '../services/module.service', "../services/helpers.service", './dashboard/dashboard.component', './login/login.component', './navigation/nav.component', './userManagement/user.management.component', "./registration/registration.component"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', 'angular2/http', "services/
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, http_1, api_service_1, user_service_1, dashboard_component_1, login_component_1;
+    var core_1, router_1, api_service_1, user_service_1, nav_service_1, module_service_1, helpers_service_1, dashboard_component_1, login_component_1, nav_component_1, user_management_component_1, registration_component_1;
     var AppComponent;
     return {
         setters:[
@@ -20,77 +20,123 @@ System.register(['angular2/core', 'angular2/router', 'angular2/http', "services/
             function (router_1_1) {
                 router_1 = router_1_1;
             },
-            function (http_1_1) {
-                http_1 = http_1_1;
-            },
             function (api_service_1_1) {
                 api_service_1 = api_service_1_1;
             },
             function (user_service_1_1) {
                 user_service_1 = user_service_1_1;
             },
+            function (nav_service_1_1) {
+                nav_service_1 = nav_service_1_1;
+            },
+            function (module_service_1_1) {
+                module_service_1 = module_service_1_1;
+            },
+            function (helpers_service_1_1) {
+                helpers_service_1 = helpers_service_1_1;
+            },
             function (dashboard_component_1_1) {
                 dashboard_component_1 = dashboard_component_1_1;
             },
             function (login_component_1_1) {
                 login_component_1 = login_component_1_1;
+            },
+            function (nav_component_1_1) {
+                nav_component_1 = nav_component_1_1;
+            },
+            function (user_management_component_1_1) {
+                user_management_component_1 = user_management_component_1_1;
+            },
+            function (registration_component_1_1) {
+                registration_component_1 = registration_component_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
-                function AppComponent(_apiService, _router, _userService) {
+                function AppComponent(_navService, _apiService, _userService, _moduleService) {
+                    this._navService = _navService;
                     this._apiService = _apiService;
-                    this._router = _router;
                     this._userService = _userService;
-                    this.title = 'IGMS';
-                    this.userKey = localStorage.getItem('id_token');
-                    this.loggedIn = false;
+                    this._moduleService = _moduleService;
+                    this.appRoutes = this.getAppRoutes();
                 }
                 AppComponent.prototype.ngOnInit = function () {
-                    //this._userService.user$.subscribe(user => this.user = user);
-                    this.loggedInCheck();
-                };
-                AppComponent.prototype.loggedInCheck = function () {
                     var _this = this;
-                    if (this.userKey == 'undefined' || this.userKey == null) {
-                        this._router.navigate(['Login']);
-                    }
-                    else {
-                        this._apiService.getAuthenticatedUser()
-                            .subscribe(function (data) { return _this._userService.setBasicUserDetails(data); }, function (error) { return _this._router.navigate(['Login']); }, function () {
-                            _this._router.navigate(['Dashboard']);
-                            _this.loggedIn = true;
-                        });
-                    }
+                    this._userService.user$.subscribe(function (user) { return _this.user = user; });
+                    this.getModules();
+                };
+                // Load information for modules
+                AppComponent.prototype.getModules = function () {
+                    var _this = this;
+                    this._apiService.get('modules')
+                        .subscribe(function (data) { return _this._moduleService.createModules(data.data); }, function (error) { return console.log(error); });
+                };
+                // Needs further work to get the component part of the route converted from a string to a type
+                AppComponent.prototype.buildMainMenus = function () {
+                    this._moduleService.modules.forEach(function (module) {
+                        module.menus.forEach(function (menu) {
+                            if (menu.link) {
+                                var route = { path: menu.link, component: window[menu.component], as: menu.name };
+                                console.log(route);
+                                this._navService.addRoute(this.constructor, route);
+                                this.appRoutes = this.getAppRoutes();
+                            }
+                        }, this);
+                    }, this);
+                };
+                // Get routes currently set in the nav service
+                AppComponent.prototype.getAppRoutes = function () {
+                    return this._navService.getRoutes(this.constructor).configs.map(function (route) {
+                        return { path: [("/" + route.path)], name: route.as };
+                    });
                 };
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'IGMS',
+                        viewProviders: [nav_service_1.NavService],
                         templateUrl: 'app/components/app.component.html',
-                        styleUrls: ['app/components/app.component.css'],
-                        directives: [router_1.ROUTER_DIRECTIVES],
+                        encapsulation: core_1.ViewEncapsulation.None,
+                        directives: [
+                            nav_component_1.NavComponent,
+                            router_1.ROUTER_DIRECTIVES
+                        ],
                         providers: [
-                            router_1.ROUTER_PROVIDERS,
-                            http_1.HTTP_PROVIDERS,
                             api_service_1.ApiService,
-                            user_service_1.UserService
+                            user_service_1.UserService,
+                            module_service_1.ModuleService,
+                            helpers_service_1.HelpersService
                         ]
                     }),
                     router_1.RouteConfig([
                         {
                             path: '/dashboard',
-                            name: 'Dashboard',
-                            component: dashboard_component_1.DashboardComponent
+                            as: 'Dashboard',
+                            component: dashboard_component_1.DashboardComponent,
+                            useAsDefault: true
                         },
                         {
                             path: '/login',
-                            name: 'Login',
+                            as: 'Login',
                             component: login_component_1.LoginComponent
-                        }
+                        },
+                        {
+                            path: '/signup',
+                            as: 'Signup',
+                            component: registration_component_1.RegistrationComponent
+                        },
+                        {
+                            path: '/activate/:id',
+                            as: 'Activate',
+                            component: registration_component_1.RegistrationComponent
+                        },
+                        {
+                            path: '/usermanagement/...',
+                            as: 'UserManagement',
+                            component: user_management_component_1.UserManagementComponent
+                        },
                     ]), 
-                    __metadata('design:paramtypes', [(typeof (_a = typeof api_service_1.ApiService !== 'undefined' && api_service_1.ApiService) === 'function' && _a) || Object, router_1.Router, (typeof (_b = typeof user_service_1.UserService !== 'undefined' && user_service_1.UserService) === 'function' && _b) || Object])
+                    __metadata('design:paramtypes', [nav_service_1.NavService, api_service_1.ApiService, user_service_1.UserService, module_service_1.ModuleService])
                 ], AppComponent);
                 return AppComponent;
-                var _a, _b;
             }());
             exports_1("AppComponent", AppComponent);
         }

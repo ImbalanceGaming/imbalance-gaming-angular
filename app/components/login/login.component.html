@@ -4,11 +4,11 @@
     <div [hidden]="!loginError.error" class="alert alert-danger">
         {{loginError.message}}
     </div>
-    <form class="login-form" (ngSubmit)="onSubmit()" #heroForm="ngForm">
+    <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
         <div class="form-group">
             <label for="email">Email</label>
             <input id="email" type="text" class="form-control" required [(ngModel)]="userEmail" ngControl="email"
-                   #email="ngForm">
+                   #email="ngForm" placeholder="Email">
 
             <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
                 Email is required
@@ -18,7 +18,7 @@
         <div class="form-group">
             <label for="password">Password</label>
             <input id="password" type="password" class="form-control" required [(ngModel)]="userPassword"
-                   ngControl="password" #password="ngForm">
+                   ngControl="password" #password="ngForm" placeholder="Password">
 
             <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
                 Password is required
@@ -26,13 +26,9 @@
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-default" [disabled]="!heroForm.form.valid">Login</button>
+            <button type="submit" class="btn btn-default" [disabled]="!loginForm.form.valid">Login</button>
         </div>
 
-        <div class="form-group">
-            <input type="checkbox"> Keep me logged in
-        </div>
-
-        <a href="#">Signup</a> | <a href="#">Reset Password</a>
+        <a [routerLink]="['Signup']">Signup</a> | <a href="#">Reset Password</a>
     </form>
 </div>

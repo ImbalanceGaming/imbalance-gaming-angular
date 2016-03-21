@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'services/user.service', "services/api.service"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../../services/user.service', '../../services/api.service', "../../services/helpers.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', 'services/user.service', "s
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, user_service_1, api_service_1;
+    var core_1, router_1, user_service_1, api_service_1, helpers_service_1;
     var LoginComponent;
     return {
         setters:[
@@ -25,13 +25,17 @@ System.register(['angular2/core', 'angular2/router', 'services/user.service', "s
             },
             function (api_service_1_1) {
                 api_service_1 = api_service_1_1;
+            },
+            function (helpers_service_1_1) {
+                helpers_service_1 = helpers_service_1_1;
             }],
         execute: function() {
             LoginComponent = (function () {
-                function LoginComponent(_apiService, _router, _userService) {
+                function LoginComponent(_apiService, _router, _userService, _helpersService) {
                     this._apiService = _apiService;
                     this._router = _router;
                     this._userService = _userService;
+                    this._helpersService = _helpersService;
                     this.title = 'Login';
                     this._submitted = false;
                     this.loginError = {
@@ -41,34 +45,31 @@ System.register(['angular2/core', 'angular2/router', 'services/user.service', "s
                 LoginComponent.prototype.onSubmit = function () {
                     var _this = this;
                     this._submitted = true;
-                    this._apiService.authenticate({ email: this.userEmail, password: this.userPassword })
-                        .subscribe(function (data) { return _this.saveJwt(data.token); }, function (err) { return _this.processErrors(err); }, function () { return _this.loginError.error = false; });
-                };
-                LoginComponent.prototype.processErrors = function (err) {
-                    this.loginError = {
-                        error: true,
-                        message: err.message,
-                        code: err.code
+                    var data = {
+                        email: this.userEmail,
+                        password: this.userPassword
                     };
+                    this._apiService.post('login', data)
+                        .subscribe(function (data) { return _this.saveJwt(data.token); }, function (error) { return _this.loginError = _this._helpersService.processErrors(error); }, function () { return _this.loginError.error = false; });
                 };
                 LoginComponent.prototype.saveJwt = function (jwt) {
                     var _this = this;
-                    if (jwt) {
-                        localStorage.setItem('id_token', jwt);
-                        this._apiService.getAuthenticatedUser()
-                            .subscribe(function (data) { return _this._userService.setBasicUserDetails(data); }, function (err) { return _this.processErrors(err); }, function () { return _this._router.navigate(['Dashboard']); });
+                    if (jwt != null) {
+                        localStorage.setItem('jwt', jwt);
+                        this._apiService.getWithAuth('loginUser')
+                            .subscribe(function (data) { return _this._userService.setBasicUserDetails(data); }, function (error) { return _this.loginError = _this._helpersService.processErrors(error); }, function () { return _this._router.navigate(['Dashboard']); });
                     }
                 };
                 LoginComponent = __decorate([
                     core_1.Component({
                         selector: 'my-login',
                         templateUrl: 'app/components/login/login.component.html',
-                        styleUrls: ['app/components/login/login.component.css']
+                        styleUrls: ['app/components/login/login.component.css'],
+                        directives: [router_1.ROUTER_DIRECTIVES]
                     }), 
-                    __metadata('design:paramtypes', [(typeof (_a = typeof api_service_1.ApiService !== 'undefined' && api_service_1.ApiService) === 'function' && _a) || Object, router_1.Router, (typeof (_b = typeof user_service_1.UserService !== 'undefined' && user_service_1.UserService) === 'function' && _b) || Object])
+                    __metadata('design:paramtypes', [api_service_1.ApiService, router_1.Router, user_service_1.UserService, helpers_service_1.HelpersService])
                 ], LoginComponent);
                 return LoginComponent;
-                var _a, _b;
             }());
             exports_1("LoginComponent", LoginComponent);
         }

@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'rxjs/Observable'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-jwt', 'angular2/router', '../common/headers'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable'], function(
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, Observable_1;
+    var core_1, http_1, Observable_1, angular2_jwt_1, router_1, headers_1;
     var ApiService;
     return {
         setters:[
@@ -22,14 +22,26 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable'], function(
             },
             function (Observable_1_1) {
                 Observable_1 = Observable_1_1;
+            },
+            function (angular2_jwt_1_1) {
+                angular2_jwt_1 = angular2_jwt_1_1;
+            },
+            function (router_1_1) {
+                router_1 = router_1_1;
+            },
+            function (headers_1_1) {
+                headers_1 = headers_1_1;
             }],
         execute: function() {
             ApiService = (function () {
-                function ApiService(http) {
+                function ApiService(http, _authHttp, _router) {
                     this.http = http;
-                    this._liveURL = 'http://192.168.0.2/imbalance/api/';
-                    this._devUrl = 'http://192.168.0.2/imbalance/api/public/index.php/api/';
+                    this._authHttp = _authHttp;
+                    this._router = _router;
+                    this._liveURL = 'https://api.imbalancegaming.com/';
+                    this._devUrl = 'https://192.168.0.2/imbalance/api/public/index.php/api/';
                     this._devMode = true;
+                    ApiService.router = this._router;
                     if (this._devMode) {
                         this._connectionUrl = this._devUrl;
                     }
@@ -40,41 +52,68 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable'], function(
                 ApiService.prototype.get = function (action) {
                     return this.http.get(this._connectionUrl + action)
                         .map(function (res) { return res.json(); })
-                        .do(function (data) { return console.log(data); }) // eyeball results in the console
-                        .catch(this.handleError);
+                        .catch(ApiService.handleError);
                 };
-                ApiService.prototype.authenticate = function (data) {
-                    var creds = "email=" + data.email + "&password=" + data.password;
-                    var headers = new http_1.Headers();
-                    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-                    //noinspection TypeScriptUnresolvedVariable
-                    return this.http.post(this._connectionUrl + 'login', creds, {
-                        headers: headers
-                    })
+                ApiService.prototype.post = function (action, data) {
+                    var body = JSON.stringify(data);
+                    return this.http.post(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })
                         .map(function (res) { return res.json(); })
-                        .catch(this.handleError);
+                        .catch(ApiService.handleError);
                 };
-                ApiService.prototype.getAuthenticatedUser = function () {
-                    var key = "token=" + localStorage.getItem('id_token');
-                    var headers = new http_1.Headers();
-                    //headers.append('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
-                    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-                    //noinspection TypeScriptUnresolvedVariable
-                    return this.http.post(this._connectionUrl + 'loginUser', key, {
-                        headers: headers
+                ApiService.prototype.getWithAuth = function (action) {
+                    return this._authHttp.get(this._connectionUrl + action, {
+                        headers: headers_1.contentHeaders
                     })
-                        .map(function (res) { return res.json(); })
-                        .catch(this.handleError);
+                        .map(function (res) { return ApiService.refreshToken(res); })
+                        .catch(ApiService.handleAuthError);
                 };
-                ApiService.prototype.handleError = function (error) {
-                    // in a real world app, we may send the error to some remote logging infrastructure
-                    // instead of just logging it to the console
+                ApiService.prototype.postWithAuth = function (action, data) {
+                    var body = JSON.stringify(data);
+                    return this._authHttp.post(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })
+                        .map(function (res) { return ApiService.refreshToken(res); })
+                        .catch(ApiService.handleAuthError);
+                };
+                ApiService.prototype.patch = function (action, data) {
+                    var body = JSON.stringify(data);
+                    return this._authHttp.patch(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })
+                        .map(function (res) { return ApiService.refreshToken(res); })
+                        .catch(ApiService.handleAuthError);
+                };
+                ApiService.handleError = function (error) {
                     //console.error(error);
                     return Observable_1.Observable.throw(error.json().error || 'Server error');
                 };
+                ApiService.handleAuthError = function (error) {
+                    // in a real world app, we may send the error to some remote logging infrastructure
+                    // instead of just logging it to the console
+                    //console.error(error);
+                    var errorMessage = error.json().error;
+                    switch (errorMessage) {
+                        case 'token_invalid':
+                            localStorage.removeItem('jwt');
+                            ApiService.router.navigate(['Login']);
+                            break;
+                        case 'token_expired':
+                            localStorage.removeItem('jwt');
+                            ApiService.router.navigate(['Login']);
+                            break;
+                        default:
+                            ApiService.refreshToken(error);
+                            break;
+                    }
+                    return Observable_1.Observable.throw(error.json().error || 'Server error');
+                };
+                ApiService.refreshToken = function (response) {
+                    var newToken = response.headers.get('Authorization');
+                    if (newToken != null) {
+                        newToken = newToken.split(' ').pop();
+                        localStorage.setItem('jwt', newToken);
+                    }
+                    return response.json();
+                };
                 ApiService = __decorate([
                     core_1.Injectable(), 
-                    __metadata('design:paramtypes', [http_1.Http])
+                    __metadata('design:paramtypes', [http_1.Http, angular2_jwt_1.AuthHttp, router_1.Router])
                 ], ApiService);
                 return ApiService;
             }());

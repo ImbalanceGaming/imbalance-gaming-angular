@@ -1,2 +1,70 @@
-<h1>{{title}}</h1>
-<h2>Hello {{user.email}}</h2>
+<div class="container-fluid">
+    <div class="row header-row">
+        <div class="header col-md-12">
+            <h3>{{title}}</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="left-bar col-md-2">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Widget Title</h3>
+                        </div>
+                        <div class="panel-body">
+                            Widget Content
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="center-bar col-md-8">
+            <div class="row">
+                <div class="col-md-6 ">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Widget Title</h3>
+                                </div>
+                                <div class="panel-body">
+                                    Widget Content <br />
+                                    Hello {{user?.forename}} {{user?.surname}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Widget Title</h3>
+                                </div>
+                                <div class="panel-body">
+                                    Widget Content
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right-bar col-md-2">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Widget Title</h3>
+                        </div>
+                        <div class="panel-body">
+                            Widget Content
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

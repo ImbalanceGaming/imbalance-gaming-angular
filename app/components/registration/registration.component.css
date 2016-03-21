@@ -1,0 +1,7 @@
+.reg {
+    width: 300px;
+    border: solid black 1px;
+}
+.reg-form {
+    margin-bottom: 20px;
+}
