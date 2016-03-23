@@ -1,17 +1,11 @@
 {
-  "name": "imblanceGaming",
-  "version": "0.0.1",
-  "scripts": {
-    "start": "concurrently \"npm run tsc:w\" \"npm run lite\" ",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
-    "lite": "lite-server",
-    "typings": "typings",
-    "postinstall": "typings install"
-  },
-  "license": "ISC",
+  "name": "imbalance-gaming-management-interface-angular-2",
+  "version": "0.0.2",
+  "description": "Angular 2 management frontend for Imbalance website.",
+  "main": "index.html",
   "dependencies": {
     "angular2": "2.0.0-beta.8",
+    "angular2-config": "^1.1.1",
     "angular2-jwt": "^0.1.8",
     "bootstrap": "~3.3.6",
     "es6-promise": "^3.0.2",
@@ -27,5 +21,23 @@
     "lite-server": "^2.1.0",
     "typescript": "^1.8.2",
     "typings": "^0.6.8"
+  },
+  "scripts": {
+    "start": "concurrently \"npm run tsc:w\" \"npm run lite\" ",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "lite": "lite-server",
+    "typings": "typings",
+    "postinstall": "typings install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ImbalanceGaming/imbalance-gaming-management-interface-angular-2.git"
+  },
+  "keywords": ["Angular 2, Imbalance, Gaming, Management, Interface"],
+  "author": "Christopher Pratt",
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/ImbalanceGaming/imbalance-gaming-management-interface-angular-2/issues"
   }
 }

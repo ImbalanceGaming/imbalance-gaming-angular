@@ -1,7 +1,7 @@
-System.register(['angular2/platform/browser', 'angular2/core', 'angular2/common', 'angular2/router', 'angular2/http', 'angular2-jwt', 'rxjs/Rx', './components/app.component', './common/app-injector'], function(exports_1, context_1) {
+System.register(['angular2/platform/browser', 'angular2/core', 'angular2/common', 'angular2/router', 'angular2/http', 'angular2-jwt', 'rxjs/Rx', './components/app.component', './common/app-injector', './config/config'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var browser_1, core_1, common_1, router_1, http_1, angular2_jwt_1, app_component_1, app_injector_1;
+    var browser_1, core_1, common_1, router_1, http_1, angular2_jwt_1, app_component_1, app_injector_1, config_1;
     return {
         setters:[
             function (browser_1_1) {
@@ -28,6 +28,9 @@ System.register(['angular2/platform/browser', 'angular2/core', 'angular2/common'
             },
             function (app_injector_1_1) {
                 app_injector_1 = app_injector_1_1;
+            },
+            function (config_1_1) {
+                config_1 = config_1_1;
             }],
         execute: function() {
             browser_1.bootstrap(app_component_1.AppComponent, [
@@ -46,6 +49,20 @@ System.register(['angular2/platform/browser', 'angular2/core', 'angular2/common'
                         }), http);
                     },
                     deps: [http_1.Http]
+                }),
+                core_1.provide('config', {
+                    useValue: {
+                        key1: 'value',
+                        visibleDropdowns: false,
+                        nested: {
+                            name: config_1.Config.properties.name,
+                            description: config_1.Config.properties.description,
+                            version: config_1.Config.properties.version,
+                            devMode: config_1.Config.properties.devMode,
+                            liveAPIUrl: config_1.Config.properties.liveAPIUrl,
+                            devAPIUrl: config_1.Config.properties.devAPIUrl
+                        }
+                    }
                 })
             ]).then(function (appRef) {
                 // store a reference to the application injector

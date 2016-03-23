@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-jwt', 'angular2/router', '../common/headers'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-jwt', 'angular2/router', '../common/headers', '../config/config'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, Observable_1, angular2_jwt_1, router_1, headers_1;
+    var core_1, http_1, Observable_1, angular2_jwt_1, router_1, headers_1, config_1;
     var ApiService;
     return {
         setters:[
@@ -31,6 +31,9 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-
             },
             function (headers_1_1) {
                 headers_1 = headers_1_1;
+            },
+            function (config_1_1) {
+                config_1 = config_1_1;
             }],
         execute: function() {
             ApiService = (function () {
@@ -38,9 +41,9 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-
                     this.http = http;
                     this._authHttp = _authHttp;
                     this._router = _router;
-                    this._liveURL = 'https://api.imbalancegaming.com/';
-                    this._devUrl = 'https://192.168.0.2/imbalance/api/public/index.php/api/';
-                    this._devMode = true;
+                    this._liveURL = config_1.Config.properties.liveAPIUrl;
+                    this._devUrl = config_1.Config.properties.devAPIUrl;
+                    this._devMode = config_1.Config.properties.devMode;
                     ApiService.router = this._router;
                     if (this._devMode) {
                         this._connectionUrl = this._devUrl;

@@ -1,5 +1,5 @@
 # Angular Imbalance Project
-Angular frontend for Imbalance website.
+Angular 2 management frontend for Imbalance website.
 
 Makes use of a REST API to get data and perform server side operations.
 
@@ -13,11 +13,11 @@ Makes use of a REST API to get data and perform server side operations.
 ## Installation
 1. Clone repo to desired location.
 2. Run **_npm install_**.
-3. Change the URL in the **_app/services/api.service.ts_** file to point to the correct point for the REST API.
-4. Run **_npm start_** to run the server that will compile the changes made, close the server once it is finished.
+3. Change the devAPIUrl property in the **_app/config/config.js_** file to point to the correct point for the REST API.
 
 ## Live Install
-No extra steps at present
+1. Change the liveAPIUrl property in the **_app/config/config.js_** file to point to the correct point for the REST API.
+2. Change the devMode property in the **_app/config/config.js_** file to true.
 
 ## Apache Config File
 See the apache example folder for info on setting up apache .conf files.

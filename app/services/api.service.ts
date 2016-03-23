@@ -1,19 +1,19 @@
-import {Injectable}                 from 'angular2/core';
-import {Http, Headers, Response}    from 'angular2/http';
-import {Observable}                 from 'rxjs/Observable';
-import {AuthHttp}                   from 'angular2-jwt';
-import {Router}                     from 'angular2/router';
+import {Injectable}     from 'angular2/core';
+import {Http, Response} from 'angular2/http';
+import {Observable}     from 'rxjs/Observable';
+import {AuthHttp}       from 'angular2-jwt';
+import {Router}         from 'angular2/router';
 
 import {contentHeaders} from '../common/headers';
-import {Headers} from "../../node_modules/angular2/ts/src/http/headers";
+import {Config}         from '../config/config';
 
 @Injectable()
 export class ApiService {
 
-    private _liveURL = 'https://api.imbalancegaming.com/';
-    private _devUrl = 'https://192.168.0.2/imbalance/api/public/index.php/api/';
+    private _liveURL = Config.properties.liveAPIUrl;
+    private _devUrl = Config.properties.devAPIUrl;
     private _connectionUrl : string;
-    private _devMode = true;
+    private _devMode = Config.properties.devMode;
     static router: Router;
 
     constructor(public http:Http, private _authHttp: AuthHttp, private _router:Router) {
