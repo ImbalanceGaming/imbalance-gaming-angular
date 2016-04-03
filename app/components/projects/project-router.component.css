@@ -1,0 +1,10 @@
+.projects {
+    height: 100%;
+}
+.nav-row {
+    border-right: solid 1px lightgray;
+    height: 100%;
+}
+.nav-row a {
+    font-size: 20px;
+}

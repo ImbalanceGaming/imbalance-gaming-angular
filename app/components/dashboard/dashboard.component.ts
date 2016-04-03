@@ -1,4 +1,4 @@
-import {Component, OnInit}      from 'angular2/core';
+import {Component}              from 'angular2/core';
 import {CanActivate, Router}    from 'angular2/router';
 
 import {User}           from '../../models/user';

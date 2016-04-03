@@ -1,0 +1,99 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3>{{title}}</h3>
+    </div>
+    <div class="col-md-12 form">
+        <div class="row">
+            <div class="col-md-4">
+                <message-controls></message-controls>
+                <dynamic-form
+                        *ngIf="formData.length > 0 && formButtonData.length > 0"
+                        [questions]="formData"
+                        [formButtonData]="formButtonData"
+                        (saveEmitter)="saveChanges($event)"
+                        (deleteEmitter)="deleteUser()"
+                        (cancelEmitter)="cancelEdit()"
+                ></dynamic-form>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="group.users.length > 0" class="col-md-8">
+        <h3>Users</h3>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <td colspan="6" class="table-button">
+                    <span class="pull-right">
+                        <dynamic-modal-form
+                                *ngIf="userModalFormData.length > 0"
+                                [modalHeader]="'Add User'"
+                                [buttonText]="'Add User'"
+                                [questions]="userModalFormData"
+                                [searchReturn]="userSearchReturn"
+                                (saveEmitter)="onAddUser($event)"
+                                (searchEmitter)="onUserSearch($event)"
+                        ></dynamic-modal-form>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Full Name</td>
+                <td>Role</td>
+                <td>Username</td>
+                <td>Email</td>
+                <td>Last Session</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="#user of group.users">
+                <td><a [routerLink]="['\UserDetail', {id: user.id}]">{{user.forename}} {{user.surname}}</a></td>
+                <td>{{user.role}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.last_login}}</td>
+                <td><a class="link-click" (click)="onRemoveUser(user.id)">remove</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="group.projects.length > 0" class="col-md-8">
+        <h3>Projects</h3>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <td colspan="5" class="table-button">
+                    <span class="pull-right">
+                        <dynamic-modal-form
+                                *ngIf="projectModalFormData.length > 0"
+                                [modalHeader]="'Add Project'"
+                                [buttonText]="'Add Project'"
+                                [questions]="projectModalFormData"
+                                [searchReturn]="projectSearchReturn"
+                                (saveEmitter)="onAddProject($event)"
+                                (searchEmitter)="onProjectSearch($event)"
+                        ></dynamic-modal-form>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Key</td>
+                <td>Name</td>
+                <td>Description</td>
+                <td>status</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="#project of group.projects">
+                <td><a [routerLink]="['/Projects', 'ProjectDetail', {id: project.id}]">{{project.key}}</a></td>
+                <td>{{project.name}}</td>
+                <td>{{project.description}}</td>
+                <td>{{project.status}}</td>
+                <td><a class="link-click" (click)="onRemoveProject(project.id)">remove</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

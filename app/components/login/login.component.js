@@ -57,7 +57,7 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
                     if (jwt != null) {
                         localStorage.setItem('jwt', jwt);
                         this._apiService.getWithAuth('loginUser')
-                            .subscribe(function (data) { return _this._userService.setBasicUserDetails(data); }, function (error) { return _this.loginError = _this._helpersService.processErrors(error); }, function () { return _this._router.navigate(['Dashboard']); });
+                            .subscribe(function (data) { return _this._userService.setUserDetails(data); }, function (error) { return _this.loginError = _this._helpersService.processErrors(error); }, function () { return _this._router.navigate(['Dashboard']); });
                     }
                 };
                 LoginComponent = __decorate([

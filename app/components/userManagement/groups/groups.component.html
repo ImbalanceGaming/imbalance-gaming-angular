@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-md-12">
+        <h4>Create new group</h4>
+    </div>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <message-controls></message-controls>
+
+                <form class="group-form" (ngSubmit)="onSubmit()" #groupForm="ngForm" *ngIf="active">
+                    <div class="form-group form-inline">
+                        <label class="sr-only" for="name">Group Name</label>
+                        <input id="name" type="text" class="form-control" required ngControl="name"
+                               #name="ngForm" [(ngModel)]="group.name" placeholder="Group Name">
+
+                        <label class="sr-only" for="description">Group Description</label>
+                        <input id="description" type="text" class="form-control" ngControl="description"
+                               #description="ngForm" [(ngModel)]="group.description" placeholder="Group Description">
+
+                        <div [hidden]="(name.valid || name.pristine)" class="alert alert-danger">
+                            <div [hidden]="name.valid || name.pristine">
+                                Group name is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <table-controls
+                (pageChange)="pageChanged($event)"
+        ></table-controls>
+    </div>
+</div>

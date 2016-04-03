@@ -1,5 +1,4 @@
-import {Component, OnInit}  from 'angular2/core';
-import {NgForm}     from 'angular2/common';
+import {Component}  from 'angular2/core';
 import {Router, RouteParams}     from 'angular2/router';
 
 import {UserService}    from '../../services/user.service';

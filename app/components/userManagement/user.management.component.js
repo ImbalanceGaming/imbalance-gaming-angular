@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../../services/user.service', "./users/users.component", "./users/userDetail/user-detail.component", "../../common/auth-check"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', "../../common/auth-check", '../../services/user.service', "./users/users.component", "./users/userDetail/user-detail.component", "./groups/groups.component", "./groups/groupDetail/group-detail.component"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, router_2, user_service_1, users_component_1, user_detail_component_1, auth_check_1;
+    var core_1, router_1, auth_check_1, user_service_1, users_component_1, user_detail_component_1, groups_component_1, group_detail_component_1;
     var UserManagementComponent;
     return {
         setters:[
@@ -19,7 +19,9 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
             },
             function (router_1_1) {
                 router_1 = router_1_1;
-                router_2 = router_1_1;
+            },
+            function (auth_check_1_1) {
+                auth_check_1 = auth_check_1_1;
             },
             function (user_service_1_1) {
                 user_service_1 = user_service_1_1;
@@ -30,8 +32,11 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
             function (user_detail_component_1_1) {
                 user_detail_component_1 = user_detail_component_1_1;
             },
-            function (auth_check_1_1) {
-                auth_check_1 = auth_check_1_1;
+            function (groups_component_1_1) {
+                groups_component_1 = groups_component_1_1;
+            },
+            function (group_detail_component_1_1) {
+                group_detail_component_1 = group_detail_component_1_1;
             }],
         execute: function() {
             UserManagementComponent = (function () {
@@ -41,21 +46,21 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
                 }
                 UserManagementComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    this._userService.user$.subscribe(function (updatedUser) { return _this.user = updatedUser; });
-                    this._userService.users$.subscribe(function (users) { return _this.users = users; });
+                    this._userService.user$.subscribe(function (updatedUser) { return _this._user = updatedUser; });
                     this._userService.loggedInCheck();
-                    this._userService.getUsers();
                 };
                 UserManagementComponent = __decorate([
                     core_1.Component({
                         selector: 'user-management',
                         templateUrl: 'app/components/userManagement/user.management.component.html',
                         styleUrls: ['app/components/userManagement/user.management.component.css'],
-                        directives: [router_2.RouterOutlet, router_2.ROUTER_DIRECTIVES]
+                        directives: [router_1.RouterOutlet, router_1.ROUTER_DIRECTIVES]
                     }),
-                    router_2.RouteConfig([
+                    router_1.RouteConfig([
                         { path: '/users', name: 'Users', component: users_component_1.UsersComponent, useAsDefault: true },
-                        { path: '/users/userDetail/:id', name: 'UserDetail', component: user_detail_component_1.UserDetail }
+                        { path: '/users/userDetail/:id', name: 'UserDetail', component: user_detail_component_1.UserDetail },
+                        { path: '/groups', name: 'Groups', component: groups_component_1.GroupsComponent },
+                        { path: '/groups/groupDetail/:id', name: 'GroupDetail', component: group_detail_component_1.GroupDetailComponent }
                     ]),
                     router_1.CanActivate(function (next, previous) {
                         return auth_check_1.authCheck(next, previous);

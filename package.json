@@ -4,22 +4,24 @@
   "description": "Angular 2 management frontend for Imbalance website.",
   "main": "index.html",
   "dependencies": {
-    "angular2": "2.0.0-beta.8",
+    "angular2": "^2.0.0-beta.8",
     "angular2-config": "^1.1.1",
     "angular2-jwt": "^0.1.8",
     "bootstrap": "~3.3.6",
     "es6-promise": "^3.0.2",
-    "es6-shim": "^0.33.3",
+    "es6-shim": "^0.35.0",
     "jquery": "~2.2.1",
+    "ng2-bs3-modal": "^0.4.2",
+    "ng2-pagination": "0.0.1-beta.3",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.2",
     "systemjs": "0.19.22",
-    "zone.js": "0.5.15"
+    "zone.js": "0.6.6"
   },
   "devDependencies": {
     "concurrently": "^2.0.0",
     "lite-server": "^2.1.0",
-    "typescript": "^1.8.2",
+    "typescript": "^1.8.9",
     "typings": "^0.6.8"
   },
   "scripts": {
@@ -34,9 +36,11 @@
     "type": "git",
     "url": "https://github.com/ImbalanceGaming/imbalance-gaming-management-interface-angular-2.git"
   },
-  "keywords": ["Angular 2, Imbalance, Gaming, Management, Interface"],
+  "keywords": [
+    "Angular 2, Imbalance, Gaming, Management, Interface"
+  ],
   "author": "Christopher Pratt",
-  "license": "GNU",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/ImbalanceGaming/imbalance-gaming-management-interface-angular-2/issues"
   }

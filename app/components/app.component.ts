@@ -1,18 +1,24 @@
-import {Component, OnInit, ViewEncapsulation}   from 'angular2/core';
-import {ROUTER_DIRECTIVES, Router, RouteConfig} from 'angular2/router';
+import {Component, ViewEncapsulation}   from 'angular2/core';
+import {ROUTER_DIRECTIVES, RouteConfig} from 'angular2/router';
 
-import {ApiService}     from '../services/api.service';
-import {UserService}    from '../services/user.service';
-import {NavService}     from '../services/nav.service';
-import {ModuleService}  from '../services/module.service';
-import {HelpersService} from "../services/helpers.service";
+import {ApiService}         from '../services/api.service';
+import {UserService}        from '../services/user.service';
+import {NavService}         from '../services/nav.service';
+import {ModuleService}      from '../services/module.service';
+import {HelpersService}     from "../services/helpers.service";
+import {FormDataService}    from "../services/form-data.service";
+import {MessagesService}    from "../directives/messages/messages.service";
+import {TableDataService}   from "../services/table-data.service";
+import {TableService}       from "../directives/tables/table.service";
+import {ProjectService}     from "../services/project.service";
+import {GroupService}       from "../services/group.service";
 
 import {DashboardComponent}         from './dashboard/dashboard.component';
 import {LoginComponent}             from './login/login.component';
 import {NavComponent}               from './navigation/nav.component';
 import {UserManagementComponent}    from './userManagement/user.management.component';
 import {RegistrationComponent}      from "./registration/registration.component";
-import {UserManagementComponent}    from "./userManagement/user.management.component";
+import {ProjectRouterComponent}     from "./projects/project-router.component";
 
 import {Module} from "../models/module";
 import {Menu}   from "../models/menu";
@@ -30,37 +36,23 @@ import {Menu}   from "../models/menu";
         ApiService,
         UserService,
         ModuleService,
-        HelpersService
+        HelpersService,
+        FormDataService,
+        TableDataService,
+        MessagesService,
+        TableService,
+        ProjectService,
+        GroupService
     ]
 })
 
 @RouteConfig([
-    {
-        path: '/dashboard',
-        as: 'Dashboard',
-        component: DashboardComponent,
-        useAsDefault: true
-    },
-    {
-        path: '/login',
-        as: 'Login',
-        component: LoginComponent
-    },
-    {
-        path: '/signup',
-        as: 'Signup',
-        component: RegistrationComponent
-    },
-    {
-        path: '/activate/:id',
-        as: 'Activate',
-        component: RegistrationComponent
-    },
-    {
-        path: '/usermanagement/...',
-        as: 'UserManagement',
-        component: UserManagementComponent
-    },
+    {path: '/dashboard', as: 'Dashboard', component: DashboardComponent, useAsDefault: true},
+    {path: '/login', as: 'Login', component: LoginComponent},
+    {path: '/signup', as: 'Signup', component: RegistrationComponent},
+    {path: '/activate/:id', as: 'Activate', component: RegistrationComponent},
+    {path: '/usermanagement/...', as: 'UserManagement', component: UserManagementComponent},
+    {path: '/projects/...', as: 'Projects', component: ProjectRouterComponent},
 ])
 
 //Main class for application
@@ -76,12 +68,13 @@ export class AppComponent {
         private _userService:UserService,
         private _moduleService:ModuleService
     ) {
-        this.appRoutes = this.getAppRoutes();
+        // this.appRoutes = this.getAppRoutes();
     }
 
     ngOnInit() {
         this._userService.user$.subscribe(user => this.user = user);
-        this.getModules();
+        this._userService.loggedInCheck();
+        // this.getModules();
     }
 
     // Load information for modules
@@ -108,11 +101,11 @@ export class AppComponent {
     }
 
     // Get routes currently set in the nav service
-    private getAppRoutes():string[][] {
-        return this._navService.getRoutes(this.constructor).configs.map(route => {
-                return {path: [`/${route.path}`], name: route.as};
-            });
-    }
+    // private getAppRoutes():string[][] {
+    //     return this._navService.getRoutes(this.constructor).configs.map(route => {
+    //             return {path: [`/${route.path}`], name: route.as};
+    //         });
+    // }
 
 }
 

@@ -1,0 +1,19 @@
+<div [ngFormModel]="form">
+    <label *ngIf="question.type != 'hidden'" [attr.for]="question.key">{{question.label}}</label>
+    <div [ngSwitch]="question.controlType">
+        <input class="form-control" *ngSwitchWhen="'textbox'" [ngControl]="question.key"
+               [id]="question.key" [type]="question.type" [readonly]="question.read_only">
+
+        <div *ngIf="searchReturn && question.search_box" class="list-group">
+            <a *ngFor="#return of searchReturn" (click)="selectLead(return)" class="list-group-item">
+                {{return.name}}
+            </a>
+        </div>
+
+        <select class="form-control" [id]="question.key" *ngSwitchWhen="'dropdown'"
+                [ngControl]="question.key">
+            <option *ngFor="#opt of question.options" [value]="opt.key" [selected]="opt.selected">{{opt.value}}</option>
+        </select>
+    </div>
+    <div class="alert alert-danger" *ngIf="!isValid">{{question.label}} is required</div>
+</div>

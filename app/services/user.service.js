@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/add/operator/share', '../models/user', "./api.service"], function(exports_1, context_1) {
+System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/add/operator/share', '../models/user', "./api.service", "../directives/messages/messages.service", "../directives/tables/table.service", "./table-data.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, Observable_1, router_1, user_1, api_service_1;
+    var core_1, Observable_1, router_1, user_1, api_service_1, messages_service_1, table_service_1, table_data_service_1;
     var UserService;
     return {
         setters:[
@@ -29,168 +29,269 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
             },
             function (api_service_1_1) {
                 api_service_1 = api_service_1_1;
+            },
+            function (messages_service_1_1) {
+                messages_service_1 = messages_service_1_1;
+            },
+            function (table_service_1_1) {
+                table_service_1 = table_service_1_1;
+            },
+            function (table_data_service_1_1) {
+                table_data_service_1 = table_data_service_1_1;
             }],
         execute: function() {
             UserService = (function () {
-                function UserService(_apiService, _router) {
+                function UserService(_apiService, _router, _messageService, _tableService, _tableDataService) {
                     var _this = this;
                     this._apiService = _apiService;
                     this._router = _router;
+                    this._messageService = _messageService;
+                    this._tableService = _tableService;
+                    this._tableDataService = _tableDataService;
                     this._user = new user_1.User();
                     this._users = [];
                     this.user$ = Observable_1.Observable.create(function (observer) { return _this._userObserver = observer; }).share();
                     this.users$ = Observable_1.Observable.create(function (observer) { return _this._usersObserver = observer; }).share();
-                    this.messages$ = Observable_1.Observable.create(function (observer) { return _this._messagesObserver = observer; }).share();
-                    this._messages = [];
                 }
-                Object.defineProperty(UserService.prototype, "user", {
-                    get: function () {
-                        return this._user;
-                    },
-                    set: function (value) {
-                        this._user = value;
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Object.defineProperty(UserService.prototype, "users", {
-                    get: function () {
-                        return this._users;
-                    },
-                    set: function (value) {
-                        this._users = value;
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Object.defineProperty(UserService.prototype, "messages", {
-                    get: function () {
-                        return this._messages;
-                    },
-                    set: function (value) {
-                        this._messages = value;
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                UserService.prototype.setBasicUserDetails = function (userData) {
+                UserService.prototype.setUserDetails = function (userData) {
                     this._user.email = userData.email;
                     this._user.id = userData.id;
                     this._user.username = userData.username;
                     this._user.role = userData.role;
+                    this._user.last_login = userData.last_login;
+                    this._user.active = userData.active;
                     this._user.loggedIn = true;
-                    this._userObserver.next(this.user);
-                };
-                UserService.prototype.setExtendedUserDetails = function (userData) {
                     this._user.forename = userData.forename;
                     this._user.surname = userData.surname;
                     this._user.dob = userData.dob;
                     this._user.country = userData.country;
                     this._user.website = userData.website;
                     this._user.avatar = userData.avatar;
-                    this._user.twitterUsername = userData.twitterUsername;
+                    this._user.twitter_username = userData.twitter_username;
                     this._user.facebook = userData.facebook;
-                    this._userObserver.next(this.user);
+                    this._userObserver.next(this._user);
                 };
-                UserService.prototype.getUsers = function () {
-                    var _this = this;
-                    this._apiService.getWithAuth('usersWithDetails')
-                        .subscribe(function (data) { return _this.buildUsersData(data); }, function (error) { return console.log(error); });
+                UserService.prototype.create = function (userData) {
+                    var user = new user_1.User();
+                    user.email = userData.email;
+                    user.id = userData.id;
+                    user.username = userData.username;
+                    user.role = userData.role;
+                    user.last_login = userData.last_login;
+                    user.active = userData.active;
+                    user.forename = userData.forename;
+                    user.surname = userData.surname;
+                    user.dob = userData.dob;
+                    user.country = userData.country;
+                    user.website = userData.website;
+                    user.avatar = userData.avatar;
+                    user.twitter_username = userData.twitter_username;
+                    user.facebook = userData.facebook;
+                    return user;
                 };
-                // Check that the user is logged in by first checking that they have
-                // a token set and if so is that token still valid
-                UserService.prototype.loggedInCheck = function () {
-                    var _this = this;
-                    if (localStorage.getItem('jwt')) {
-                        this._apiService.getWithAuth('loginUser')
-                            .subscribe(function (data) { return _this.setBasicUserDetails(data); }, function (error) { return _this._router.navigate(['Login']); }, function () { return _this.getFullUserDetails(); });
-                    }
-                };
-                UserService.prototype.addUser = function (user) {
-                    var _this = this;
-                    var data = {
-                        username: user.username,
-                        email: user.email,
-                        forename: user.forename,
-                        surname: user.surname
-                    };
-                    this._apiService.postWithAuth('users', data).subscribe(function (data) { return _this.processMessages(data.success.message, true); }, function (error) { return _this.processMessages(error.message, false); }, function () { return _this.getUsers(); });
-                };
-                UserService.prototype.getUser = function (id) {
+                UserService.prototype.get = function (id) {
                     return Promise.resolve(this._users).then(function (users) { return users.filter(function (user) { return user.id === id; })[0]; });
                 };
-                UserService.prototype.updateUser = function (user) {
+                UserService.prototype.getUsers = function (page, queryAPI, buildTableData) {
                     var _this = this;
-                    var data = {
+                    if (page === void 0) { page = 1; }
+                    if (queryAPI === void 0) { queryAPI = false; }
+                    if (buildTableData === void 0) { buildTableData = false; }
+                    if (this._users.length === 0 || queryAPI) {
+                        return this._apiService.getPromiseWithAuth('users?page=' + page)
+                            .then(function (data) { return _this.buildUsers(data, buildTableData); }, function (error) {
+                            _this._messageService.addMessage({
+                                success: null,
+                                error: error
+                            });
+                        });
+                    }
+                    else {
+                        return Promise.resolve(this._users).then(function (users) {
+                            _this.setUsers(users);
+                            if (buildTableData) {
+                                _this.updateTable();
+                            }
+                        });
+                    }
+                };
+                UserService.prototype.set = function (user) {
+                    this._user = user;
+                    this._userObserver.next(this._user);
+                };
+                UserService.prototype.setUsers = function (users) {
+                    this._users = users;
+                    this._usersObserver.next(this._users);
+                };
+                UserService.prototype.add = function (user) {
+                    var _this = this;
+                    this._apiService.postWithAuth('users', this.generateData(user)).subscribe(function (data) {
+                        _this._messageService.addMessage({
+                            success: data.success.message,
+                            error: null
+                        });
+                    }, function (error) {
+                        _this._messageService.addMessage({
+                            success: null,
+                            error: error.message
+                        });
+                    }, function () {
+                        _this.getUsers(1, true, true).then(function () {
+                            _this.getUsers(_this._tableDataService.table.totalPages, true, true);
+                        });
+                    });
+                };
+                UserService.prototype.update = function (user) {
+                    var _this = this;
+                    this._apiService.patch('users/' + user.id, this.generateData(user)).subscribe(function (data) {
+                        _this._messageService.addMessage({
+                            success: data.success.message,
+                            error: null
+                        });
+                    }, function (error) {
+                        _this._messageService.addMessage({
+                            success: null,
+                            error: error.message
+                        });
+                    });
+                };
+                UserService.prototype.delete = function (user) {
+                    var _this = this;
+                    this._apiService.delete('users/' + user.id).subscribe(function (data) {
+                        _this._messageService.addMessage({
+                            success: data.success.message,
+                            error: null
+                        });
+                    }, function (error) {
+                        _this._messageService.addMessage({
+                            success: null,
+                            error: error.message
+                        });
+                    }, function () {
+                        _this.getUsers(1, true, true).then(function () {
+                            _this.getUsers(_this._tableDataService.table.totalPages, true, true);
+                        });
+                    });
+                };
+                UserService.prototype.generateData = function (user) {
+                    return {
                         role: user.role,
                         email: user.email,
                         forename: user.forename,
-                        surname: user.surname
+                        surname: user.surname,
+                        username: user.username
                     };
-                    this._apiService.patch('users/' + user.id, data).subscribe(function (data) { return _this.processMessages(data.success.message, true); }, function (error) { return _this.processMessages(error.message, false); });
                 };
-                UserService.prototype.clearMessage = function () {
-                    this._messages = [];
-                    this._messagesObserver.next(this._messages);
-                };
-                UserService.prototype.processMessages = function (message, success) {
-                    var messageObject;
-                    if (success) {
-                        messageObject = {
-                            success: message,
-                            error: null
-                        };
-                        this._messages.push(messageObject);
-                        this._messagesObserver.next(this._messages);
-                    }
-                    else {
-                        messageObject = {
-                            success: null,
-                            error: message
-                        };
-                        this._messages.push(messageObject);
-                        this._messagesObserver.next(this._messages);
-                    }
-                };
-                UserService.prototype.getFullUserDetails = function () {
+                UserService.prototype.setActiveStatus = function (id) {
                     var _this = this;
-                    this._apiService.getWithAuth('user/' + this._user.id + '/userDetail')
-                        .subscribe(function (data) { return _this.setExtendedUserDetails(data.data); }, function (error) { return console.log(error); });
+                    this._apiService.patch('setActiveStatus/' + id, {}).subscribe(function (data) {
+                        _this._messageService.addMessage({
+                            success: data.success.message,
+                            error: null
+                        });
+                    }, function (error) {
+                        _this._messageService.addMessage({
+                            success: null,
+                            error: error.message
+                        });
+                    }, function () {
+                        _this.get(id).then(function (user) {
+                            var userObject = user;
+                            userObject.active = (userObject.active) ? false : true;
+                            _this.updateUserInUsers(userObject);
+                        });
+                    });
+                };
+                /*
+                 @todo Move this into a better place
+                 */
+                UserService.prototype.loggedInCheck = function () {
+                    var _this = this;
+                    // Check that the user is logged in by first checking that they have
+                    // a token set and if so is that token still valid
+                    if (localStorage.getItem('jwt')) {
+                        this._apiService.getWithAuth('loginUser')
+                            .subscribe(function (data) { return _this.setUserDetails(data); }, function (error) { return _this._router.navigate(['Login']); });
+                    }
+                };
+                UserService.prototype.findUsers = function (searchTerm) {
+                    return this._apiService.getPromiseWithAuth('findUsers/' + searchTerm)
+                        .then(function (data) {
+                        var userData = [];
+                        data.data.forEach(function (user) {
+                            userData.push({
+                                id: user.id,
+                                name: user.forename + " " + user.surname
+                            });
+                        });
+                        return userData;
+                    }, function (error) {
+                        return [];
+                    });
+                };
+                UserService.prototype.updateUserInUsers = function (user) {
+                    this._users.forEach(function (userObject, index) {
+                        if (user.id === userObject.id) {
+                            this._users[index] = user;
+                        }
+                    }, this);
+                    this._usersObserver.next(this._users);
+                    this.updateTable();
                 };
                 /**
                  * Build users array from server data
                  *
                  * @param {Object[]} usersData
+                 * @param {boolean} buildTableData
+                 * @param {Object[]} usersData.data
+                 * @param {Object} usersData.data.user
+                 * @param {Object} usersData.data.userDetails
+                 * @param {Object} usersData.paginator
+                 * @param {Object} usersData.paginator.per_page
+                 * @param {Object} usersData.paginator.last_page
+                 * @param {Object} usersData.paginator.current_page
                  */
-                UserService.prototype.buildUsersData = function (usersData) {
+                UserService.prototype.buildUsers = function (usersData, buildTableData) {
                     var _this = this;
+                    if (buildTableData === void 0) { buildTableData = false; }
                     this._users = [];
-                    usersData.data.forEach(function (userData) {
-                        //noinspection TypeScriptUnresolvedVariable
-                        var userInfo = userData.user;
-                        //noinspection TypeScriptUnresolvedVariable
-                        var userDetails = userData.userDetails;
+                    for (var key in usersData.data) {
+                        var userInfo = void 0;
+                        if (usersData.data.hasOwnProperty(key)) {
+                            userInfo = usersData.data[key];
+                        }
                         var user = new user_1.User();
                         user.email = userInfo.email;
                         user.id = userInfo.id;
                         user.username = userInfo.username;
                         user.role = userInfo.role;
-                        user.lastLogin = userInfo.lastLogin;
-                        user.forename = userDetails.forename;
-                        user.surname = userDetails.surname;
-                        user.dob = userDetails.dob;
-                        user.country = userDetails.country;
-                        user.website = userDetails.website;
-                        user.avatar = userDetails.avatar;
-                        user.twitterUsername = userDetails.twitterUsername;
-                        user.facebook = userDetails.facebook;
-                        _this._users.push(user);
-                    }, this);
-                    this._usersObserver.next(this._users);
+                        user.last_login = userInfo.last_login;
+                        user.active = userInfo.active;
+                        user.forename = userInfo.forename;
+                        user.surname = userInfo.surname;
+                        user.dob = userInfo.dob;
+                        user.country = userInfo.country;
+                        user.website = userInfo.website;
+                        user.avatar = userInfo.avatar;
+                        user.twitter_username = userInfo.twitter_username;
+                        user.facebook = userInfo.facebook;
+                        this._users.push(user);
+                    }
+                    this.setUsers(this._users);
+                    if (buildTableData) {
+                        this._tableDataService.getUsersTableData(this._users, true, usersData.paginator)
+                            .then(function (table) { return _this._tableService.addTable(table); });
+                    }
+                    return this._users;
+                };
+                UserService.prototype.updateTable = function () {
+                    var _this = this;
+                    this._tableDataService.getUsersTableData(this._users, false)
+                        .then(function (table) { return _this._tableService.addTable(table); });
                 };
                 UserService = __decorate([
                     core_1.Injectable(), 
-                    __metadata('design:paramtypes', [api_service_1.ApiService, router_1.Router])
+                    __metadata('design:paramtypes', [api_service_1.ApiService, router_1.Router, messages_service_1.MessagesService, table_service_1.TableService, table_data_service_1.TableDataService])
                 ], UserService);
                 return UserService;
             }());

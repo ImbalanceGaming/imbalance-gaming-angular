@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3>{{title}}</h3>
+    </div>
+    <div class="col-md-12 form">
+        <div class="row">
+            <div class="col-md-4">
+                <message-controls></message-controls>
+                <dynamic-form
+                        *ngIf="formData.length > 0 && formButtonData.length > 0"
+                        [questions]="formData"
+                        [formButtonData]="formButtonData"
+                        [searchReturn]="userSearchReturn"
+                        (saveEmitter)="saveChanges($event)"
+                        (deleteEmitter)="deleteProject()"
+                        (cancelEmitter)="cancelEdit()"
+                        (searchEmitter)="onUserSearch($event)"
+                ></dynamic-form>
+            </div>
+        </div>
+    </div>
+    <!--<div *ngIf="project.groups.length > 0" class="col-md-8">-->
+        <!--<h3>Groups</h3>-->
+        <!--<table class="table table-bordered table-hover">-->
+            <!--<thead>-->
+            <!--<tr>-->
+                <!--<td colspan="2" class="table-button">-->
+                    <!--<button type="button" class="btn btn-default pull-right">Add Group</button>-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td>Name</td>-->
+                <!--<td>Description</td>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr *ngFor="#group of project.groups">-->
+                <!--<td><a [routerLink]="['/UserManagement', 'GroupDetail', {id: group.id}]">{{group.name}}</a></td>-->
+                <!--<td>{{group.description}}</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+        <!--</table>-->
+    <!--</div>-->
+</div>

@@ -1,0 +1,67 @@
+<div class="btn-group pull-right" role="group">
+    <button type="button" class="btn btn-default" *ngIf="saveButtonData.show"
+            [disabled]="!form.valid" (click)="saveModal.open()">
+        {{saveButtonData.buttonText}}
+    </button>
+    <button type="button" class="btn btn-default" *ngIf="cancelButtonData.show"
+            [disabled]="cancelButtonData.disabled" (click)="cancelModal.open()">
+        {{cancelButtonData.buttonText}}
+    </button>
+    <button type="button" class="btn btn-default" *ngIf="deleteButtonData.show"
+            [disabled]="deleteButtonData.disabled" (click)="deleteModal.open()">
+        {{deleteButtonData.buttonText}}
+    </button>
+</div>
+
+<modal #saveModal [keyboard]="false" [backdrop]="'static'" (onClose)="save()">
+    <modal-header [show-close]="false">
+        <h4 class="modal-title">{{saveButtonData.modalHeader}}</h4>
+    </modal-header>
+    <modal-body>
+        {{saveButtonData.modalContent}}
+    </modal-body>
+    <modal-footer>
+        <modal-footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="saveModal.dismiss()">
+                Cancel
+            </button>
+            <button type="button" class="btn btn-primary" (click)="saveModal.close()">
+                {{saveButtonData.buttonText}}
+            </button>
+        </modal-footer>
+    </modal-footer>
+</modal>
+
+<modal #cancelModal [keyboard]="false" [backdrop]="'static'" (onClose)="cancel()">
+    <modal-header [show-close]="false">
+        <h4 class="modal-title">{{cancelButtonData.modalHeader}}</h4>
+    </modal-header>
+    <modal-body>
+        {{cancelButtonData.modalContent}}
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelModal.dismiss()">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-primary" (click)="cancelModal.close()">
+            Ok
+        </button>
+    </modal-footer>
+</modal>
+
+<modal #deleteModal [keyboard]="false" [backdrop]="'static'" (onClose)="delete()">
+    <modal-header [show-close]="false">
+        <h4 class="modal-title">{{deleteButtonData.modalHeader}}</h4>
+    </modal-header>
+    <modal-body>
+        {{deleteButtonData.modalContent}}
+    </modal-body>
+    <modal-footer>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="deleteModal.dismiss()">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-primary" (click)="deleteModal.close()">
+            {{deleteButtonData.buttonText}}
+        </button>
+    </modal-footer>
+</modal>

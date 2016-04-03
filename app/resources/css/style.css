@@ -12,7 +12,15 @@ html, body {
 .header-row {
     background-color: lightgray;
     margin-bottom: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 .header-row h3 {
     margin-top: 2px;
+}
+.pagination li {
+    cursor: pointer !important;
+}
+.link-click {
+    cursor: pointer !important;
 }

@@ -1,0 +1,68 @@
+<div class="row" *ngIf="tableData.body.rows.length > 0">
+    <div class="col-md-12">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <td *ngFor="#header of tableData.headers">
+                        <span *ngIf="header.show">{{header.value}}</span>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="#row of tableData.body.rows | paginate: tableData.paginationConfig">
+                    <td *ngFor="#cell of row.cells">
+                        <a *ngIf="cell.detailCell"
+                           [routerLink]="[tableData.detailURL,
+                           {id: row.rowId, page: tableData.paginationConfig.currentPage}]"
+                        >
+                            {{cell?.value}}
+                        </a>
+                        <a class="link-click" *ngIf="cell.clickEvent" (click)="linkClicked(row.rowId)">
+                            {{cell?.value}}
+                        </a>
+                        <span *ngIf="!cell.detailCell && !cell.clickEvent">{{cell?.value}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row" *ngIf="tableData.body.rows.length > 0">
+    <div class="col-md-12">
+        <pagination-controls
+                #p
+                [id]="tableData.paginationConfig.id"
+                (pageChange)="tableData.paginationConfig.currentPage = pageChanged($event)"
+                autoHide="true">
+            <nav>
+                <ul class="pagination">
+                    <li [class.disabled]="p.isFirstPage()">
+                        <a (click)="p.previous()" aria-label="Previous">
+                                <span
+                                        aria-hidden="true">&laquo;
+                                </span>
+                        </a>
+                    </li>
+                    <li *ngFor="#page of p.pages" [class.active]="p.getCurrent() === page.value">
+                        <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
+                            {{ page.label }}
+                                <span class="sr-only">
+                                    (current)
+                                </span>
+                        </a>
+                            <span *ngIf="p.getCurrent() === page.value">
+                                {{ page.label }}
+                            </span>
+                    </li>
+                    <li [class.disabled]="p.isLastPage()">
+                        <a (click)="p.next()" aria-label="Next">
+                                <span
+                                        aria-hidden="true">&raquo;
+                                </span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </pagination-controls>
+    </div>
+</div>

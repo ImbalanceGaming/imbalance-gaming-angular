@@ -57,12 +57,6 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-
                         .map(function (res) { return res.json(); })
                         .catch(ApiService.handleError);
                 };
-                ApiService.prototype.post = function (action, data) {
-                    var body = JSON.stringify(data);
-                    return this.http.post(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })
-                        .map(function (res) { return res.json(); })
-                        .catch(ApiService.handleError);
-                };
                 ApiService.prototype.getWithAuth = function (action) {
                     return this._authHttp.get(this._connectionUrl + action, {
                         headers: headers_1.contentHeaders
@@ -70,15 +64,50 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-
                         .map(function (res) { return ApiService.refreshToken(res); })
                         .catch(ApiService.handleAuthError);
                 };
+                ApiService.prototype.getPromiseWithAuth = function (action) {
+                    return this._authHttp.get(this._connectionUrl + action, {
+                        headers: headers_1.contentHeaders
+                    })
+                        .toPromise()
+                        .then(function (res) { return ApiService.refreshToken(res); })
+                        .catch(ApiService.handleAuthError);
+                };
+                ApiService.prototype.post = function (action, data) {
+                    var body = JSON.stringify(data);
+                    return this.http.post(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })
+                        .map(function (res) { return res.json(); })
+                        .catch(ApiService.handleError);
+                };
                 ApiService.prototype.postWithAuth = function (action, data) {
                     var body = JSON.stringify(data);
                     return this._authHttp.post(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })
                         .map(function (res) { return ApiService.refreshToken(res); })
                         .catch(ApiService.handleAuthError);
                 };
+                ApiService.prototype.postPromiseWithAuth = function (action, data) {
+                    var body = JSON.stringify(data);
+                    return this._authHttp.post(this._connectionUrl + action, body, {
+                        headers: headers_1.contentHeaders
+                    })
+                        .toPromise()
+                        .then(function (res) { return ApiService.refreshToken(res); })
+                        .catch(ApiService.handleAuthError);
+                };
                 ApiService.prototype.patch = function (action, data) {
                     var body = JSON.stringify(data);
                     return this._authHttp.patch(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })
+                        .map(function (res) { return ApiService.refreshToken(res); })
+                        .catch(ApiService.handleAuthError);
+                };
+                ApiService.prototype.patchPromise = function (action, data) {
+                    var body = JSON.stringify(data);
+                    return this._authHttp.patch(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })
+                        .toPromise()
+                        .then(function (res) { return ApiService.refreshToken(res); })
+                        .catch(ApiService.handleAuthError);
+                };
+                ApiService.prototype.delete = function (action) {
+                    return this._authHttp.delete(this._connectionUrl + action, { headers: headers_1.contentHeaders })
                         .map(function (res) { return ApiService.refreshToken(res); })
                         .catch(ApiService.handleAuthError);
                 };

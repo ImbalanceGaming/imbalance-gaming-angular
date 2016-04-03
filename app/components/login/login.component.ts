@@ -1,10 +1,8 @@
 import {Component}  from 'angular2/core';
-import {NgForm}     from 'angular2/common';
 import {Router, ROUTER_DIRECTIVES}     from 'angular2/router';
 
 import {UserService}    from '../../services/user.service';
 import {ApiService}     from '../../services/api.service';
-import {User}           from '../../models/user';
 import {HelpersService} from "../../services/helpers.service";
 
 @Component({
@@ -57,7 +55,7 @@ export class LoginComponent {
             localStorage.setItem('jwt', jwt);
             this._apiService.getWithAuth('loginUser')
                 .subscribe(
-                    data => this._userService.setBasicUserDetails(data),
+                    data => this._userService.setUserDetails(data),
                     error => this.loginError = this._helpersService.processErrors(error),
                     () => this._router.navigate(['Dashboard'])
                 );

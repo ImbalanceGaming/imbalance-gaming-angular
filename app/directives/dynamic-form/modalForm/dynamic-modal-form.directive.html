@@ -1,0 +1,29 @@
+<div>
+    <button type="button" class="btn btn-default pull-right" (click)="modal.open()">{{buttonText}}</button>
+
+    <modal #modal (onClose)="onSubmit()">
+        <modal-header [show-close]="false">
+            <h4 class="modal-title">{{modalHeader}}</h4>
+        </modal-header>
+        <modal-body>
+            <form class="form" (ngSubmit)="onSubmit()" [ngFormModel]="form" #dynamicForm="ngForm">
+                <div *ngFor="#question of questions" class="form-group">
+                    <df-question
+                            [question]="question"
+                            [form]="form"
+                            [searchReturn]="searchReturn"
+                            (searchEmitter)="onSearch($event)"
+                    ></df-question>
+                </div>
+            </form>
+        </modal-body>
+        <modal-footer>
+                <button type="button" class="btn btn-default" data-dismiss="modal" (click)="modal.dismiss()">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary" [disabled]="!dynamicForm.valid" (click)="modal.close()">
+                    Save
+                </button>
+        </modal-footer>
+    </modal>
+</div>

@@ -1,20 +1,18 @@
 export class User {
 
-    //Basic User Details
     private _id          : number;
     private _username    : string;
     private _email       : string;
     private _role        : string;
-    private _lastLogin   : string;
-
-    //Extended user Details
+    private _last_login  : string;
+    private _active      : boolean;
     private _forename    : string;
-    private _surname    : string;
+    private _surname     : string;
     private _dob         : string;
     private _country     : string;
     private _website     : string;
     private _avatar      : string;
-    private _twitterUsername : string;
+    private _twitter_username : string;
     private _facebook    : string;
 
     private _loggedIn    : boolean;
@@ -55,12 +53,20 @@ export class User {
         this._role = value;
     }
 
-    get lastLogin():string {
-        return this._lastLogin;
+    get last_login():string {
+        return this._last_login;
     }
 
-    set lastLogin(value:string) {
-        this._lastLogin = value;
+    set last_login(value:string) {
+        this._last_login = value;
+    }
+
+    get active():boolean {
+        return this._active;
+    }
+
+    set active(value:boolean) {
+        this._active = value;
     }
 
     get forename():string {
@@ -111,12 +117,12 @@ export class User {
         this._avatar = value;
     }
 
-    get twitterUsername():string {
-        return this._twitterUsername;
+    get twitter_username():string {
+        return this._twitter_username;
     }
 
-    set twitterUsername(value:string) {
-        this._twitterUsername = value;
+    set twitter_username(value:string) {
+        this._twitter_username = value;
     }
 
     get facebook():string {

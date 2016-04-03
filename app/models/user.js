@@ -49,12 +49,22 @@ System.register([], function(exports_1, context_1) {
                     enumerable: true,
                     configurable: true
                 });
-                Object.defineProperty(User.prototype, "lastLogin", {
+                Object.defineProperty(User.prototype, "last_login", {
                     get: function () {
-                        return this._lastLogin;
+                        return this._last_login;
                     },
                     set: function (value) {
-                        this._lastLogin = value;
+                        this._last_login = value;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(User.prototype, "active", {
+                    get: function () {
+                        return this._active;
+                    },
+                    set: function (value) {
+                        this._active = value;
                     },
                     enumerable: true,
                     configurable: true
@@ -119,12 +129,12 @@ System.register([], function(exports_1, context_1) {
                     enumerable: true,
                     configurable: true
                 });
-                Object.defineProperty(User.prototype, "twitterUsername", {
+                Object.defineProperty(User.prototype, "twitter_username", {
                     get: function () {
-                        return this._twitterUsername;
+                        return this._twitter_username;
                     },
                     set: function (value) {
-                        this._twitterUsername = value;
+                        this._twitter_username = value;
                     },
                     enumerable: true,
                     configurable: true

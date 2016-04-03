@@ -1,0 +1,18 @@
+<form class="form" (ngSubmit)="onSubmit()" [ngFormModel]="form">
+    <div *ngFor="#question of questions" class="form-group">
+        <df-question
+                [question]="question"
+                [form]="form"
+                [searchReturn]="searchReturn"
+                (searchEmitter)="onSearch($event)"
+        ></df-question>
+    </div>
+    <form-buttons-control
+            *ngIf="form"
+            [form]="form"
+            [buttonData]="formButtonData"
+            (saveEmitter)="save()"
+            (deleteEmitter)="delete()"
+            (cancelEmitter)="cancel()"
+    ></form-buttons-control>
+</form>

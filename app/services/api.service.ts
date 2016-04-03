@@ -34,17 +34,6 @@ export class ApiService {
 
     }
 
-    post(action:string, data:Object) {
-
-        let body = JSON.stringify(data);
-
-        return this.http.post(this._connectionUrl + action, body, {headers: contentHeaders})
-            .map(res => res.json())
-            //.do(data => console.log(data)) // eyeball results in the console
-            .catch(ApiService.handleError);
-
-    }
-
     getWithAuth(action:string) {
 
         return this._authHttp.get(this._connectionUrl + action, {
@@ -56,7 +45,30 @@ export class ApiService {
 
     }
 
-    postWithAuth(action:string, data:Object) {
+    getPromiseWithAuth(action: string) {
+
+        return this._authHttp.get(this._connectionUrl + action, {
+                headers: contentHeaders
+            })
+            .toPromise()
+            .then(res => ApiService.refreshToken(res))
+            //.do(data => console.log(data)) // eyeball results in the console
+            .catch(ApiService.handleAuthError);
+
+    }
+
+    post(action:string, data:any) {
+
+        let body = JSON.stringify(data);
+
+        return this.http.post(this._connectionUrl + action, body, {headers: contentHeaders})
+            .map(res => res.json())
+            //.do(data => console.log(data)) // eyeball results in the console
+            .catch(ApiService.handleError);
+
+    }
+
+    postWithAuth(action:string, data:any) {
 
         let body = JSON.stringify(data);
 
@@ -67,11 +79,46 @@ export class ApiService {
 
     }
 
-    patch(action:string, data:Object) {
+    postPromiseWithAuth(action:string, data:any) {
+
+        let body = JSON.stringify(data);
+
+        return this._authHttp.post(this._connectionUrl + action, body, {
+                headers: contentHeaders
+            })
+            .toPromise()
+            .then(res => ApiService.refreshToken(res))
+            //.do(data => console.log(data)) // eyeball results in the console
+            .catch(ApiService.handleAuthError);
+
+    }
+
+    patch(action:string, data:any) {
 
         let body = JSON.stringify(data);
 
         return this._authHttp.patch(this._connectionUrl + action, body, {headers: contentHeaders})
+            .map(res => ApiService.refreshToken(res))
+            //.do(data => console.log(data)) // eyeball results in the console
+            .catch(ApiService.handleAuthError);
+
+    }
+
+    patchPromise(action:string, data:any) {
+
+        let body = JSON.stringify(data);
+
+        return this._authHttp.patch(this._connectionUrl + action, body, {headers: contentHeaders})
+            .toPromise()
+            .then(res => ApiService.refreshToken(res))
+            //.do(data => console.log(data)) // eyeball results in the console
+            .catch(ApiService.handleAuthError);
+
+    }
+
+    delete(action: string) {
+
+        return this._authHttp.delete(this._connectionUrl + action, {headers: contentHeaders})
             .map(res => ApiService.refreshToken(res))
             //.do(data => console.log(data)) // eyeball results in the console
             .catch(ApiService.handleAuthError);

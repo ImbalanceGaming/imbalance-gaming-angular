@@ -1,47 +1,81 @@
-import {Component, OnInit}      from 'angular2/core';
-import {CanActivate, Router, RouteParams}    from 'angular2/router';
-import {NgForm}                 from 'angular2/common';
+import {Component}                          from 'angular2/core';
+import {CanActivate, Router, RouteParams}   from 'angular2/router';
 
-import {User}           from "../../../../models/user";
-import {UserService}    from "../../../../services/user.service";
-import {Message}        from "../../../../models/message";
+import {authCheck}            from "../../../../common/auth-check"
+import {ComponentInstruction} from "../../../../../node_modules/angular2/src/router/instruction";
+
+import {User}                   from "../../../../models/user";
+import {UserService}            from "../../../../services/user.service";
+import {FormButtonInterface}    from "../../../../directives/form-buttons/form-button.interface";
+import {DynamicFormDirective}   from "../../../../directives/dynamic-form/normalForm/dynamic-form.directive";
+import {FormDataService}        from "../../../../services/form-data.service";
+import {MessagesDirective}      from "../../../../directives/messages/messages.directive";
 
 @Component({
     selector: 'user-detail',
     templateUrl: 'app/components/userManagement/users/userDetail/user-detail.component.html',
-    styleUrls: ['app/components/userManagement/users/userDetail/user-detail.component.css']
+    styleUrls: ['app/components/userManagement/users/userDetail/user-detail.component.css'],
+    directives: [DynamicFormDirective, MessagesDirective]
+})
+
+@CanActivate((next: ComponentInstruction, previous: ComponentInstruction) => {
+    return authCheck(next, previous);
 })
 
 export class UserDetail {
 
-    public title    : string;
-    public users    : Array<User>;
-    public user     : User;
-    public roles    : Array<string>;
-    public messages : Array<Message>;
+    title    : string;
+    users    : Array<User> = [];
+    user     : User;
+    formData : Array<any> = [];
+    formButtonData : Array<FormButtonInterface> = [];
 
-    constructor(private _userService:UserService, private _routeParams: RouteParams) {
-        this._userService.messages$.subscribe(updatedMessages => this.messages = updatedMessages);
+    constructor(
+        private _userService:UserService,
+        private _routeParams: RouteParams,
+        private _router: Router,
+        private _formDataService: FormDataService
+    ) {
         this.title = 'User Detail';
         this.user = new User();
-        this.roles = ['User', 'Developer', 'Administrator'];
     }
 
     ngOnInit() {
+
         this._userService.users$.subscribe(updatedUser => this.users = updatedUser);
         let id = +this._routeParams.get('id');
-        this._userService.getUser(id)
-            .then(user => this.user = user);
+        let page = +this._routeParams.get('page');
+        this._userService.getUsers(page, true).then(() => {
+            this._userService.get(id).then(user => {
+                this.user = user;
+                this._formDataService.getUserDetailData(user)
+                    .then(formData => this.formData = formData);
+                this._formDataService.getDefaultButtons()
+                    .then(formButtonData => this.formButtonData = formButtonData);
+            });
+        });
+
     }
 
-    selectRole(role) {
-        this.user.role = role.target.value;
+    saveChanges(formData) {
+
+        this.user.username = formData.username;
+        this.user.email = formData.email;
+        this.user.forename = formData.forename;
+        this.user.surname = formData.surname;
+        this.user.role = formData.role;
+
+        this._userService.update(this.user);
+
     }
 
-    onSubmit() {
-        this._userService.clearMessage();
+    cancelEdit() {
+        this._router.navigate(['Users']);
+    }
 
-        this._userService.updateUser(this.user);
+    deleteUser() {
+        this._userService.delete(this.user);
+        this._router.navigate(['Users']);
     }
 
 }
