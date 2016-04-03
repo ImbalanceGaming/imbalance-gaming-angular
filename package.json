@@ -1,6 +1,6 @@
 {
   "name": "imbalance-gaming-management-interface-angular-2",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Angular 2 management frontend for Imbalance website.",
   "main": "index.html",
   "dependencies": {
