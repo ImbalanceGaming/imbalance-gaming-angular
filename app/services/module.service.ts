@@ -1,56 +1,202 @@
-import {Injectable}                 from 'angular2/core';
-import {Http}                       from 'angular2/http';
+import {Injectable}         from 'angular2/core';
+import {Observer}           from "rxjs/Observer";
+import {Observable}         from "rxjs/Observable";
+import 'rxjs/add/operator/share';
 
-import {Module}                     from "../models/module";
-import {ModuleSection}              from '../models/module.section';
-import {Menu}                       from "../models/menu";
+import {Module}             from "../models/module";
+import {ServiceInterface}   from "../interfaces/service.interface";
+import {ApiService}         from "./api.service";
+import {MessagesService}    from "../directives/messages/messages.service";
+import {TableService}       from "../directives/tables/table.service";
+import {TableDataService}   from "./table-data.service";
+import {ModuleSection} from "../models/module-section";
+import {ModuleSectionService} from "./module-section.service";
 
 @Injectable()
-export class ModuleService {
+export class ModuleService implements ServiceInterface {
 
-    private _modules : Array<Module>;
+    modules$ : Observable<Array<Module>>;
 
-    constructor() {
-        this._modules = [];
+    private _modulesObserver : Observer<Array<Module>>;
+
+    private _modules : Array<Module> = [];
+
+    constructor(
+        private _apiService:ApiService,
+        private _messageService:MessagesService,
+        private _tableService:TableService,
+        private _tableDataService:TableDataService,
+        private _moduleSectionService:ModuleSectionService
+    ) {
+        this.modules$ = Observable.create(observer => this._modulesObserver = observer).share();
     }
 
-    get modules():Array<Module> {
-        return this._modules;
+    create(moduleData) : Module {
+
+        return new Module(
+            moduleData.id,
+            moduleData.key,
+            moduleData.name,
+            moduleData.description
+        );
+
     }
 
-    set modules(value:Array<Module>) {
-        this._modules = value;
+    get(id:number) {
+
+        return Promise.resolve(this._modules).then(
+            modules => modules.filter(module => module.id === id)[0]
+        );
+
     }
 
-    public createModules(data:Array<any>) {
+    getModules(page: number = 1, queryAPI:boolean = false, buildTableData:boolean = false) : Promise {
 
-        data.forEach(function(module_data) {
-            let module = new Module(module_data.moduleId, module_data.key, module_data.name, module_data.description);
-
-            //noinspection TypeScriptUnresolvedVariable
-            module_data.module_sections.forEach(function(section) {
-                //noinspection TypeScriptUnresolvedVariable
-                let moduleSection = new ModuleSection(section.id, section.name, section.description);
-                module.sections.push(moduleSection);
-
-                //noinspection TypeScriptUnresolvedVariable
-                section.menus.forEach(function(menu_data) {
-                    //noinspection TypeScriptUnresolvedVariable
-                    let menu = new Menu(
-                        menu_data.id,
-                        menu_data.name,
-                        menu_data.description,
-                        menu_data.placement,
-                        menu_data.link,
-                        menu_data.component
-                    );
-                    module.menus.push(menu);
-                });
+        if (this._modules.length === 0 || queryAPI) {
+            return this._apiService.getPromiseWithAuth('modules?page='+page)
+                .then(
+                    data => this.buildModules(data, buildTableData),
+                    error => {
+                        this._messageService.addMessage({
+                            success: null,
+                            error: error
+                        })
+                    }
+                );
+        } else {
+            return Promise.resolve(this._modules).then(modules => {
+                this.set(modules);
+                if (buildTableData) {
+                    this.updateTable();
+                }
             });
+        }
+
+
+    }
+
+    set(modules: Array<Module>) {
+
+        this._modules = modules;
+        this._modulesObserver.next(this._modules);
+
+    }
+
+    add(module: Module) {
+
+        this._apiService.postWithAuth('modules', this.generateData(module)).subscribe(
+            data => {
+                this._messageService.addMessage({
+                    success: data.success.message,
+                    error: null
+                })
+            },
+            error => {
+                this._messageService.addMessage({
+                    success: null,
+                    error: error.message
+                })
+            },
+            () => {
+                this.getModules(1, true, true).then(() => {
+                    this.getModules(this._tableDataService.table.totalPages, true, true);
+                });
+            }
+        );
+
+    }
+
+    update(module: Module) {
+
+        this._apiService.patch('modules/'+module.id, this.generateData(module)).subscribe(
+            data => {
+                this._messageService.addMessage({
+                    success: data.success.message,
+                    error: null
+                })
+            },
+            error => {
+                this._messageService.addMessage({
+                    success: null,
+                    error: error.message
+                })
+            }
+        );
+
+    }
+
+    delete(module: Module) {
+
+        this._apiService.delete('modules/'+module.id).subscribe(
+            data => {
+                this._messageService.addMessage({
+                    success: data.success.message,
+                    error: null
+                })
+            },
+            error => {
+                this._messageService.addMessage({
+                    success: null,
+                    error: error.message
+                })
+            },
+            () => {
+                this.getModules(1, true, true).then(() => {
+                    this.getModules(this._tableDataService.table.totalPages, true, true);
+                });
+            }
+        );
+        
+    }
+
+    public generateData(module: Module) {
+
+        return {
+            'key': module.key,
+            'name': module.name,
+            'description': module.description,
+        }
+
+    }
+
+    private buildModules(modulesData: any, buildTableData = false) {
+
+        this._modules = [];
+
+        for(let key in modulesData.data) {
+            let moduleInfo;
+            let moduleSectionsData;
+
+            if (modulesData.data.hasOwnProperty(key)) {
+                moduleInfo = modulesData.data[key].module;
+                moduleSectionsData = modulesData.data[key].module_sections;
+            }
+
+            let module = this.create(moduleInfo);
+
+            if (moduleSectionsData.length > 0) {
+                let moduleSections: Array<ModuleSection> = [];
+                moduleSections.forEach(sectionData => {
+                    moduleSections.push(this._moduleSectionService.create(sectionData));
+                });
+                module.sections = moduleSections;
+            }
 
             this._modules.push(module);
-        }, this);
+        }
 
+        this.set(this._modules);
+
+        if (buildTableData) {
+            this._tableDataService.getModuleTableData(this._modules, true, modulesData.paginator)
+                .then(table => this._tableService.addTable(table));
+        }
+
+    }
+
+    private updateTable() {
+        this._tableDataService.getModuleTableData(this._modules, false)
+            .then(table => this._tableService.addTable(table));
     }
 
 }

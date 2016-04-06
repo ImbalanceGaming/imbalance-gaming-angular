@@ -30,6 +30,9 @@ System.register(['angular2/core', "./messages.service"], function(exports_1, con
                 MessagesDirective.prototype.closeMessage = function (index) {
                     this._messagesService.removeMessage(index);
                 };
+                MessagesDirective.prototype.ngAfterViewChecked = function () {
+                    this._messagesService.setMessagesViewed();
+                };
                 MessagesDirective = __decorate([
                     core_1.Component({
                         selector: 'message-controls',

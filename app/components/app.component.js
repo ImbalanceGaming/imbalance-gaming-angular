@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../services/api.service', '../services/user.service', '../services/nav.service', '../services/module.service', "../services/helpers.service", "../services/form-data.service", "../directives/messages/messages.service", "../services/table-data.service", "../directives/tables/table.service", "../services/project.service", "../services/group.service", './dashboard/dashboard.component', './login/login.component', './navigation/nav.component', './userManagement/user.management.component', "./registration/registration.component", "./projects/project-router.component"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../services/api.service', '../services/user.service', '../services/nav.service', '../services/module.service', "../services/helpers.service", "../services/form-data.service", "../directives/messages/messages.service", "../services/table-data.service", "../directives/tables/table.service", "../services/project.service", "../services/group.service", './dashboard/dashboard.component', './login/login.component', './navigation/nav.component', './userManagement/user.management.component', "./registration/registration.component", "./projects/project-router.component", "../services/module-section.service", "../services/permission.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', '../services/api.service', 
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, api_service_1, user_service_1, nav_service_1, module_service_1, helpers_service_1, form_data_service_1, messages_service_1, table_data_service_1, table_service_1, project_service_1, group_service_1, dashboard_component_1, login_component_1, nav_component_1, user_management_component_1, registration_component_1, project_router_component_1;
+    var core_1, router_1, api_service_1, user_service_1, nav_service_1, module_service_1, helpers_service_1, form_data_service_1, messages_service_1, table_data_service_1, table_service_1, project_service_1, group_service_1, dashboard_component_1, login_component_1, nav_component_1, user_management_component_1, registration_component_1, project_router_component_1, module_section_service_1, permission_service_1;
     var AppComponent;
     return {
         setters:[
@@ -70,12 +70,17 @@ System.register(['angular2/core', 'angular2/router', '../services/api.service', 
             },
             function (project_router_component_1_1) {
                 project_router_component_1 = project_router_component_1_1;
+            },
+            function (module_section_service_1_1) {
+                module_section_service_1 = module_section_service_1_1;
+            },
+            function (permission_service_1_1) {
+                permission_service_1 = permission_service_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
-                function AppComponent(_navService, _apiService, _userService, _moduleService) {
+                function AppComponent(_navService, _userService, _moduleService) {
                     this._navService = _navService;
-                    this._apiService = _apiService;
                     this._userService = _userService;
                     this._moduleService = _moduleService;
                     // this.appRoutes = this.getAppRoutes();
@@ -85,25 +90,6 @@ System.register(['angular2/core', 'angular2/router', '../services/api.service', 
                     this._userService.user$.subscribe(function (user) { return _this.user = user; });
                     this._userService.loggedInCheck();
                     // this.getModules();
-                };
-                // Load information for modules
-                AppComponent.prototype.getModules = function () {
-                    var _this = this;
-                    this._apiService.get('modules')
-                        .subscribe(function (data) { return _this._moduleService.createModules(data.data); }, function (error) { return console.log(error); });
-                };
-                // Needs further work to get the component part of the route converted from a string to a type
-                AppComponent.prototype.buildMainMenus = function () {
-                    this._moduleService.modules.forEach(function (module) {
-                        module.menus.forEach(function (menu) {
-                            if (menu.link) {
-                                var route = { path: menu.link, component: window[menu.component], as: menu.name };
-                                console.log(route);
-                                this._navService.addRoute(this.constructor, route);
-                                this.appRoutes = this.getAppRoutes();
-                            }
-                        }, this);
-                    }, this);
                 };
                 AppComponent = __decorate([
                     core_1.Component({
@@ -117,15 +103,17 @@ System.register(['angular2/core', 'angular2/router', '../services/api.service', 
                         ],
                         providers: [
                             api_service_1.ApiService,
-                            user_service_1.UserService,
-                            module_service_1.ModuleService,
                             helpers_service_1.HelpersService,
                             form_data_service_1.FormDataService,
                             table_data_service_1.TableDataService,
                             messages_service_1.MessagesService,
                             table_service_1.TableService,
+                            user_service_1.UserService,
                             project_service_1.ProjectService,
-                            group_service_1.GroupService
+                            group_service_1.GroupService,
+                            module_service_1.ModuleService,
+                            module_section_service_1.ModuleSectionService,
+                            permission_service_1.PermissionService
                         ]
                     }),
                     router_1.RouteConfig([
@@ -136,7 +124,7 @@ System.register(['angular2/core', 'angular2/router', '../services/api.service', 
                         { path: '/usermanagement/...', as: 'UserManagement', component: user_management_component_1.UserManagementComponent },
                         { path: '/projects/...', as: 'Projects', component: project_router_component_1.ProjectRouterComponent },
                     ]), 
-                    __metadata('design:paramtypes', [nav_service_1.NavService, api_service_1.ApiService, user_service_1.UserService, module_service_1.ModuleService])
+                    __metadata('design:paramtypes', [nav_service_1.NavService, user_service_1.UserService, module_service_1.ModuleService])
                 ], AppComponent);
                 return AppComponent;
             }());

@@ -1,5 +1,5 @@
-import {ModuleSection} from "./module.section";
 import {Menu} from "./menu";
+import {ModuleSection} from "./module-section";
 
 export class Module {
 
@@ -10,11 +10,11 @@ export class Module {
     private _sections       : Array<ModuleSection>;
     private _menus          : Array<Menu>;
 
-    constructor(id:number, key:string, name:string, description:string) {
-        this._id = id;
-        this._key = key;
-        this._name = name;
-        this._description = description;
+    constructor(id?:number, key?:string, name?:string, description?:string) {
+        this._id = id || null;
+        this._key = key || '';
+        this._name = name || '';
+        this._description = description || '';
         this._sections = [];
         this._menus = [];
     }

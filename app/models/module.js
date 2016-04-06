@@ -7,10 +7,10 @@ System.register([], function(exports_1, context_1) {
         execute: function() {
             Module = (function () {
                 function Module(id, key, name, description) {
-                    this._id = id;
-                    this._key = key;
-                    this._name = name;
-                    this._description = description;
+                    this._id = id || null;
+                    this._key = key || '';
+                    this._name = name || '';
+                    this._description = description || '';
                     this._sections = [];
                     this._menus = [];
                 }

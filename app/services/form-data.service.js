@@ -1,4 +1,4 @@
-System.register(['angular2/core', "../directives/dynamic-form/models/question-dropdown", "../directives/dynamic-form/models/question-textbox"], function(exports_1, context_1) {
+System.register(['angular2/core', "../directives/dynamic-form/models/question-dropdown", "../directives/dynamic-form/models/question-textbox", "../directives/dynamic-form/models/question-checkbox"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, question_dropdown_1, question_textbox_1;
+    var core_1, question_dropdown_1, question_textbox_1, question_checkbox_1;
     var FormDataService;
     return {
         setters:[
@@ -22,6 +22,9 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
             },
             function (question_textbox_1_1) {
                 question_textbox_1 = question_textbox_1_1;
+            },
+            function (question_checkbox_1_1) {
+                question_checkbox_1 = question_checkbox_1_1;
             }],
         execute: function() {
             FormDataService = (function () {
@@ -246,7 +249,103 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                         return questionData.sort(function (a, b) { return a.order - b.order; });
                     });
                 };
-                FormDataService.prototype.getGroupAddUserData = function () {
+                FormDataService.prototype.getPermissionDetailData = function (permission) {
+                    return Promise.resolve(permission).then(function (permission) {
+                        var questionData = [
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'name',
+                                label: 'Name',
+                                value: permission.name,
+                                required: true,
+                                order: 1,
+                                type: 'text'
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'description',
+                                label: 'Description',
+                                value: permission.description,
+                                order: 2,
+                                type: 'text'
+                            }),
+                            new question_checkbox_1.CheckboxQuestion({
+                                key: 'view',
+                                label: 'View',
+                                value: permission.view,
+                                checked: permission.view,
+                                order: 3,
+                            }),
+                            new question_checkbox_1.CheckboxQuestion({
+                                key: 'add',
+                                label: 'Add',
+                                value: permission.add,
+                                checked: permission.add,
+                                order: 4,
+                            }),
+                            new question_checkbox_1.CheckboxQuestion({
+                                key: 'edit',
+                                label: 'Edit',
+                                value: permission.edit,
+                                checked: permission.edit,
+                                order: 5,
+                            }),
+                            new question_checkbox_1.CheckboxQuestion({
+                                key: 'delete',
+                                label: 'Delete',
+                                value: permission.delete,
+                                checked: permission.delete,
+                                order: 6,
+                            })
+                        ];
+                        return questionData.sort(function (a, b) { return a.order - b.order; });
+                    });
+                };
+                FormDataService.prototype.getPermissionCreateData = function (permission) {
+                    return Promise.resolve(permission).then(function (permission) {
+                        var questionData = [
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'name',
+                                label: 'Name',
+                                value: '',
+                                order: 1,
+                                read_only: true,
+                                type: 'text'
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'description',
+                                label: 'Description',
+                                value: '',
+                                order: 2,
+                                type: 'text'
+                            }),
+                            new question_checkbox_1.CheckboxQuestion({
+                                key: 'view',
+                                label: 'View',
+                                value: true,
+                                order: 3,
+                            }),
+                            new question_checkbox_1.CheckboxQuestion({
+                                key: 'add',
+                                label: 'Add',
+                                value: true,
+                                order: 4,
+                            }),
+                            new question_checkbox_1.CheckboxQuestion({
+                                key: 'edit',
+                                label: 'Edit',
+                                value: true,
+                                order: 5,
+                            }),
+                            new question_checkbox_1.CheckboxQuestion({
+                                key: 'delete',
+                                label: 'Delete',
+                                value: true,
+                                order: 6,
+                            })
+                        ];
+                        return questionData.sort(function (a, b) { return a.order - b.order; });
+                    });
+                };
+                FormDataService.prototype.getAddUserData = function () {
                     return Promise.resolve().then(function () {
                         var questionData = [
                             new question_textbox_1.TextboxQuestion({
@@ -269,12 +368,58 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                         return questionData.sort(function (a, b) { return a.order - b.order; });
                     });
                 };
-                FormDataService.prototype.getGroupAddProjectData = function () {
+                FormDataService.prototype.getAddProjectData = function () {
                     return Promise.resolve().then(function () {
                         var questionData = [
                             new question_textbox_1.TextboxQuestion({
                                 key: 'project',
                                 label: 'Choose Project',
+                                value: '',
+                                required: true,
+                                order: 1,
+                                type: 'text',
+                                search_box: true
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'selectedSearchValue',
+                                label: 'selectedSearchValue',
+                                value: '',
+                                order: 2,
+                                type: 'hidden'
+                            }),
+                        ];
+                        return questionData.sort(function (a, b) { return a.order - b.order; });
+                    });
+                };
+                FormDataService.prototype.getAddGroupData = function () {
+                    return Promise.resolve().then(function () {
+                        var questionData = [
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'group',
+                                label: 'Choose Group',
+                                value: '',
+                                required: true,
+                                order: 1,
+                                type: 'text',
+                                search_box: true
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'selectedSearchValue',
+                                label: 'selectedSearchValue',
+                                value: '',
+                                order: 2,
+                                type: 'hidden'
+                            }),
+                        ];
+                        return questionData.sort(function (a, b) { return a.order - b.order; });
+                    });
+                };
+                FormDataService.prototype.getAddModuleSectionData = function () {
+                    return Promise.resolve().then(function () {
+                        var questionData = [
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'module-section',
+                                label: 'Choose Module Section',
                                 value: '',
                                 required: true,
                                 order: 1,

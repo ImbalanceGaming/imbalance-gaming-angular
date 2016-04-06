@@ -1,12 +1,25 @@
-System.register([], function(exports_1, context_1) {
+System.register(["./user"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
+    var user_1;
     var Project;
     return {
-        setters:[],
+        setters:[
+            function (user_1_1) {
+                user_1 = user_1_1;
+            }],
         execute: function() {
             Project = (function () {
-                function Project() {
+                function Project(id, key, name, description, status, url, git_url) {
+                    this._id = id || null;
+                    this._key = key || '';
+                    this._name = name || '';
+                    this._description = description || '';
+                    this._status = status || '';
+                    this._url = url || '';
+                    this._git_url = git_url || '';
+                    this._lead_user = new user_1.User();
+                    this._lead_user_id = this._lead_user.id || null;
                 }
                 Object.defineProperty(Project.prototype, "id", {
                     get: function () {

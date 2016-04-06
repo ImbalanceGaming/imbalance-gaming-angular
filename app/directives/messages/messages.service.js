@@ -31,13 +31,32 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share'],
                 MessagesService.prototype.addMessage = function (message) {
                     this._messages.push(message);
                     this._messagesObserver.next(this._messages);
+                    this.removeViewedMessages();
                 };
                 MessagesService.prototype.removeMessage = function (index) {
                     this._messages.splice(index, 1);
                     this._messagesObserver.next(this._messages);
                 };
+                MessagesService.prototype.setMessagesViewed = function () {
+                    var _this = this;
+                    this._messages.forEach(function (message, index) {
+                        if (!message.viewed) {
+                            _this._messages[index].viewed = true;
+                            _this._messagesObserver.next(_this._messages);
+                        }
+                    }, this);
+                };
                 MessagesService.prototype.clearMessages = function () {
                     this._messages = [];
+                    this._messagesObserver.next(this._messages);
+                };
+                MessagesService.prototype.removeViewedMessages = function () {
+                    var _this = this;
+                    this._messages.forEach(function (message, index) {
+                        if (message.viewed) {
+                            _this._messages.splice(index, 1);
+                        }
+                    }, this);
                     this._messagesObserver.next(this._messages);
                 };
                 MessagesService = __decorate([

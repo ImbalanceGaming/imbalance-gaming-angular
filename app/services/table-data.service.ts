@@ -7,6 +7,9 @@ import {TableRow} from "../directives/tables/interfaces/table-row.interface";
 import {TableCell} from "../directives/tables/interfaces/table-cell.interface";
 import {Group} from "../models/group";
 import {Project} from "../models/project";
+import {Module} from "../models/module";
+import {ModuleSection} from "../models/module-section";
+import {Permission} from "../models/permission";
 
 @Injectable()
 export class TableDataService {
@@ -104,7 +107,8 @@ export class TableDataService {
         projects: Array<Project>,
         updateTableConfig:boolean = true,
         paginatorData?: any
-    ) {
+    ) : Promise {
+
         return Promise.resolve(projects).then(projects => {
 
             if (updateTableConfig) {
@@ -144,6 +148,65 @@ export class TableDataService {
 
             return this.table;
         });
+
+    }
+
+    getModuleTableData(
+        modules: Array<Module>,
+        updateTableConfig:boolean = true,
+        paginatorData?: any
+    ) {
+
+    }
+
+    getModuleSectionTableData(
+        moduleSections: Array<ModuleSection>,
+        updateTableConfig:boolean = true,
+        paginatorData?: any
+    ) {
+
+    }
+
+    getPermissionTableData(
+        permissions: Array<Permission>,
+        updateTableConfig:boolean = true,
+        paginatorData?: any
+    ) : Promise {
+
+        return Promise.resolve(permissions).then(permissions => {
+
+            if (updateTableConfig) {
+                this.updateTableConfig(paginatorData, 'permissions-paginator', '\PermissionDetail');
+            }
+
+            this.table.body.rows = [];
+
+            this.table.headers = [
+                <TableHeader>{value: 'Name', show: true},
+                <TableHeader>{value: 'Description', show: true},
+                <TableHeader>{value: 'View', show: true},
+                <TableHeader>{value: 'Add', show: true},
+                <TableHeader>{value: 'Edit', show: true},
+                <TableHeader>{value: 'Delete', show: true}
+            ];
+
+            permissions.forEach(function (permission:Permission) {
+                this.table.body.rows.push(<TableRow>{
+                    rowId: permission.id,
+                    cells: [
+                        <TableCell>{value: permission.name, detailCell: true, clickEvent: false},
+                        <TableCell>{value: permission.description, detailCell: false, clickEvent: false},
+                        <TableCell>{value: permission.view, detailCell: false, clickEvent: false},
+                        <TableCell>{value: permission.add, detailCell: false, clickEvent: false},
+                        <TableCell>{value: permission.edit, detailCell: false, clickEvent: false},
+                        <TableCell>{value: permission.delete, detailCell: false, clickEvent: false}
+                    ]
+                })
+            }, this);
+
+            return this.table;
+        });
+
     }
 
     private updateTableConfig(paginatorData: any, id: string, detailURL: string) {

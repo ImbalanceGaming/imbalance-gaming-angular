@@ -1,0 +1,151 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3>{{title}}</h3>
+    </div>
+    <div class="col-md-12 form">
+        <div class="row">
+            <div class="col-md-4">
+                <message-controls></message-controls>
+                <dynamic-form
+                        *ngIf="formData.length > 0 && formButtonData.length > 0"
+                        [questions]="formData"
+                        [formButtonData]="formButtonData"
+                        (saveEmitter)="saveChanges($event)"
+                        (deleteEmitter)="deleteUser()"
+                        (cancelEmitter)="cancelEdit()"
+                ></dynamic-form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h3>Users</h3>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <td colspan="6" class="table-button">
+                    <span class="pull-right">
+                        <dynamic-modal-form
+                                *ngIf="userModalFormData.length > 0"
+                                [modalHeader]="'Add User'"
+                                [buttonText]="'Add User'"
+                                [questions]="userModalFormData"
+                                [searchReturn]="userSearchReturn"
+                                (saveEmitter)="onAddUser($event)"
+                                (searchEmitter)="onUserSearch($event)"
+                        ></dynamic-modal-form>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Full Name</td>
+                <td>Role</td>
+                <td>Username</td>
+                <td>Email</td>
+                <td>Last Session</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody *ngIf="permission.users.length > 0">
+            <tr *ngFor="#user of permission.users">
+                <td><a [routerLink]="['\UserDetail', {id: user.id}]">{{user.forename}} {{user.surname}}</a></td>
+                <td>{{user.role}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.last_login}}</td>
+                <td><a class="link-click" (click)="onRemoveUser(user.id)">remove</a></td>
+            </tr>
+            </tbody>
+            <tbody *ngIf="permission.users.length == 0">
+            <tr>
+                <td colspan="6">
+                    This permissions does not have any users assigned
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-8">
+        <h3>Groups</h3>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <td colspan="3" class="table-button">
+                    <span class="pull-right">
+                        <dynamic-modal-form
+                                *ngIf="groupModalFormData.length > 0"
+                                [modalHeader]="'Add Group'"
+                                [buttonText]="'Add Group'"
+                                [questions]="groupModalFormData"
+                                [searchReturn]="groupSearchReturn"
+                                (saveEmitter)="onAddGroup($event)"
+                                (searchEmitter)="onGroupSearch($event)"
+                        ></dynamic-modal-form>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>Description</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody *ngIf="permission.groups.length > 0">
+            <tr *ngFor="#group of permission.groups">
+                <td>{{group?.name}}</td>
+                <td>{{group?.description}}</td>
+                <td><a class="link-click" (click)="onRemoveGroup(group.id)">remove</a></td>
+            </tr>
+            </tbody>
+            <tbody *ngIf="permission.groups.length == 0">
+            <tr >
+                <td colspan="3">
+                    This permissions does not have any groups assigned
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-8">
+        <h3>Module Sections</h3>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <td colspan="3" class="table-button">
+                    <span class="pull-right">
+                        <dynamic-modal-form
+                                *ngIf="moduleSectionModalFormData.length > 0"
+                                [modalHeader]="'Add Group'"
+                                [buttonText]="'Add Group'"
+                                [questions]="moduleSectionModalFormData"
+                                [searchReturn]="moduleSectionSearchReturn"
+                                (saveEmitter)="onAddModuleSection($event)"
+                                (searchEmitter)="onModuleSectionSearch($event)"
+                        ></dynamic-modal-form>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>Description</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody *ngIf="permission.module_sections.length > 0">
+            <tr *ngFor="#moduleSection of permission.module_sections">
+                <td>{{moduleSection?.name}}</td>
+                <td>{{moduleSection?.description}}</td>
+                <td><a class="link-click" (click)="onRemoveModuleSection(moduleSection.id)">remove</a></td>
+            </tr>
+            </tbody>
+            <tbody *ngIf="permission.module_sections.length == 0">
+            <tr>
+                <td colspan="3">
+                    This permissions does not have any module sections assigned
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

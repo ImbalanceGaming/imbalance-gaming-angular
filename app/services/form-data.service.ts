@@ -7,6 +7,8 @@ import {User}               from "../models/user";
 import {FormButtonInterface} from "../directives/form-buttons/form-button.interface";
 import {Group} from "../models/group";
 import {Project} from "../models/project";
+import {Permission} from "../models/permission";
+import {CheckboxQuestion} from "../directives/dynamic-form/models/question-checkbox";
 
 @Injectable()
 export class FormDataService {
@@ -246,7 +248,111 @@ export class FormDataService {
 
     }
 
-    getGroupAddUserData() {
+    getPermissionDetailData(permission: Permission) {
+
+        return Promise.resolve(permission).then(permission => {
+            let questionData:QuestionBase<any>[] = [
+                new TextboxQuestion({
+                    key:'name',
+                    label:'Name',
+                    value:permission.name,
+                    required: true,
+                    order: 1,
+                    type: 'text'
+                }),
+                new TextboxQuestion({
+                    key:'description',
+                    label:'Description',
+                    value:permission.description,
+                    order: 2,
+                    type: 'text'
+                }),
+                new CheckboxQuestion({
+                    key:'view',
+                    label:'View',
+                    value:permission.view,
+                    checked:permission.view,
+                    order: 3,
+                }),
+                new CheckboxQuestion({
+                    key:'add',
+                    label:'Add',
+                    value:permission.add,
+                    checked:permission.add,
+                    order: 4,
+                }),
+                new CheckboxQuestion({
+                    key:'edit',
+                    label:'Edit',
+                    value:permission.edit,
+                    checked:permission.edit,
+                    order: 5,
+                }),
+                new CheckboxQuestion({
+                    key:'delete',
+                    label:'Delete',
+                    value:permission.delete,
+                    checked:permission.delete,
+                    order: 6,
+                })
+            ];
+
+            return questionData.sort((a,b) => a.order - b.order);
+        });
+
+    }
+
+    getPermissionCreateData(permission: Permission) {
+
+        return Promise.resolve(permission).then(permission => {
+            let questionData:QuestionBase<any>[] = [
+                new TextboxQuestion({
+                    key:'name',
+                    label:'Name',
+                    value:'',
+                    order: 1,
+                    read_only: true,
+                    type: 'text'
+                }),
+                new TextboxQuestion({
+                    key:'description',
+                    label:'Description',
+                    value:'',
+                    order: 2,
+                    type: 'text'
+                }),
+                new CheckboxQuestion({
+                    key:'view',
+                    label:'View',
+                    value:true,
+                    order: 3,
+                }),
+                new CheckboxQuestion({
+                    key:'add',
+                    label:'Add',
+                    value:true,
+                    order: 4,
+                }),
+                new CheckboxQuestion({
+                    key:'edit',
+                    label:'Edit',
+                    value:true,
+                    order: 5,
+                }),
+                new CheckboxQuestion({
+                    key:'delete',
+                    label:'Delete',
+                    value:true,
+                    order: 6,
+                })
+            ];
+
+            return questionData.sort((a,b) => a.order - b.order);
+        });
+
+    }
+
+    getAddUserData() {
 
         return Promise.resolve().then(() => {
             let questionData:QuestionBase<any>[] = [
@@ -273,13 +379,67 @@ export class FormDataService {
 
     }
 
-    getGroupAddProjectData() {
+    getAddProjectData() {
 
         return Promise.resolve().then(() => {
             let questionData:QuestionBase<any>[] = [
                 new TextboxQuestion({
                     key:'project',
                     label:'Choose Project',
+                    value:'',
+                    required: true,
+                    order: 1,
+                    type: 'text',
+                    search_box: true
+                }),
+                new TextboxQuestion({
+                    key:'selectedSearchValue',
+                    label:'selectedSearchValue',
+                    value:'',
+                    order: 2,
+                    type: 'hidden'
+                }),
+            ];
+
+            return questionData.sort((a,b) => a.order - b.order);
+        });
+
+    }
+
+    getAddGroupData() {
+
+        return Promise.resolve().then(() => {
+            let questionData:QuestionBase<any>[] = [
+                new TextboxQuestion({
+                    key:'group',
+                    label:'Choose Group',
+                    value:'',
+                    required: true,
+                    order: 1,
+                    type: 'text',
+                    search_box: true
+                }),
+                new TextboxQuestion({
+                    key:'selectedSearchValue',
+                    label:'selectedSearchValue',
+                    value:'',
+                    order: 2,
+                    type: 'hidden'
+                }),
+            ];
+
+            return questionData.sort((a,b) => a.order - b.order);
+        });
+
+    }
+
+    getAddModuleSectionData() {
+
+        return Promise.resolve().then(() => {
+            let questionData:QuestionBase<any>[] = [
+                new TextboxQuestion({
+                    key:'module-section',
+                    label:'Choose Module Section',
                     value:'',
                     required: true,
                     order: 1,

@@ -1,4 +1,5 @@
-import {MenuSubSection} from "./menu.subsection";
+
+import {MenuSubSection} from "./menu-subsection";
 
 export class Menu {
 

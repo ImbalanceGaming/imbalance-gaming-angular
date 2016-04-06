@@ -1,5 +1,4 @@
 import {User} from "./user";
-import {Group} from "./group";
 
 export class Project {
 
@@ -8,12 +7,30 @@ export class Project {
     private _name : string;
     private _description : string;
     private _status : string;
-    private _lead_user : User;
-    private _lead_user_id : number;
     private _url: string;
     private _git_url: string;
+    private _lead_user : User;
+    private _lead_user_id : number;
 
-    constructor() {}
+    constructor(
+        id?: number,
+        key?: string,
+        name?: string,
+        description?: string,
+        status?: string,
+        url?: string,
+        git_url?: string
+    ) {
+        this._id = id || null;
+        this._key = key || '';
+        this._name = name || '';
+        this._description = description || '';
+        this._status = status || '';
+        this._url = url || '';
+        this._git_url = git_url || '';
+        this._lead_user = new User();
+        this._lead_user_id = this._lead_user.id || null;
+    }
 
     get id():number {
         return this._id;

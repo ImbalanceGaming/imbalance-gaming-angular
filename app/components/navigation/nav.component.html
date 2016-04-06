@@ -15,18 +15,7 @@
         <div *ngIf="user?.loggedIn" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a [routerLink]="['UserManagement']">User Management</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <!--<li><a href="#">A Project</a></li>-->
-                        <!--<li><a href="#">Another Project</a></li>-->
-                        <!--<li><a href="#">Another Project</a></li>-->
-                        <!--<li role="separator" class="divider"></li>-->
-                        <li><a [routerLink]="['Projects']">View All Projects</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Create a Project</a></li>
-                    </ul>
-                </li>
+                <li><a [routerLink]="['Projects']">Projects</a></li>
                 <!--<li class="dropdown">-->
                     <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Modules<span class="caret"></span></a>-->
                     <!--<ul class="dropdown-menu">-->

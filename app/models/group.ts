@@ -9,7 +9,13 @@ export class Group {
     private _users : Array<User> = [];
     private _projects : Array<Project> = [];
 
-    constructor() {}
+    constructor(id?: number, name?: string, description?: string) {
+        this._id = id || null;
+        this._name = name || '';
+        this._description = description || '';
+        this._users = [];
+        this._projects = [];
+    }
 
     get id():number {
         return this._id;

@@ -66,9 +66,9 @@ System.register(['angular2/core', 'angular2/router', "../../../../common/auth-ch
                     this.projectSearchReturn = [];
                     this.title = 'Group Detail';
                     this.group = new group_1.Group();
-                    this._formDataService.getGroupAddUserData()
+                    this._formDataService.getAddUserData()
                         .then(function (formData) { return _this.userModalFormData = formData; });
-                    this._formDataService.getGroupAddProjectData()
+                    this._formDataService.getAddProjectData()
                         .then(function (formData) { return _this.projectModalFormData = formData; });
                 }
                 GroupDetailComponent.prototype.ngOnInit = function () {

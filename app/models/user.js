@@ -6,7 +6,21 @@ System.register([], function(exports_1, context_1) {
         setters:[],
         execute: function() {
             User = (function () {
-                function User() {
+                function User(id, username, email, role, last_login, active, forename, surname, dob, country, website, avatar, twitter_username, facebook) {
+                    this._id = id || null;
+                    this._username = username || '';
+                    this._email = email || '';
+                    this._role = role || '';
+                    this._last_login = last_login;
+                    this._active = active || false;
+                    this._forename = forename || '';
+                    this._surname = surname || '';
+                    this._dob = dob || '';
+                    this._country = country || '';
+                    this._website = website || '';
+                    this._avatar = avatar || '';
+                    this._twitter_username = twitter_username || '';
+                    this._facebook = facebook || '';
                     this._loggedIn = false;
                 }
                 Object.defineProperty(User.prototype, "id", {

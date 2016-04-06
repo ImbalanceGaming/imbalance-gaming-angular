@@ -22,6 +22,8 @@ export class MessagesService {
         this._messages.push(message);
         this._messagesObserver.next(this._messages);
 
+        this.removeViewedMessages();
+
     }
 
     removeMessage(index: number) {
@@ -31,9 +33,32 @@ export class MessagesService {
         
     }
 
+    setMessagesViewed() {
+
+        this._messages.forEach((message: Message, index) => {
+            if (!message.viewed) {
+                this._messages[index].viewed = true;
+                this._messagesObserver.next(this._messages);
+            }
+        }, this);
+
+    }
+
     clearMessages() {
 
         this._messages = [];
+        this._messagesObserver.next(this._messages);
+
+    }
+
+    private removeViewedMessages() {
+
+        this._messages.forEach((message: Message, index) => {
+            if (message.viewed) {
+                this._messages.splice(index, 1)
+            }
+        }, this);
+
         this._messagesObserver.next(this._messages);
 
     }

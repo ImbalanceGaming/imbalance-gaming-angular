@@ -50,10 +50,10 @@ export class GroupDetailComponent {
         this.title = 'Group Detail';
         this.group = new Group();
 
-        this._formDataService.getGroupAddUserData()
+        this._formDataService.getAddUserData()
             .then(formData => this.userModalFormData = formData);
 
-        this._formDataService.getGroupAddProjectData()
+        this._formDataService.getAddProjectData()
             .then(formData => this.projectModalFormData = formData);
     }
 

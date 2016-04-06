@@ -10,6 +10,8 @@ import {UsersComponent}     from "./users/users.component";
 import {UserDetail}         from "./users/userDetail/user-detail.component";
 import {GroupsComponent}    from "./groups/groups.component";
 import {GroupDetailComponent} from "./groups/groupDetail/group-detail.component";
+import {PermissionsComponent} from "./permissions/permissions.component";
+import {PermissionDetailComponent} from "./permissions/permissionDetail/permission-detail.component";
 
 @Component({
     selector: 'user-management',
@@ -22,7 +24,9 @@ import {GroupDetailComponent} from "./groups/groupDetail/group-detail.component"
     {path: '/users', name: 'Users', component: UsersComponent, useAsDefault: true},
     {path: '/users/userDetail/:id', name: 'UserDetail', component: UserDetail},
     {path: '/groups', name: 'Groups', component: GroupsComponent},
-    {path: '/groups/groupDetail/:id', name: 'GroupDetail', component: GroupDetailComponent}
+    {path: '/groups/groupDetail/:id', name: 'GroupDetail', component: GroupDetailComponent},
+    {path: '/permissions', name: 'Permissions', component: PermissionsComponent},
+    {path: '/permissions/permissionDetail/:id', name: 'PermissionDetail', component: PermissionDetailComponent}
 ])
 
 @CanActivate((next:ComponentInstruction, previous:ComponentInstruction) => {

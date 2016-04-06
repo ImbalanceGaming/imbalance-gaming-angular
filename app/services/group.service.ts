@@ -1,4 +1,4 @@
-import {Injectable, Inject}                 from 'angular2/core';
+import {Injectable}                 from 'angular2/core';
 import {Observable}                 from 'rxjs/Observable';
 import {Observer}                   from 'rxjs/Observer';
 import 'rxjs/add/operator/share';
@@ -37,11 +37,11 @@ export class GroupService implements ServiceInterface {
 
     create(groupData) : Group {
 
-        let group = new Group();
-        group.id = groupData.id;
-        group.name = groupData.name;
-        group.description = groupData.description;
-        return group;
+        return new Group(
+            groupData.id,
+            groupData.name,
+            groupData.description
+        );
 
     }
 
@@ -174,6 +174,27 @@ export class GroupService implements ServiceInterface {
 
     }
 
+    findGroups(searchTerm: string) {
+
+        return this._apiService.getPromiseWithAuth('findGroups/'+searchTerm)
+            .then(
+                data => {
+                    let groupData = [];
+                    data.data.forEach(group => {
+                        groupData.push({
+                            id: group.id,
+                            name: group.name
+                        });
+                    });
+                    return groupData;
+                },
+                error => {
+                    return [];
+                }
+            );
+
+    }
+
     addUserToGroup(groupId: number, userId: number) {
 
         return this._apiService.patchPromise('addUserToGroup/'+groupId, {user_id: userId})
@@ -303,8 +324,6 @@ export class GroupService implements ServiceInterface {
         }
 
         this.set(this._groups);
-
-        console.log(this._groups);
 
         if (buildTableData) {
             this._tableDataService.getGroupsTableData(this._groups, true, groupsData.paginator)

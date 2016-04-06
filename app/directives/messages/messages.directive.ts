@@ -20,4 +20,8 @@ export class MessagesDirective {
         this._messagesService.removeMessage(index);
     }
 
+    ngAfterViewChecked() {
+        this._messagesService.setMessagesViewed();
+    }
+
 }

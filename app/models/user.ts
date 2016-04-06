@@ -17,7 +17,37 @@ export class User {
 
     private _loggedIn    : boolean;
 
-    constructor() {
+    constructor(
+        id?: number,
+        username?: string,
+        email?: string,
+        role?: string,
+        last_login?: string,
+        active?: boolean,
+        forename?: string,
+        surname?: string,
+        dob?: string,
+        country?: string,
+        website?: string,
+        avatar?: string,
+        twitter_username?: string,
+        facebook?: string
+    ) {
+        this._id = id || null;
+        this._username = username || '';
+        this._email = email || '';
+        this._role = role || '';
+        this._last_login = last_login;
+        this._active = active || false;
+        this._forename = forename || '';
+        this._surname = surname || '';
+        this._dob = dob || '';
+        this._country = country || '';
+        this._website = website || '';
+        this._avatar = avatar || '';
+        this._twitter_username = twitter_username || '';
+        this._facebook = facebook || '';
+
         this._loggedIn = false;
     }
 

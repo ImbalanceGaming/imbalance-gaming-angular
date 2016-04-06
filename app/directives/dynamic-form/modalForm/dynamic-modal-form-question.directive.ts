@@ -63,4 +63,12 @@ export class DynamicModalFormQuestionDirective {
         this.searchReturn = [];
     }
 
+    checkboxChange() {
+        if (this.form.value[this.question.key] == '1') {
+            (<Control>this.form.controls[this.question.key]).updateValue(false);
+        } else {
+            (<Control>this.form.controls[this.question.key]).updateValue(true);
+        }
+    }
+
 }

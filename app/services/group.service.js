@@ -56,11 +56,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                     this.groups$ = Observable_1.Observable.create(function (observer) { return _this._groupsObserver = observer; }).share();
                 }
                 GroupService.prototype.create = function (groupData) {
-                    var group = new group_1.Group();
-                    group.id = groupData.id;
-                    group.name = groupData.name;
-                    group.description = groupData.description;
-                    return group;
+                    return new group_1.Group(groupData.id, groupData.name, groupData.description);
                 };
                 GroupService.prototype.get = function (id) {
                     return Promise.resolve(this._groups).then(function (groups) { return groups.filter(function (group) { return group.id === id; })[0]; });
@@ -157,6 +153,21 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                         users: userIds,
                         projects: projectIds
                     };
+                };
+                GroupService.prototype.findGroups = function (searchTerm) {
+                    return this._apiService.getPromiseWithAuth('findGroups/' + searchTerm)
+                        .then(function (data) {
+                        var groupData = [];
+                        data.data.forEach(function (group) {
+                            groupData.push({
+                                id: group.id,
+                                name: group.name
+                            });
+                        });
+                        return groupData;
+                    }, function (error) {
+                        return [];
+                    });
                 };
                 GroupService.prototype.addUserToGroup = function (groupId, userId) {
                     var _this = this;
@@ -265,7 +276,6 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                         _loop_1(key);
                     }
                     this.set(this._groups);
-                    console.log(this._groups);
                     if (buildTableData) {
                         this._tableDataService.getGroupsTableData(this._groups, true, groupsData.paginator)
                             .then(function (table) { return _this._tableService.addTable(table); });

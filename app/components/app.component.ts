@@ -22,6 +22,8 @@ import {ProjectRouterComponent}     from "./projects/project-router.component";
 
 import {Module} from "../models/module";
 import {Menu}   from "../models/menu";
+import {ModuleSectionService} from "../services/module-section.service";
+import {PermissionService} from "../services/permission.service";
 
 @Component({
     selector: 'IGMS',
@@ -34,15 +36,17 @@ import {Menu}   from "../models/menu";
     ],
     providers: [
         ApiService,
-        UserService,
-        ModuleService,
         HelpersService,
         FormDataService,
         TableDataService,
         MessagesService,
         TableService,
+        UserService,
         ProjectService,
-        GroupService
+        GroupService,
+        ModuleService,
+        ModuleSectionService,
+        PermissionService
     ]
 })
 
@@ -64,7 +68,6 @@ export class AppComponent {
 
     constructor(
         private _navService:NavService,
-        private _apiService:ApiService,
         private _userService:UserService,
         private _moduleService:ModuleService
     ) {
@@ -77,28 +80,28 @@ export class AppComponent {
         // this.getModules();
     }
 
-    // Load information for modules
-    private getModules() {
-        this._apiService.get('modules')
-            .subscribe(
-                data => this._moduleService.createModules(data.data),
-                error => console.log(error)
-            );
-    }
-
-    // Needs further work to get the component part of the route converted from a string to a type
-    private buildMainMenus() {
-        this._moduleService.modules.forEach(function(module:Module) {
-            module.menus.forEach(function(menu:Menu) {
-                if (menu.link) {
-                    let route = {path: menu.link, component: window[menu.component], as: menu.name};
-                    console.log(route);
-                    this._navService.addRoute(this.constructor, route);
-                    this.appRoutes = this.getAppRoutes();
-                }
-            }, this);
-        }, this);
-    }
+    // // Load information for modules
+    // private getModules() {
+    //     this._apiService.get('modules')
+    //         .subscribe(
+    //             data => this._moduleService.createModules(data.data),
+    //             error => console.log(error)
+    //         );
+    // }
+    //
+    // // Needs further work to get the component part of the route converted from a string to a type
+    // private buildMainMenus() {
+    //     this._moduleService.modules.forEach(function(module:Module) {
+    //         module.menus.forEach(function(menu:Menu) {
+    //             if (menu.link) {
+    //                 let route = {path: menu.link, component: window[menu.component], as: menu.name};
+    //                 console.log(route);
+    //                 this._navService.addRoute(this.constructor, route);
+    //                 this.appRoutes = this.getAppRoutes();
+    //             }
+    //         }, this);
+    //     }, this);
+    // }
 
     // Get routes currently set in the nav service
     // private getAppRoutes():string[][] {

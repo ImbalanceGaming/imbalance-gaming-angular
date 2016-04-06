@@ -61,6 +61,14 @@ System.register(['angular2/core', 'angular2/common', "../models/question-base"],
                     this.form.controls['selectedSearchValue'].updateValue(user.id);
                     this.searchReturn = [];
                 };
+                DynamicFormQuestionDirective.prototype.checkboxChange = function () {
+                    if (this.form.value[this.question.key] == '1') {
+                        this.form.controls[this.question.key].updateValue(false);
+                    }
+                    else {
+                        this.form.controls[this.question.key].updateValue(true);
+                    }
+                };
                 __decorate([
                     core_1.Input(), 
                     __metadata('design:type', question_base_1.QuestionBase)
