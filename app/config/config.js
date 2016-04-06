@@ -17,8 +17,8 @@ System.register([], function(exports_1, context_1) {
                     mame: 'Imbalance Gaming Management Interface',
                     description: 'Angular 2 management frontend for Imbalance website.',
                     version: '0.0.3',
-                    devMode: true,
-                    liveAPIUrl: 'https://api.imbalancegaming.com/api/',
+                    devMode: false,
+                    liveAPIUrl: 'http://api.imbalancegaming.com/api/',
                     devAPIUrl: 'https://192.168.0.2/imbalance/api/public/index.php/api/'
                 };
                 return Config;
