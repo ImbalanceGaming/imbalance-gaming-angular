@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../../services/user.service', '../../services/api.service', "../../services/helpers.service"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../../services/user.service', '../../services/api.service', "../../services/helpers.service", "../../services/module.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, user_service_1, api_service_1, helpers_service_1;
+    var core_1, router_1, user_service_1, api_service_1, helpers_service_1, module_service_1;
     var LoginComponent;
     return {
         setters:[
@@ -28,14 +28,18 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
             },
             function (helpers_service_1_1) {
                 helpers_service_1 = helpers_service_1_1;
+            },
+            function (module_service_1_1) {
+                module_service_1 = module_service_1_1;
             }],
         execute: function() {
             LoginComponent = (function () {
-                function LoginComponent(_apiService, _router, _userService, _helpersService) {
+                function LoginComponent(_apiService, _router, _userService, _helpersService, _moduleService) {
                     this._apiService = _apiService;
                     this._router = _router;
                     this._userService = _userService;
                     this._helpersService = _helpersService;
+                    this._moduleService = _moduleService;
                     this.title = 'Login';
                     this._submitted = false;
                     this.loginError = {
@@ -57,7 +61,10 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
                     if (jwt != null) {
                         localStorage.setItem('jwt', jwt);
                         this._apiService.getWithAuth('loginUser')
-                            .subscribe(function (data) { return _this._userService.setUserDetails(data); }, function (error) { return _this.loginError = _this._helpersService.processErrors(error); }, function () { return _this._router.navigate(['Dashboard']); });
+                            .subscribe(function (data) { return _this._userService.setUserDetails(data); }, function (error) { return _this.loginError = _this._helpersService.processErrors(error); }, function () {
+                            _this._router.navigate(['Dashboard']);
+                            _this._moduleService.setPermissions();
+                        });
                     }
                 };
                 LoginComponent = __decorate([
@@ -67,7 +74,7 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
                         styleUrls: ['app/components/login/login.component.css'],
                         directives: [router_1.ROUTER_DIRECTIVES]
                     }), 
-                    __metadata('design:paramtypes', [api_service_1.ApiService, router_1.Router, user_service_1.UserService, helpers_service_1.HelpersService])
+                    __metadata('design:paramtypes', [api_service_1.ApiService, router_1.Router, user_service_1.UserService, helpers_service_1.HelpersService, module_service_1.ModuleService])
                 ], LoginComponent);
                 return LoginComponent;
             }());

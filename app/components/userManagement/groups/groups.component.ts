@@ -1,8 +1,5 @@
 import {Component}                  from 'angular2/core';
-import {CanActivate, ROUTER_DIRECTIVES}     from 'angular2/router';
-
-import {authCheck}            from "../../../common/auth-check"
-import {ComponentInstruction} from "../../../../node_modules/angular2/src/router/instruction";
+import {ROUTER_DIRECTIVES}     from 'angular2/router';
 
 import {TableDirective}     from "../../../directives/tables/table.directive";
 import {MessagesDirective}  from "../../../directives/messages/messages.directive";
@@ -14,10 +11,6 @@ import {GroupService} from "../../../services/group.service";
     templateUrl: 'app/components/userManagement/groups/groups.component.html',
     styleUrls: ['app/components/userManagement/groups/groups.component.css'],
     directives: [ROUTER_DIRECTIVES, TableDirective, MessagesDirective]
-})
-
-@CanActivate((next: ComponentInstruction, previous: ComponentInstruction) => {
-    return authCheck(next, previous);
 })
 
 export class GroupsComponent {
@@ -37,7 +30,7 @@ export class GroupsComponent {
 
     ngOnInit() {
         this._groupsService.groups$.subscribe(groups => this.groups = groups);
-        this._groupsService.getGroups(1, false, true);
+        this._groupsService.getGroups(1, true, true);
     }
 
     onSubmit() {

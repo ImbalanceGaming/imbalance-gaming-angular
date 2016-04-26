@@ -19,7 +19,7 @@
             <label>
                 <input [ngControl]="question.key"
                        [id]="question.key" [type]="question.type" [checked]="question.checked == 1" (change)="checkboxChange()">
-                <strong>{{question.key}}</strong>
+                <strong>{{question.label}}</strong>
             </label>
         </div>
     </div>

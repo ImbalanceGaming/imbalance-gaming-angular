@@ -4,22 +4,21 @@
             <h3>{{title}}</h3>
         </div>
         <div class="col-md-2">
-            <dynamic-modal-form
-                    *ngIf="formData.length > 0"
-                    [modalHeader]="'New Project'"
-                    [buttonText]="'Create New Project'"
-                    [questions]="formData"
-                    [searchReturn]="userSearchReturn"
-                    (saveEmitter)="onSubmit($event)"
-                    (searchEmitter)="onUserSearch($event)"
-            ></dynamic-modal-form>
+            <div class="pull-right">
+                <dynamic-modal-form
+                        *ngIf="formData.length > 0"
+                        [modalHeader]="'New Project'"
+                        [buttonText]="'Create New Project'"
+                        [questions]="formData"
+                        [searchReturn]="searchReturn"
+                        (saveEmitter)="onSubmit($event)"
+                        (searchEmitter)="onSearch($event)"
+                ></dynamic-modal-form>
+            </div>
         </div>
     </div>
     <div class="row projects">
-        <div class="col-md-2 nav-row">
-            <a [routerLink]="['Projects']">Projects</a> <br/>
-        </div>
-        <div class="col-md-10">
+        <div class="col-md-8 center-block" style="float:none;">
             <router-outlet></router-outlet>
         </div>
     </div>

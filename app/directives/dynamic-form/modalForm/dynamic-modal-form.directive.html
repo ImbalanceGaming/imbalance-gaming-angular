@@ -1,5 +1,4 @@
-<div>
-    <button type="button" class="btn btn-default pull-right" (click)="modal.open()">{{buttonText}}</button>
+    <button type="button" class="btn btn-default" (click)="modal.open()">{{buttonText}}</button>
 
     <modal #modal (onClose)="onSubmit()">
         <modal-header [show-close]="false">
@@ -26,4 +25,3 @@
                 </button>
         </modal-footer>
     </modal>
-</div>

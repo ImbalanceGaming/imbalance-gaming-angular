@@ -6,7 +6,7 @@ System.register([], function(exports_1, context_1) {
         setters:[],
         execute: function() {
             User = (function () {
-                function User(id, username, email, role, last_login, active, forename, surname, dob, country, website, avatar, twitter_username, facebook) {
+                function User(id, username, email, role, last_login, active, forename, surname, dob, country, website, avatar, twitter_username, facebook, has_dev_area) {
                     this._id = id || null;
                     this._username = username || '';
                     this._email = email || '';
@@ -21,6 +21,7 @@ System.register([], function(exports_1, context_1) {
                     this._avatar = avatar || '';
                     this._twitter_username = twitter_username || '';
                     this._facebook = facebook || '';
+                    this._has_dev_area = has_dev_area || false;
                     this._loggedIn = false;
                 }
                 Object.defineProperty(User.prototype, "id", {
@@ -169,6 +170,16 @@ System.register([], function(exports_1, context_1) {
                     },
                     set: function (value) {
                         this._loggedIn = value;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(User.prototype, "has_dev_area", {
+                    get: function () {
+                        return this._has_dev_area;
+                    },
+                    set: function (value) {
+                        this._has_dev_area = value;
                     },
                     enumerable: true,
                     configurable: true

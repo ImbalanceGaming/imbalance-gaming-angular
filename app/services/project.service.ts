@@ -10,7 +10,9 @@ import {TableService}               from "../directives/tables/table.service";
 import {TableDataService}           from "./table-data.service";
 import {ServiceInterface}           from "../interfaces/service.interface";
 import {UserService}                from "./user.service";
-import {GroupService}               from "./group.service";
+import {ProjectPackage} from "../models/project-package";
+import {ProjectHistory} from "../models/project-history";
+import {Server} from "../models/server";
 
 @Injectable()
 export class ProjectService implements ServiceInterface {
@@ -38,9 +40,7 @@ export class ProjectService implements ServiceInterface {
         project.key = projectData.key;
         project.name = projectData.name;
         project.description = projectData.description;
-        project.status = projectData.status;
         project.url = projectData.url;
-        project.git_url = projectData.git_url;
         return project;
 
     }
@@ -106,9 +106,9 @@ export class ProjectService implements ServiceInterface {
 
     }
 
-    update(project: Project) {
+    update(project: Project) : Promise {
 
-        this._apiService.patch('projects/'+project.id, this.generateData(project)).subscribe(
+        return this._apiService.patchPromise('projects/'+project.id, this.generateData(project)).then(
             data => {
                 this._messageService.addMessage({
                     success: data.success.message,
@@ -155,10 +155,8 @@ export class ProjectService implements ServiceInterface {
             key : project.key,
             name : project.name,
             description : project.description,
-            status : project.status,
             url : project.url,
-            git_url : project.git_url,
-            lead_user_id: project.lead_user_id
+            lead_user_id: project.lead_user_id,
         };
 
     }
@@ -210,16 +208,60 @@ export class ProjectService implements ServiceInterface {
         for(let key in projectsData.data) {
             let projectInfo;
             let projectLeadUser;
+            let projectPackages;
+            let projectHistory;
+            let projectServers;
 
             if (projectsData.data.hasOwnProperty(key)) {
                 projectInfo = projectsData.data[key].project;
                 projectLeadUser = projectsData.data[key].lead_user;
+                projectPackages = projectsData.data[key].project_packages;
+                projectHistory = projectsData.data[key].project_history;
+                projectServers = projectsData.data[key].servers;
             }
 
             let project = this.create(projectInfo);
 
             if (projectLeadUser != null) {
                 project.lead_user = this._userService.create(projectLeadUser);
+            }
+
+            if (projectPackages.length > 0) {
+                projectPackages.forEach(packageData => {
+                    let projectPackage = new ProjectPackage(
+                        packageData.id,
+                        packageData.name,
+                        packageData.repository,
+                        packageData.deploy_branch,
+                        packageData.deploy_location
+                    );
+                    projectPackage.project = project;
+                    project.packages.push(projectPackage);
+                });
+            }
+
+            if (projectHistory.length > 0) {
+                projectHistory.forEach(historyData => {
+                    let projectHistory = new ProjectHistory(
+                        historyData.id,
+                        historyData.deployment_date,
+                        historyData.committer,
+                        historyData.commit,
+                        historyData.status
+                    );
+                    project.history.push(projectHistory);
+                });
+            }
+            
+            if (projectServers.length > 0) {
+                projectServers.forEach(serverData => {
+                    let server = new Server(
+                        serverData.id,
+                        serverData.name,
+                        serverData.address
+                    );
+                    project.servers.push(server);
+                });
             }
 
             this._projects.push(project);

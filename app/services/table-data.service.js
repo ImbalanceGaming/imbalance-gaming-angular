@@ -38,7 +38,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     if (updateTableConfig === void 0) { updateTableConfig = true; }
                     return Promise.resolve(users).then(function (users) {
                         if (updateTableConfig) {
-                            _this.updateTableConfig(paginatorData, 'users-paginator', '\UserDetail');
+                            _this.updateTableConfig(paginatorData, 'users-paginator', 'UserDetail');
                         }
                         _this.table.body.rows = [];
                         _this.table.headers = [
@@ -71,7 +71,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     if (updateTableConfig === void 0) { updateTableConfig = true; }
                     return Promise.resolve(groups).then(function (groups) {
                         if (updateTableConfig) {
-                            _this.updateTableConfig(paginatorData, 'groups-paginator', '\GroupDetail');
+                            _this.updateTableConfig(paginatorData, 'groups-paginator', 'GroupDetail');
                         }
                         _this.table.body.rows = [];
                         _this.table.headers = [
@@ -95,7 +95,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     if (updateTableConfig === void 0) { updateTableConfig = true; }
                     return Promise.resolve(projects).then(function (projects) {
                         if (updateTableConfig) {
-                            _this.updateTableConfig(paginatorData, 'projects-paginator', '\ProjectDetail');
+                            _this.updateTableConfig(paginatorData, 'projects-paginator', 'ProjectDetail');
                         }
                         _this.table.body.rows = [];
                         _this.table.headers = [
@@ -104,8 +104,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                             { value: 'Description', show: true },
                             { value: 'Project Lead', show: true },
                             { value: 'Project URL', show: true },
-                            { value: 'Git URL', show: true },
-                            { value: 'Status', show: true },
+                            { value: 'Packages', show: true },
                             { value: 'Deploy', show: false },
                         ];
                         projects.forEach(function (project) {
@@ -119,14 +118,16 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                                         value: project.lead_user ? project.lead_user.forename + ' ' + project.lead_user.surname : 'None',
                                         detailCell: false, clickEvent: false },
                                     { value: project.url ? project.url : 'N/A', detailCell: false, clickEvent: false },
-                                    { value: project.git_url, detailCell: false, clickEvent: false },
-                                    { value: project.status, detailCell: false, clickEvent: false },
+                                    { value: project.packages.length, detailCell: false, clickEvent: false },
                                     { value: 'deploy', detailCell: false, clickEvent: true },
                                 ]
                             });
                         }, _this);
                         return _this.table;
                     });
+                };
+                TableDataService.prototype.getProjectPackageTableData = function (packages, updateTableConfig, paginatorData) {
+                    if (updateTableConfig === void 0) { updateTableConfig = true; }
                 };
                 TableDataService.prototype.getModuleTableData = function (modules, updateTableConfig, paginatorData) {
                     if (updateTableConfig === void 0) { updateTableConfig = true; }
@@ -139,7 +140,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     if (updateTableConfig === void 0) { updateTableConfig = true; }
                     return Promise.resolve(permissions).then(function (permissions) {
                         if (updateTableConfig) {
-                            _this.updateTableConfig(paginatorData, 'permissions-paginator', '\PermissionDetail');
+                            _this.updateTableConfig(paginatorData, 'permissions-paginator', 'PermissionDetail');
                         }
                         _this.table.body.rows = [];
                         _this.table.headers = [
@@ -156,10 +157,10 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                                 cells: [
                                     { value: permission.name, detailCell: true, clickEvent: false },
                                     { value: permission.description, detailCell: false, clickEvent: false },
-                                    { value: permission.view, detailCell: false, clickEvent: false },
-                                    { value: permission.add, detailCell: false, clickEvent: false },
-                                    { value: permission.edit, detailCell: false, clickEvent: false },
-                                    { value: permission.delete, detailCell: false, clickEvent: false }
+                                    { value: permission.view, detailCell: false, clickEvent: false, icon: true },
+                                    { value: permission.add, detailCell: false, clickEvent: false, icon: true },
+                                    { value: permission.edit, detailCell: false, clickEvent: false, icon: true },
+                                    { value: permission.delete, detailCell: false, clickEvent: false, icon: true }
                                 ]
                             });
                         }, _this);

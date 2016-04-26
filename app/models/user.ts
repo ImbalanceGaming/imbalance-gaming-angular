@@ -14,6 +14,7 @@ export class User {
     private _avatar      : string;
     private _twitter_username : string;
     private _facebook    : string;
+    private _has_dev_area: boolean;
 
     private _loggedIn    : boolean;
 
@@ -31,7 +32,8 @@ export class User {
         website?: string,
         avatar?: string,
         twitter_username?: string,
-        facebook?: string
+        facebook?: string,
+        has_dev_area?: boolean
     ) {
         this._id = id || null;
         this._username = username || '';
@@ -47,6 +49,7 @@ export class User {
         this._avatar = avatar || '';
         this._twitter_username = twitter_username || '';
         this._facebook = facebook || '';
+        this._has_dev_area = has_dev_area || false;
 
         this._loggedIn = false;
     }
@@ -169,6 +172,14 @@ export class User {
 
     set loggedIn(value:boolean) {
         this._loggedIn = value;
+    }
+
+    get has_dev_area():boolean {
+        return this._has_dev_area;
+    }
+
+    set has_dev_area(value:boolean) {
+        this._has_dev_area = value;
     }
     
 }

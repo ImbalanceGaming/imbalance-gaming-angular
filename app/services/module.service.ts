@@ -11,24 +11,34 @@ import {TableService}       from "../directives/tables/table.service";
 import {TableDataService}   from "./table-data.service";
 import {ModuleSection} from "../models/module-section";
 import {ModuleSectionService} from "./module-section.service";
+import {PermissionService} from "./permission.service";
 
 @Injectable()
 export class ModuleService implements ServiceInterface {
 
-    modules$ : Observable<Array<Module>>;
+    modules$: Observable<Array<Module>>;
+    module$: Observable<Module>;
 
     private _modulesObserver : Observer<Array<Module>>;
+    private _moduleObserver: Observer<Module>;
 
-    private _modules : Array<Module> = [];
+    private _modules: Array<Module> = [];
+    private _module: Module = new Module();
 
     constructor(
         private _apiService:ApiService,
         private _messageService:MessagesService,
         private _tableService:TableService,
         private _tableDataService:TableDataService,
-        private _moduleSectionService:ModuleSectionService
+        private _moduleSectionService:ModuleSectionService,
+        private _permissionService:PermissionService
     ) {
         this.modules$ = Observable.create(observer => this._modulesObserver = observer).share();
+        this.module$ = Observable.create(observer => this._moduleObserver = observer).share();
+    }
+
+    firstCall() {
+        this._moduleObserver.next(this._module);
     }
 
     create(moduleData) : Module {
@@ -48,6 +58,14 @@ export class ModuleService implements ServiceInterface {
             modules => modules.filter(module => module.id === id)[0]
         );
 
+    }
+
+    getSection(name: string) {
+        return Promise.resolve(this._module).then(
+            (module: Module) =>
+                module.sections.filter(section => section.name === name)[0]
+
+        );
     }
 
     getModules(page: number = 1, queryAPI:boolean = false, buildTableData:boolean = false) : Promise {
@@ -72,6 +90,15 @@ export class ModuleService implements ServiceInterface {
             });
         }
 
+    }
+
+    getModule(moduleName: string) : Promise {
+
+        return this._apiService.getPromiseWithAuth('getModule/'+moduleName)
+            .then(
+                data => this.buildModule(data, false),
+                error => console.log(error)
+            );
 
     }
 
@@ -79,6 +106,13 @@ export class ModuleService implements ServiceInterface {
 
         this._modules = modules;
         this._modulesObserver.next(this._modules);
+
+    }
+
+    setModule(module: Module) {
+
+        this._module = module;
+        this._moduleObserver.next(this._module);
 
     }
 
@@ -149,7 +183,7 @@ export class ModuleService implements ServiceInterface {
         
     }
 
-    public generateData(module: Module) {
+    generateData(module: Module) {
 
         return {
             'key': module.key,
@@ -159,30 +193,22 @@ export class ModuleService implements ServiceInterface {
 
     }
 
+    setPermissions() : Promise {
+        return this._permissionService.getUserAccessLevel(this._module).then(module => {
+            this.setModule(module);
+        });
+    }
+    
+    
+
     private buildModules(modulesData: any, buildTableData = false) {
 
         this._modules = [];
 
         for(let key in modulesData.data) {
-            let moduleInfo;
-            let moduleSectionsData;
-
             if (modulesData.data.hasOwnProperty(key)) {
-                moduleInfo = modulesData.data[key].module;
-                moduleSectionsData = modulesData.data[key].module_sections;
+                this._modules.push(this.buildModule(modulesData.data[key]));
             }
-
-            let module = this.create(moduleInfo);
-
-            if (moduleSectionsData.length > 0) {
-                let moduleSections: Array<ModuleSection> = [];
-                moduleSections.forEach(sectionData => {
-                    moduleSections.push(this._moduleSectionService.create(sectionData));
-                });
-                module.sections = moduleSections;
-            }
-
-            this._modules.push(module);
         }
 
         this.set(this._modules);
@@ -191,6 +217,32 @@ export class ModuleService implements ServiceInterface {
             this._tableDataService.getModuleTableData(this._modules, true, modulesData.paginator)
                 .then(table => this._tableService.addTable(table));
         }
+
+    }
+
+    private buildModule(moduleData: any, forGroup: boolean = true) : Module {
+
+        let moduleInfo;
+        let moduleSectionsData;
+
+        moduleInfo = moduleData.data.module;
+        moduleSectionsData = moduleData.data.module_sections;
+
+        let module = this.create(moduleInfo);
+
+        if (moduleSectionsData.length > 0) {
+            let moduleSections: Array<ModuleSection> = [];
+            moduleSectionsData.forEach(sectionData => {
+                moduleSections.push(this._moduleSectionService.create(sectionData));
+            });
+            module.sections = moduleSections;
+        }
+
+        if (!forGroup) {
+            this.setModule(module);
+        }
+
+        return module;
 
     }
 

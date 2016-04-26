@@ -1,44 +1,234 @@
 <div class="row">
     <div class="col-md-12">
-        <h3>{{title}}</h3>
+        <message-controls></message-controls>
     </div>
-    <div class="col-md-12 form">
+    <div class="col-md-12">
         <div class="row">
-            <div class="col-md-4">
-                <message-controls></message-controls>
-                <dynamic-form
-                        *ngIf="formData.length > 0 && formButtonData.length > 0"
-                        [questions]="formData"
-                        [formButtonData]="formButtonData"
-                        [searchReturn]="userSearchReturn"
-                        (saveEmitter)="saveChanges($event)"
-                        (deleteEmitter)="deleteProject()"
-                        (cancelEmitter)="cancelEdit()"
-                        (searchEmitter)="onUserSearch($event)"
-                ></dynamic-form>
+            <div class="col-md-12 center-block" style="float:none;">
+                <div class="row gutter-40">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3>Project Details</h3>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="pull-right header-btn">
+                                    <dynamic-modal-form
+                                            *ngIf="editProjectFormData.length > 0"
+                                            [modalHeader]="'Edit Project'"
+                                            [buttonText]="'Edit'"
+                                            [questions]="editProjectFormData"
+                                            [searchReturn]="searchReturn"
+                                            (saveEmitter)="saveProjectChanges($event)"
+                                            (searchEmitter)="onSearch($event)"
+                                    ></dynamic-modal-form>
+                                    <button class="btn btn-default" type="button" (click)="deleteProject()">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td style="white-space: nowrap">Key</td>
+                                    <td>{{project.key}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="white-space: nowrap">Name</td>
+                                    <td>{{project.name}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="white-space: nowrap">Description</td>
+                                    <td>{{project.description}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="white-space: nowrap">Project Lead</td>
+                                    <td>{{project.lead_user.forename}} {{project.lead_user.surname}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="white-space: nowrap">Project URL</td>
+                                    <td><a href="project.url">{{project.url}}</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <h3>Deployments</h3>
+                        <table class="table">
+                            <thead></thead>
+                            <tbody>
+                            <tr>
+                                <td>Today's</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>This Week</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Last Duration</td>
+                                <td>36 sec</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h3>Packages</h3>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="pull-right header-btn">
+                                    <dynamic-modal-form
+                                            *ngIf="addPackageFormData.length > 0"
+                                            [modalHeader]="'Add Package'"
+                                            [buttonText]="'Add'"
+                                            [questions]="addPackageFormData"
+                                            (saveEmitter)="createPackage($event)"
+                                    ></dynamic-modal-form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist" *ngIf="project.packages.length > 0">
+                            <template ngFor #package [ngForOf]="project.packages" #index="index">
+                                <li role="presentation" [class.active]="index == 0">
+                                    <a href="#{{package.id}}" aria-controls="home" role="tab" data-toggle="tab">
+                                        {{package.name}}
+                                    </a>
+                                </li>
+                            </template>
+
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div *ngIf="project.packages.length > 0" class="tab-content">
+                            <template ngFor #package [ngForOf]="project.packages" #index="index">
+                                <div role="tabpane" [class.active]="index == 0" class="tab-pane" id="{{package.id}}">
+                                    <table class="table">
+                                        <thead></thead>
+                                        <tbody>
+                                        <tr>
+                                            <td style="white-space: nowrap">Name</td>
+                                            <td>{{package.name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="white-space: nowrap">Repository</td>
+                                            <td><a href="package.repository">{{package.repository}}</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="white-space: nowrap">Deploy Branch</td>
+                                            <td>{{package.deploy_branch}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="white-space: nowrap">Deploy Location</td>
+                                            <td>{{package.deploy_location}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div class="btn-group" role="group">
+                                                    <button
+                                                            class="btn btn-default header-btn"
+                                                            type="button"
+                                                            (click)="editPackage(package.id)"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                            class="btn btn-default header-btn"
+                                                            type="button"
+                                                            (click)="deletePackage(package.id)"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </template>
+                        </div>
+                        <div *ngIf="project.packages.length == 0" class="tab-content">
+                            <hr>
+                            No packages for this project
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 center-block" style="float:none;">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#deployments" aria-controls="home" role="tab" data-toggle="tab">Deployments</a></li>
+                    <li role="presentation"><a href="#servers" aria-controls="profile" role="tab" data-toggle="tab">Servers</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="deployments">
+                        <h3>Recent Deployments</h3>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <td>Started</td>
+                                <td>Committer</td>
+                                <td>Commit</td>
+                                <td>Status</td>
+                            </tr>
+                            </thead>
+                            <tbody *ngIf="project.history.length > 0">
+                            <tr *ngFor="#history of project.history">
+                                <td>{{history.deployment_date}}</td>
+                                <td>{{history.committer}}</td>
+                                <td>{{history.commit}}</td>
+                                <td *ngIf="history.status === 'Finished'">
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Finished
+                                </td>
+                                <td *ngIf="history.status === 'Failed'">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Failed
+                                </td>
+                                <td *ngIf="history.status === 'In Progress'">
+                                    <span aria-hidden="true">
+                                        <img src="app/resources/images/ajax-loader.gif">
+                                    </span> In Progress
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody *ngIf="project.history.length == 0">
+                            <tr>
+                                <td colspan="4">No deployment history for this project yet.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="servers">
+                        <h3>Project Servers</h3>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Address</td>
+                                <td></td>
+                            </tr>
+                            </thead>
+                            <tbody *ngIf="project.servers.length > 0">
+                            <tr *ngFor="#server of project.servers">
+                                <td>{{server.name}}</td>
+                                <td>{{server.address}}</td>
+                                <td><a href="#">Deploy</a></td>
+                            </tr>
+                            </tbody>
+                            <tbody *ngIf="project.servers.length == 0">
+                            <tr>
+                                <td colspan="4">No servers associated with this project yet.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-    <!--<div *ngIf="project.groups.length > 0" class="col-md-8">-->
-        <!--<h3>Groups</h3>-->
-        <!--<table class="table table-bordered table-hover">-->
-            <!--<thead>-->
-            <!--<tr>-->
-                <!--<td colspan="2" class="table-button">-->
-                    <!--<button type="button" class="btn btn-default pull-right">Add Group</button>-->
-                <!--</td>-->
-            <!--</tr>-->
-            <!--<tr>-->
-                <!--<td>Name</td>-->
-                <!--<td>Description</td>-->
-            <!--</tr>-->
-            <!--</thead>-->
-            <!--<tbody>-->
-            <!--<tr *ngFor="#group of project.groups">-->
-                <!--<td><a [routerLink]="['/UserManagement', 'GroupDetail', {id: group.id}]">{{group.name}}</a></td>-->
-                <!--<td>{{group.description}}</td>-->
-            <!--</tr>-->
-            <!--</tbody>-->
-        <!--</table>-->
-    <!--</div>-->
 </div>

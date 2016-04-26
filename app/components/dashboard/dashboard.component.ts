@@ -3,10 +3,10 @@ import {CanActivate, Router}    from 'angular2/router';
 
 import {User}           from '../../models/user';
 import {UserService}    from '../../services/user.service';
-import {ApiService}     from "../../services/api.service";
 
 import {authCheck} from "../../common/auth-check"
 import {ComponentInstruction} from "../../../node_modules/angular2/src/router/instruction";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
     selector: 'my-dashboard',
@@ -25,13 +25,14 @@ export class DashboardComponent {
 
     constructor(
         private _userService:UserService,
-        private _apiService:ApiService,
-        private _router: Router
-    ) {}
+        private _authService: AuthService
+    ) {
+        
+    }
 
     ngOnInit() {
         this._userService.user$.subscribe(updatedUser => this.user = updatedUser);
-        this._userService.loggedInCheck();
+        this._authService.loggedInCheck();
     }
 
 }

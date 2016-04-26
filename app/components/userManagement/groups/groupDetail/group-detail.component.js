@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', "../../../../common/auth-check", "../../../../directives/dynamic-form/normalForm/dynamic-form.directive", "../../../../services/form-data.service", "../../../../directives/messages/messages.directive", "../../../../models/group", "../../../../services/group.service", "../../../../directives/dynamic-form/modalForm/dynamic-modal-form.directive", "../../../../services/user.service", "../../../../services/project.service"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', "../../../../directives/dynamic-form/normalForm/dynamic-form.directive", "../../../../services/form-data.service", "../../../../directives/messages/messages.directive", "../../../../models/group", "../../../../services/group.service", "../../../../directives/dynamic-form/modalForm/dynamic-modal-form.directive", "../../../../services/user.service", "../../../../services/project.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', "../../../../common/auth-ch
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, auth_check_1, dynamic_form_directive_1, form_data_service_1, messages_directive_1, group_1, group_service_1, dynamic_modal_form_directive_1, user_service_1, project_service_1;
+    var core_1, router_1, dynamic_form_directive_1, form_data_service_1, messages_directive_1, group_1, group_service_1, dynamic_modal_form_directive_1, user_service_1, project_service_1;
     var GroupDetailComponent;
     return {
         setters:[
@@ -19,9 +19,6 @@ System.register(['angular2/core', 'angular2/router', "../../../../common/auth-ch
             },
             function (router_1_1) {
                 router_1 = router_1_1;
-            },
-            function (auth_check_1_1) {
-                auth_check_1 = auth_check_1_1;
             },
             function (dynamic_form_directive_1_1) {
                 dynamic_form_directive_1 = dynamic_form_directive_1_1;
@@ -148,9 +145,6 @@ System.register(['angular2/core', 'angular2/router', "../../../../common/auth-ch
                         templateUrl: 'app/components/userManagement/groups/groupDetail/group-detail.component.html',
                         styleUrls: ['app/components/userManagement/groups/groupDetail/group-detail.component.css'],
                         directives: [dynamic_form_directive_1.DynamicFormDirective, messages_directive_1.MessagesDirective, router_1.ROUTER_DIRECTIVES, dynamic_modal_form_directive_1.DynamicModalFormDirective]
-                    }),
-                    router_1.CanActivate(function (next, previous) {
-                        return auth_check_1.authCheck(next, previous);
                     }), 
                     __metadata('design:paramtypes', [group_service_1.GroupService, router_1.RouteParams, router_1.Router, form_data_service_1.FormDataService, user_service_1.UserService, project_service_1.ProjectService])
                 ], GroupDetailComponent);

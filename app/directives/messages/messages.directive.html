@@ -3,10 +3,8 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeMessage(i)">
         <span aria-hidden="true">&times;</span>
     </button>
-    <span *ngIf="message.success">
-        {{message.success}}
-    </span>
-    <span *ngIf="message.error">
-        {{message.error}}
-    </span>
+    <div *ngIf="message.success" [innerHTML]="message.success">
+    </div>
+    <div *ngIf="message.error" [innerHTML]="message.error">
+    </div>
 </div>

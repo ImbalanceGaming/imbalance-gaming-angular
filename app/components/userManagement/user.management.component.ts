@@ -4,14 +4,15 @@ import {ROUTER_DIRECTIVES, RouteConfig, CanActivate, RouterOutlet} from 'angular
 import {authCheck}              from "../../common/auth-check"
 import {ComponentInstruction}   from "../../../node_modules/angular2/src/router/instruction";
 
-import {User}               from '../../models/user';
-import {UserService}        from '../../services/user.service';
 import {UsersComponent}     from "./users/users.component";
 import {UserDetail}         from "./users/userDetail/user-detail.component";
 import {GroupsComponent}    from "./groups/groups.component";
 import {GroupDetailComponent} from "./groups/groupDetail/group-detail.component";
 import {PermissionsComponent} from "./permissions/permissions.component";
 import {PermissionDetailComponent} from "./permissions/permissionDetail/permission-detail.component";
+import {AuthService} from "../../services/auth.service";
+import {Module} from "../../models/module";
+import {ModuleService} from "../../services/module.service";
 
 @Component({
     selector: 'user-management',
@@ -36,13 +37,17 @@ import {PermissionDetailComponent} from "./permissions/permissionDetail/permissi
 export class UserManagementComponent {
 
     public title = 'User Management';
-    private _user:User;
 
-    constructor(private _userService:UserService) {}
+    private _moduleSectionName: 'User Management';
+
+    private _module: Module = new Module();
+
+    constructor(private _authService:AuthService, private _moduleService: ModuleService) {}
 
     ngOnInit() {
-        this._userService.user$.subscribe(updatedUser => this._user = updatedUser);
-        this._userService.loggedInCheck();
+        this._moduleService.module$.subscribe(module => this._module = module);
+        this._moduleService.firstCall();
+        this._authService.loggedInCheck();
     }
 
 }

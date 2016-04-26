@@ -10,6 +10,7 @@ import {Project} from "../models/project";
 import {Module} from "../models/module";
 import {ModuleSection} from "../models/module-section";
 import {Permission} from "../models/permission";
+import {ProjectPackage} from "../models/project-package";
 
 @Injectable()
 export class TableDataService {
@@ -35,7 +36,7 @@ export class TableDataService {
 
         return Promise.resolve(users).then(users => {
             if (updateTableConfig) {
-                this.updateTableConfig(paginatorData, 'users-paginator', '\UserDetail');
+                this.updateTableConfig(paginatorData, 'users-paginator', 'UserDetail');
             }
 
             this.table.body.rows = [];
@@ -78,7 +79,7 @@ export class TableDataService {
         return Promise.resolve(groups).then(groups => {
 
             if (updateTableConfig) {
-                this.updateTableConfig(paginatorData, 'groups-paginator', '\GroupDetail');
+                this.updateTableConfig(paginatorData, 'groups-paginator', 'GroupDetail');
             }
 
             this.table.body.rows = [];
@@ -112,7 +113,7 @@ export class TableDataService {
         return Promise.resolve(projects).then(projects => {
 
             if (updateTableConfig) {
-                this.updateTableConfig(paginatorData, 'projects-paginator', '\ProjectDetail');
+                this.updateTableConfig(paginatorData, 'projects-paginator', 'ProjectDetail');
             }
 
             this.table.body.rows = [];
@@ -123,8 +124,7 @@ export class TableDataService {
                 <TableHeader>{value: 'Description', show: true},
                 <TableHeader>{value: 'Project Lead', show: true},
                 <TableHeader>{value: 'Project URL', show: true},
-                <TableHeader>{value: 'Git URL', show: true},
-                <TableHeader>{value: 'Status', show: true},
+                <TableHeader>{value: 'Packages', show: true},
                 <TableHeader>{value: 'Deploy', show: false},
             ];
 
@@ -139,8 +139,7 @@ export class TableDataService {
                             value: project.lead_user?project.lead_user.forename + ' ' + project.lead_user.surname:'None',
                             detailCell: false, clickEvent: false},
                         <TableCell>{value: project.url?project.url:'N/A', detailCell: false, clickEvent: false},
-                        <TableCell>{value: project.git_url, detailCell: false, clickEvent: false},
-                        <TableCell>{value: project.status, detailCell: false, clickEvent: false},
+                        <TableCell>{value: project.packages.length, detailCell: false, clickEvent: false},
                         <TableCell>{value: 'deploy', detailCell: false, clickEvent: true},
                     ]
                 })
@@ -148,6 +147,14 @@ export class TableDataService {
 
             return this.table;
         });
+
+    }
+
+    getProjectPackageTableData(
+        packages: Array<ProjectPackage>,
+        updateTableConfig:boolean = true,
+        paginatorData?: any
+    ) {
 
     }
 
@@ -176,7 +183,7 @@ export class TableDataService {
         return Promise.resolve(permissions).then(permissions => {
 
             if (updateTableConfig) {
-                this.updateTableConfig(paginatorData, 'permissions-paginator', '\PermissionDetail');
+                this.updateTableConfig(paginatorData, 'permissions-paginator', 'PermissionDetail');
             }
 
             this.table.body.rows = [];
@@ -196,10 +203,10 @@ export class TableDataService {
                     cells: [
                         <TableCell>{value: permission.name, detailCell: true, clickEvent: false},
                         <TableCell>{value: permission.description, detailCell: false, clickEvent: false},
-                        <TableCell>{value: permission.view, detailCell: false, clickEvent: false},
-                        <TableCell>{value: permission.add, detailCell: false, clickEvent: false},
-                        <TableCell>{value: permission.edit, detailCell: false, clickEvent: false},
-                        <TableCell>{value: permission.delete, detailCell: false, clickEvent: false}
+                        <TableCell>{value: permission.view, detailCell: false, clickEvent: false, icon: true},
+                        <TableCell>{value: permission.add, detailCell: false, clickEvent: false, icon: true},
+                        <TableCell>{value: permission.edit, detailCell: false, clickEvent: false, icon: true},
+                        <TableCell>{value: permission.delete, detailCell: false, clickEvent: false, icon: true}
                     ]
                 })
             }, this);

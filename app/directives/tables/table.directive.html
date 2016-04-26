@@ -3,9 +3,9 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <td *ngFor="#header of tableData.headers">
+                    <th *ngFor="#header of tableData.headers">
                         <span *ngIf="header.show">{{header.value}}</span>
-                    </td>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -20,12 +20,12 @@
                         <a class="link-click" *ngIf="cell.clickEvent" (click)="linkClicked(row.rowId)">
                             {{cell?.value}}
                         </a>
-                        <span *ngIf="!cell.detailCell && !cell.clickEvent"
-                              [class.align-center]="cell.value == true || cell.value == false"
-                        >
+                        <span *ngIf="cell.icon == true" [class.align-center]="cell.icon == true">
                             <span *ngIf="cell.value == true" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                             <span *ngIf="cell.value == false" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            <span *ngIf="cell.value != true && cell.value != false">{{cell?.value}}</span>
+                        </span>
+                        <span *ngIf="!cell.detailCell && !cell.clickEvent && !cell.icon">
+                            {{cell?.value}}
                         </span>
                     </td>
                 </tr>

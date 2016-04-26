@@ -1,4 +1,4 @@
-System.register(['angular2/core', "../directives/dynamic-form/models/question-dropdown", "../directives/dynamic-form/models/question-textbox", "../directives/dynamic-form/models/question-checkbox"], function(exports_1, context_1) {
+System.register(['angular2/core', "../directives/dynamic-form/models/question-dropdown", "../directives/dynamic-form/models/question-textbox", "../directives/dynamic-form/models/question-checkbox", "./api.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, question_dropdown_1, question_textbox_1, question_checkbox_1;
+    var core_1, question_dropdown_1, question_textbox_1, question_checkbox_1, api_service_1;
     var FormDataService;
     return {
         setters:[
@@ -25,10 +25,14 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
             },
             function (question_checkbox_1_1) {
                 question_checkbox_1 = question_checkbox_1_1;
+            },
+            function (api_service_1_1) {
+                api_service_1 = api_service_1_1;
             }],
         execute: function() {
             FormDataService = (function () {
-                function FormDataService() {
+                function FormDataService(_apiService) {
+                    this._apiService = _apiService;
                 }
                 // Todo: get from a remote source of question metadata
                 FormDataService.prototype.getUserDetailData = function (user) {
@@ -67,6 +71,13 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                                 order: 4,
                                 type: 'text'
                             }),
+                            new question_checkbox_1.CheckboxQuestion({
+                                key: 'has_dev_area',
+                                label: 'Development Area',
+                                value: user.has_dev_area,
+                                checked: user.has_dev_area,
+                                order: 6,
+                            }),
                             new question_dropdown_1.DropdownQuestion({
                                 key: 'role',
                                 label: 'Role',
@@ -74,7 +85,11 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                                 options: [
                                     { key: 'User', value: 'User', selected: (user.role === 'User') ? true : false },
                                     { key: 'Developer', value: 'Developer', selected: (user.role === 'Developer') ? true : false },
-                                    { key: 'Administrator', value: 'Administrator', selected: (user.role === 'Administrator') ? true : false }
+                                    {
+                                        key: 'Administrator',
+                                        value: 'Administrator',
+                                        selected: (user.role === 'Administrator') ? true : false
+                                    }
                                 ],
                                 order: 5
                             })
@@ -140,14 +155,6 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                                 type: 'text'
                             }),
                             new question_textbox_1.TextboxQuestion({
-                                key: 'git_url',
-                                label: 'Git Url',
-                                value: project.git_url,
-                                required: true,
-                                order: 5,
-                                type: 'text'
-                            }),
-                            new question_textbox_1.TextboxQuestion({
                                 key: 'lead_user',
                                 label: 'Project Lead',
                                 value: (project.lead_user) ? project.lead_user.forename + ' ' + project.lead_user.surname : '',
@@ -155,16 +162,6 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                                 order: 6,
                                 type: 'text',
                                 search_box: true
-                            }),
-                            new question_dropdown_1.DropdownQuestion({
-                                key: 'status',
-                                label: 'Status',
-                                required: true,
-                                options: [
-                                    { key: 'Development', value: 'Development', selected: (project.status === 'Development') ? true : false },
-                                    { key: 'Live', value: 'Live', selected: (project.status === 'Live') ? true : false }
-                                ],
-                                order: 6
                             }),
                             new question_textbox_1.TextboxQuestion({
                                 key: 'selectedSearchValue',
@@ -212,14 +209,6 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                                 type: 'text'
                             }),
                             new question_textbox_1.TextboxQuestion({
-                                key: 'git_url',
-                                label: 'Git Url',
-                                value: '',
-                                required: true,
-                                order: 5,
-                                type: 'text'
-                            }),
-                            new question_textbox_1.TextboxQuestion({
                                 key: 'lead_user',
                                 label: 'Project Lead',
                                 value: '',
@@ -227,16 +216,6 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                                 order: 6,
                                 type: 'text',
                                 search_box: true
-                            }),
-                            new question_dropdown_1.DropdownQuestion({
-                                key: 'status',
-                                label: 'Status',
-                                required: true,
-                                options: [
-                                    { key: 'Development', value: 'Development', selected: true },
-                                    { key: 'Live', value: 'Live', selected: false }
-                                ],
-                                order: 7
                             }),
                             new question_textbox_1.TextboxQuestion({
                                 key: 'selectedSearchValue',
@@ -437,6 +416,132 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                         return questionData.sort(function (a, b) { return a.order - b.order; });
                     });
                 };
+                FormDataService.prototype.getPackageDetailData = function (projectPackage) {
+                    return Promise.resolve().then(function () {
+                        var questionData = [
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'name',
+                                label: 'Name',
+                                value: projectPackage.name,
+                                required: true,
+                                order: 1,
+                                type: 'text'
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'repository',
+                                label: 'Repository',
+                                value: projectPackage.repository,
+                                required: true,
+                                order: 2,
+                                type: 'text'
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'deploy_branch',
+                                label: 'Deploy Branch',
+                                value: projectPackage.deploy_branch,
+                                required: true,
+                                order: 3,
+                                type: 'text'
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'Deploy Location',
+                                label: 'Deploy Location',
+                                value: projectPackage.deploy_location,
+                                required: true,
+                                order: 4,
+                                type: 'text'
+                            })
+                        ];
+                        return questionData.sort(function (a, b) { return a.order - b.order; });
+                    });
+                };
+                FormDataService.prototype.getPackageCreateData = function () {
+                    return Promise.resolve().then(function () {
+                        var questionData = [
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'name',
+                                label: 'Name',
+                                value: '',
+                                required: true,
+                                order: 1,
+                                type: 'text'
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'repository',
+                                label: 'Repository',
+                                value: '',
+                                required: true,
+                                order: 2,
+                                type: 'text'
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'deploy_branch',
+                                label: 'Deploy Branch',
+                                value: '',
+                                required: true,
+                                order: 3,
+                                type: 'text'
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'deploy_location',
+                                label: 'Deploy Location',
+                                value: '',
+                                required: true,
+                                order: 4,
+                                type: 'text'
+                            })
+                        ];
+                        return questionData.sort(function (a, b) { return a.order - b.order; });
+                    });
+                };
+                FormDataService.prototype.getPackageCommandCreateData = function () {
+                    return this._apiService.getPromiseWithAuth('projectPackageCommandTypes')
+                        .then(function (data) {
+                        var commandTypes = [];
+                        data.forEach(function (commandType) {
+                            var type = { key: commandType.id, value: commandType.name, selected: (commandType.id == 1) ? true : false };
+                            commandTypes.push(type);
+                        });
+                        var questionData = [
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'command',
+                                label: 'Command',
+                                value: '',
+                                required: true,
+                                order: 1,
+                                type: 'text'
+                            }),
+                            new question_textbox_1.TextboxQuestion({
+                                key: 'order',
+                                label: 'Order',
+                                value: '',
+                                required: true,
+                                order: 2,
+                                type: 'number'
+                            }),
+                            new question_dropdown_1.DropdownQuestion({
+                                key: 'run_on',
+                                label: 'Run On',
+                                required: true,
+                                options: [
+                                    { key: 'install', value: 'Install', selected: true },
+                                    { key: 'update', value: 'Update', selected: false },
+                                ],
+                                order: 3
+                            }),
+                            new question_dropdown_1.DropdownQuestion({
+                                key: 'command_type',
+                                label: 'Command Type',
+                                options: commandTypes,
+                                required: true,
+                                order: 4
+                            })
+                        ];
+                        return questionData.sort(function (a, b) { return a.order - b.order; });
+                    }, function (error) {
+                        return [];
+                    });
+                };
                 FormDataService.prototype.getDefaultButtons = function () {
                     return Promise.resolve().then(function () {
                         return [
@@ -469,7 +574,7 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                 };
                 FormDataService = __decorate([
                     core_1.Injectable(), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [api_service_1.ApiService])
                 ], FormDataService);
                 return FormDataService;
             }());

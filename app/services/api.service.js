@@ -111,6 +111,12 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-
                         .map(function (res) { return ApiService.refreshToken(res); })
                         .catch(ApiService.handleAuthError);
                 };
+                ApiService.prototype.deletePromise = function (action) {
+                    return this._authHttp.delete(this._connectionUrl + action, { headers: headers_1.contentHeaders })
+                        .toPromise()
+                        .then(function (res) { return ApiService.refreshToken(res); })
+                        .catch(ApiService.handleAuthError);
+                };
                 ApiService.handleError = function (error) {
                     //console.error(error);
                     return Observable_1.Observable.throw(error.json().error || 'Server error');

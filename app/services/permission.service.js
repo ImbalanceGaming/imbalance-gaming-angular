@@ -58,6 +58,7 @@ System.register(['angular2/core', "rxjs/Observable", 'rxjs/add/operator/share', 
                     this._moduleSectionService = _moduleSectionService;
                     this._permissions = [];
                     this.permissions$ = Observable_1.Observable.create(function (observer) { return _this._permissionsObserver = observer; }).share();
+                    this._userService.user$.subscribe(function (user) { return _this._user = user; });
                 }
                 PermissionService.prototype.create = function (permissionData) {
                     return new permission_1.Permission(permissionData.id, permissionData.name, permissionData.description, permissionData.view, permissionData.add, permissionData.edit, permissionData.delete);
@@ -240,6 +241,23 @@ System.register(['angular2/core', "rxjs/Observable", 'rxjs/add/operator/share', 
                             success: null,
                             error: error.message
                         });
+                    });
+                };
+                PermissionService.prototype.getUserAccessLevel = function (module) {
+                    var _this = this;
+                    return this._userService.getUserWithPermissions().then(function (userPermissions) {
+                        userPermissions.some(function (permission) {
+                            var permissionObject = _this.create(permission);
+                            if (permissionObject.name == 'Admin Access') {
+                                module.permission = permissionObject;
+                                module.sections.forEach(function (section, index) {
+                                    module.sections[index].permission = permissionObject;
+                                }, _this);
+                            }
+                            else {
+                            }
+                        }, _this);
+                        return module;
                     });
                 };
                 PermissionService.prototype.buildPermissions = function (permissionsData, buildTableData) {

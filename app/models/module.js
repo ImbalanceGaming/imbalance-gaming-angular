@@ -1,9 +1,13 @@
-System.register([], function(exports_1, context_1) {
+System.register(["./permission"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
+    var permission_1;
     var Module;
     return {
-        setters:[],
+        setters:[
+            function (permission_1_1) {
+                permission_1 = permission_1_1;
+            }],
         execute: function() {
             Module = (function () {
                 function Module(id, key, name, description) {
@@ -13,6 +17,7 @@ System.register([], function(exports_1, context_1) {
                     this._description = description || '';
                     this._sections = [];
                     this._menus = [];
+                    this._permission = new permission_1.Permission();
                 }
                 Object.defineProperty(Module.prototype, "id", {
                     get: function () {
@@ -70,6 +75,16 @@ System.register([], function(exports_1, context_1) {
                     },
                     set: function (value) {
                         this._menus = value;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Module.prototype, "permission", {
+                    get: function () {
+                        return this._permission;
+                    },
+                    set: function (value) {
+                        this._permission = value;
                     },
                     enumerable: true,
                     configurable: true

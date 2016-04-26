@@ -125,6 +125,16 @@ export class ApiService {
 
     }
 
+    deletePromise(action: string) {
+
+        return this._authHttp.delete(this._connectionUrl + action, {headers: contentHeaders})
+            .toPromise()
+            .then(res => ApiService.refreshToken(res))
+            //.do(data => console.log(data)) // eyeball results in the console
+            .catch(ApiService.handleAuthError);
+
+    }
+
     private static handleError(error:Response) {
         //console.error(error);
         return Observable.throw(error.json().error || 'Server error');

@@ -1,8 +1,5 @@
 import {Component}                          from 'angular2/core';
-import {CanActivate, ROUTER_DIRECTIVES}     from 'angular2/router';
-
-import {authCheck}            from "../../../common/auth-check"
-import {ComponentInstruction} from "../../../../node_modules/angular2/src/router/instruction";
+import {ROUTER_DIRECTIVES}     from 'angular2/router';
 
 import {TableDirective}     from "../../../directives/tables/table.directive";
 import {MessagesDirective}  from "../../../directives/messages/messages.directive";
@@ -14,10 +11,6 @@ import {PermissionService}  from "../../../services/permission.service";
     templateUrl: 'app/components/userManagement/permissions/permissions.component.html',
     styleUrls: ['app/components/userManagement/permissions/permissions.component.css'],
     directives: [ROUTER_DIRECTIVES, TableDirective, MessagesDirective]
-})
-
-@CanActivate((next: ComponentInstruction, previous: ComponentInstruction) => {
-    return authCheck(next, previous);
 })
 
 export class PermissionsComponent {

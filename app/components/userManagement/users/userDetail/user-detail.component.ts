@@ -1,8 +1,5 @@
-import {Component}                          from 'angular2/core';
-import {CanActivate, Router, RouteParams}   from 'angular2/router';
-
-import {authCheck}            from "../../../../common/auth-check"
-import {ComponentInstruction} from "../../../../../node_modules/angular2/src/router/instruction";
+import {Component}              from 'angular2/core';
+import {Router, RouteParams}    from 'angular2/router';
 
 import {User}                   from "../../../../models/user";
 import {UserService}            from "../../../../services/user.service";
@@ -16,10 +13,6 @@ import {MessagesDirective}      from "../../../../directives/messages/messages.d
     templateUrl: 'app/components/userManagement/users/userDetail/user-detail.component.html',
     styleUrls: ['app/components/userManagement/users/userDetail/user-detail.component.css'],
     directives: [DynamicFormDirective, MessagesDirective]
-})
-
-@CanActivate((next: ComponentInstruction, previous: ComponentInstruction) => {
-    return authCheck(next, previous);
 })
 
 export class UserDetail {
@@ -64,6 +57,7 @@ export class UserDetail {
         this.user.forename = formData.forename;
         this.user.surname = formData.surname;
         this.user.role = formData.role;
+        this.user.has_dev_area = formData.has_dev_area;
 
         this._userService.update(this.user);
 

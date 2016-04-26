@@ -24,6 +24,8 @@ import {Module} from "../models/module";
 import {Menu}   from "../models/menu";
 import {ModuleSectionService} from "../services/module-section.service";
 import {PermissionService} from "../services/permission.service";
+import {User} from "../models/user";
+import {AuthService} from "../services/auth.service";
 
 @Component({
     selector: 'IGMS',
@@ -46,7 +48,8 @@ import {PermissionService} from "../services/permission.service";
         GroupService,
         ModuleService,
         ModuleSectionService,
-        PermissionService
+        PermissionService,
+        AuthService
     ]
 })
 
@@ -62,33 +65,29 @@ import {PermissionService} from "../services/permission.service";
 //Main class for application
 export class AppComponent {
 
-    public appRoutes : string[][];
-    public error     : any;
-    public user      : any;
+    appRoutes:string[][];
+    error:any;
+    user: User = new User();
+    module: Module = new Module();
+
+    private _moduleName = 'Management Module';
 
     constructor(
-        private _navService:NavService,
         private _userService:UserService,
-        private _moduleService:ModuleService
-    ) {
+        private _moduleService:ModuleService,
+        private _authService: AuthService
+    ){
         // this.appRoutes = this.getAppRoutes();
     }
 
     ngOnInit() {
         this._userService.user$.subscribe(user => this.user = user);
-        this._userService.loggedInCheck();
-        // this.getModules();
+        this._moduleService.module$.subscribe(module => this.module = module);
+        this._moduleService.getModule(this._moduleName).then(() => {
+            this._authService.setup(this._moduleName);
+        });
     }
 
-    // // Load information for modules
-    // private getModules() {
-    //     this._apiService.get('modules')
-    //         .subscribe(
-    //             data => this._moduleService.createModules(data.data),
-    //             error => console.log(error)
-    //         );
-    // }
-    //
     // // Needs further work to get the component part of the route converted from a string to a type
     // private buildMainMenus() {
     //     this._moduleService.modules.forEach(function(module:Module) {

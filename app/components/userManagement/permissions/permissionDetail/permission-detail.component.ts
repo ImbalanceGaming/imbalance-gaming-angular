@@ -1,8 +1,5 @@
 import {Component}                          from 'angular2/core';
-import {CanActivate, Router, RouteParams, ROUTER_DIRECTIVES}   from 'angular2/router';
-
-import {authCheck}            from "../../../../common/auth-check"
-import {ComponentInstruction} from "../../../../../node_modules/angular2/src/router/instruction";
+import {Router, RouteParams, ROUTER_DIRECTIVES}   from 'angular2/router';
 
 import {FormButtonInterface}    from "../../../../directives/form-buttons/form-button.interface";
 import {DynamicFormDirective}   from "../../../../directives/dynamic-form/normalForm/dynamic-form.directive";
@@ -13,17 +10,13 @@ import {GroupService}           from "../../../../services/group.service";
 import {UserService}            from "../../../../services/user.service";
 import {Permission}             from "../../../../models/permission";
 import {ModuleSectionService}   from "../../../../services/module-section.service";
-import {PermissionService} from "../../../../services/permission.service";
+import {PermissionService}      from "../../../../services/permission.service";
 
 @Component({
     selector: 'permission-detail',
     templateUrl: 'app/components/userManagement/permissions/permissionDetail/permission-detail.component.html',
     styleUrls: ['app/components/userManagement/permissions/permissionDetail/permission-detail.component.css'],
     directives: [DynamicFormDirective, MessagesDirective, ROUTER_DIRECTIVES, DynamicModalFormDirective]
-})
-
-@CanActivate((next: ComponentInstruction, previous: ComponentInstruction) => {
-    return authCheck(next, previous);
 })
 
 export class PermissionDetailComponent {

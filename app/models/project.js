@@ -10,16 +10,17 @@ System.register(["./user"], function(exports_1, context_1) {
             }],
         execute: function() {
             Project = (function () {
-                function Project(id, key, name, description, status, url, git_url) {
+                function Project(id, key, name, description, url) {
                     this._id = id || null;
                     this._key = key || '';
                     this._name = name || '';
                     this._description = description || '';
-                    this._status = status || '';
                     this._url = url || '';
-                    this._git_url = git_url || '';
                     this._lead_user = new user_1.User();
                     this._lead_user_id = this._lead_user.id || null;
+                    this._packages = [];
+                    this._history = [];
+                    this._servers = [];
                 }
                 Object.defineProperty(Project.prototype, "id", {
                     get: function () {
@@ -61,16 +62,6 @@ System.register(["./user"], function(exports_1, context_1) {
                     enumerable: true,
                     configurable: true
                 });
-                Object.defineProperty(Project.prototype, "status", {
-                    get: function () {
-                        return this._status;
-                    },
-                    set: function (value) {
-                        this._status = value;
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
                 Object.defineProperty(Project.prototype, "lead_user", {
                     get: function () {
                         return this._lead_user;
@@ -101,12 +92,32 @@ System.register(["./user"], function(exports_1, context_1) {
                     enumerable: true,
                     configurable: true
                 });
-                Object.defineProperty(Project.prototype, "git_url", {
+                Object.defineProperty(Project.prototype, "packages", {
                     get: function () {
-                        return this._git_url;
+                        return this._packages;
                     },
                     set: function (value) {
-                        this._git_url = value;
+                        this._packages = value;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Project.prototype, "history", {
+                    get: function () {
+                        return this._history;
+                    },
+                    set: function (value) {
+                        this._history = value;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Project.prototype, "servers", {
+                    get: function () {
+                        return this._servers;
+                    },
+                    set: function (value) {
+                        this._servers = value;
                     },
                     enumerable: true,
                     configurable: true

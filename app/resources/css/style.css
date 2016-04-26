@@ -24,3 +24,65 @@ html, body {
 .link-click {
     cursor: pointer !important;
 }
+
+.glyphicon-ok {
+    color: #008000;
+}
+
+.glyphicon-remove {
+    color: #ff0000;
+}
+
+.in-progress {
+    background: #FFFFFF url("app/resources/images/ajax-loader.gif") no-repeat;
+    height: 15px;
+    width: 15px;
+}
+
+/********************/
+/** Custom Gutters **/
+/********************/
+
+/*40px gutter*/
+.gutter-40.row {
+    margin-right: -40px;
+    margin-left: -40px;
+}
+
+.gutter-40 > [class^="col-"], .gutter-40 > [class^=" col-"] {
+    padding-right: 40px;
+    padding-left: 40px;
+}
+
+/*20px gutter*/
+.gutter-20.row {
+    margin-right: -10px;
+    margin-left: -10px;
+}
+
+.gutter-20 > [class^="col-"], .gutter-20 > [class^=" col-"] {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+/*10px gutter*/
+.gutter-10.row {
+    margin-right: -5px;
+    margin-left: -5px;
+}
+
+.gutter-10 > [class^="col-"], .gutter-10 > [class^=" col-"] {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+/*0px gutter*/
+.gutter-0.row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.gutter-0 > [class^="col-"], .gutter-0 > [class^=" col-"] {
+    padding-right: 0;
+    padding-left: 0;
+}

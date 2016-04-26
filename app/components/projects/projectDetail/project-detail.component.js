@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', "../../../common/auth-check", "../../../directives/dynamic-form/normalForm/dynamic-form.directive", "../../../services/form-data.service", "../../../directives/messages/messages.directive", "../../../models/project", "../../../services/project.service", "../../../services/user.service"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', "../../../services/form-data.service", "../../../directives/messages/messages.directive", "../../../models/project", "../../../services/project.service", "../../../services/user.service", "../../../directives/dynamic-form/modalForm/dynamic-modal-form.directive", "../../../models/project-package", "../../../services/project-package.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', "../../../common/auth-check
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, auth_check_1, dynamic_form_directive_1, form_data_service_1, messages_directive_1, project_1, project_service_1, user_service_1;
+    var core_1, router_1, form_data_service_1, messages_directive_1, project_1, project_service_1, user_service_1, dynamic_modal_form_directive_1, project_package_1, project_package_service_1;
     var ProjectDetailComponent;
     return {
         setters:[
@@ -19,12 +19,6 @@ System.register(['angular2/core', 'angular2/router', "../../../common/auth-check
             },
             function (router_1_1) {
                 router_1 = router_1_1;
-            },
-            function (auth_check_1_1) {
-                auth_check_1 = auth_check_1_1;
-            },
-            function (dynamic_form_directive_1_1) {
-                dynamic_form_directive_1 = dynamic_form_directive_1_1;
             },
             function (form_data_service_1_1) {
                 form_data_service_1 = form_data_service_1_1;
@@ -40,17 +34,29 @@ System.register(['angular2/core', 'angular2/router', "../../../common/auth-check
             },
             function (user_service_1_1) {
                 user_service_1 = user_service_1_1;
+            },
+            function (dynamic_modal_form_directive_1_1) {
+                dynamic_modal_form_directive_1 = dynamic_modal_form_directive_1_1;
+            },
+            function (project_package_1_1) {
+                project_package_1 = project_package_1_1;
+            },
+            function (project_package_service_1_1) {
+                project_package_service_1 = project_package_service_1_1;
             }],
         execute: function() {
             ProjectDetailComponent = (function () {
-                function ProjectDetailComponent(_projectService, _routeParams, _router, _formDataService, _userService) {
+                function ProjectDetailComponent(_projectService, _routeParams, _router, _formDataService, _userService, _packageService) {
                     this._projectService = _projectService;
                     this._routeParams = _routeParams;
                     this._router = _router;
                     this._formDataService = _formDataService;
                     this._userService = _userService;
+                    this._packageService = _packageService;
                     this.projects = [];
-                    this.formData = [];
+                    this.editProjectFormData = [];
+                    this.addPackageFormData = [];
+                    this.editPackageFormData = [];
                     this.formButtonData = [];
                     this.title = 'Project Detail';
                     this.project = new project_1.Project();
@@ -58,53 +64,67 @@ System.register(['angular2/core', 'angular2/router', "../../../common/auth-check
                 ProjectDetailComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     this._projectService.projects$.subscribe(function (projects) { return _this.projects = projects; });
-                    var id = +this._routeParams.get('id');
-                    var page = +this._routeParams.get('page');
-                    this._projectService.getProjects(page, true).then(function () {
-                        _this._projectService.get(id).then(function (project) {
-                            _this.project = project;
-                            _this._formDataService.getProjectDetailData(project)
-                                .then(function (formData) { return _this.formData = formData; });
-                            _this._formDataService.getDefaultButtons()
-                                .then(function (formButtonData) { return _this.formButtonData = formButtonData; });
-                        });
-                    });
+                    this.getProjectData();
                 };
-                ProjectDetailComponent.prototype.saveChanges = function (formData) {
+                ProjectDetailComponent.prototype.saveProjectChanges = function (formData) {
+                    var _this = this;
                     this.project.description = formData.description;
                     this.project.url = formData.url;
-                    this.project.git_url = formData.git_url;
-                    this.project.status = formData.status;
-                    this.project.lead_user = null;
                     //noinspection TypeScriptUnresolvedVariable
                     this.project.lead_user_id = formData.selectedSearchValue;
-                    this._projectService.update(this.project);
-                    var page = +this._routeParams.get('page');
-                    this._projectService.getProjects(page, true, true);
-                };
-                ProjectDetailComponent.prototype.cancelEdit = function () {
-                    this._router.navigate(['/Projects']);
+                    this._projectService.update(this.project).then(function () { return _this.getProjectData(); });
                 };
                 ProjectDetailComponent.prototype.deleteProject = function () {
                     this._projectService.delete(this.project);
-                    this._router.navigate(['/Projects']);
+                    this._router.navigate(['/Projects', 'AllProjects']);
                 };
                 ProjectDetailComponent.prototype.onSearch = function (searchValue) {
                     var _this = this;
                     this._userService.findUsers(searchValue)
                         .then(function (data) { return _this.searchReturn = data; });
                 };
+                ProjectDetailComponent.prototype.createPackage = function (formData) {
+                    var _this = this;
+                    var newPackage = this._packageService.create({
+                        name: formData.name,
+                        repository: formData.repository,
+                        deploy_branch: formData.deploy_branch,
+                        deploy_location: formData.deploy_location
+                    });
+                    newPackage.project = this.project;
+                    this._packageService.add(newPackage).then(function () { return _this.getProjectData(); });
+                };
+                ProjectDetailComponent.prototype.editPackage = function (id) {
+                    this._router.navigate(['../PackageDetail', { id: id, packageId: this.project.id }]);
+                };
+                ProjectDetailComponent.prototype.deletePackage = function (id) {
+                    var _this = this;
+                    this._packageService.delete(new project_package_1.ProjectPackage(id)).then(function () { return _this.getProjectData(); });
+                };
+                ProjectDetailComponent.prototype.getProjectData = function () {
+                    var _this = this;
+                    var id = +this._routeParams.get('id');
+                    var page = +this._routeParams.get('page');
+                    this._projectService.getProjects(page, true).then(function () {
+                        _this._projectService.get(id).then(function (project) {
+                            _this.project = project;
+                            _this._formDataService.getProjectDetailData(project)
+                                .then(function (formData) { return _this.editProjectFormData = formData; });
+                            _this._formDataService.getPackageCreateData()
+                                .then(function (formData) { return _this.addPackageFormData = formData; });
+                            _this._formDataService.getDefaultButtons()
+                                .then(function (formButtonData) { return _this.formButtonData = formButtonData; });
+                        });
+                    });
+                };
                 ProjectDetailComponent = __decorate([
                     core_1.Component({
                         selector: 'group-detail',
                         templateUrl: 'app/components/projects/projectDetail/project-detail.component.html',
                         styleUrls: ['app/components/projects/projectDetail/project-detail.component.css'],
-                        directives: [dynamic_form_directive_1.DynamicFormDirective, messages_directive_1.MessagesDirective, router_1.ROUTER_DIRECTIVES]
-                    }),
-                    router_1.CanActivate(function (next, previous) {
-                        return auth_check_1.authCheck(next, previous);
+                        directives: [dynamic_modal_form_directive_1.DynamicModalFormDirective, messages_directive_1.MessagesDirective, router_1.ROUTER_DIRECTIVES, messages_directive_1.MessagesDirective]
                     }), 
-                    __metadata('design:paramtypes', [project_service_1.ProjectService, router_1.RouteParams, router_1.Router, form_data_service_1.FormDataService, user_service_1.UserService])
+                    __metadata('design:paramtypes', [project_service_1.ProjectService, router_1.RouteParams, router_1.Router, form_data_service_1.FormDataService, user_service_1.UserService, project_package_service_1.ProjectPackageService])
                 ], ProjectDetailComponent);
                 return ProjectDetailComponent;
             }());

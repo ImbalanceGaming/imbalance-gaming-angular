@@ -15,15 +15,16 @@ import {Permission} from "../models/permission";
 import {User} from "../models/user";
 import {Group} from "../models/group";
 import {ModuleSection} from "../models/module-section";
+import {Module} from "../models/module";
 
 @Injectable()
 export class PermissionService implements ServiceInterface {
 
     permissions$ : Observable<Array<Permission>>;
-
     private _permissionsObserver : Observer<Array<Permission>>;
-
     private _permissions : Array<Permission> = [];
+
+    private _user: User;
 
     constructor(
         private _apiService:ApiService,
@@ -35,6 +36,7 @@ export class PermissionService implements ServiceInterface {
         private _moduleSectionService:ModuleSectionService
     ) {
         this.permissions$ = Observable.create(observer => this._permissionsObserver = observer).share();
+        this._userService.user$.subscribe(user => this._user = user);
     }
 
     create(permissionData) : Permission {
@@ -288,6 +290,25 @@ export class PermissionService implements ServiceInterface {
                     })
                 }
             );
+
+    }
+
+    getUserAccessLevel(module: Module) : Promise {
+
+        return this._userService.getUserWithPermissions().then(userPermissions => {
+            userPermissions.some(permission => {
+                let permissionObject = this.create(permission);
+                if (permissionObject.name == 'Admin Access') {
+                    module.permission = permissionObject;
+                    module.sections.forEach((section: ModuleSection, index: number) => {
+                        module.sections[index].permission = permissionObject;
+                    }, this);
+                } else {
+
+                }
+            }, this);
+            return module;
+        });
 
     }
 

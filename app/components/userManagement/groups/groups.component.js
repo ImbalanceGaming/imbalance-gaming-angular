@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', "../../../common/auth-check", "../../../directives/tables/table.directive", "../../../directives/messages/messages.directive", "../../../models/group", "../../../services/group.service"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', "../../../directives/tables/table.directive", "../../../directives/messages/messages.directive", "../../../models/group", "../../../services/group.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', "../../../common/auth-check
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, auth_check_1, table_directive_1, messages_directive_1, group_1, group_service_1;
+    var core_1, router_1, table_directive_1, messages_directive_1, group_1, group_service_1;
     var GroupsComponent;
     return {
         setters:[
@@ -19,9 +19,6 @@ System.register(['angular2/core', 'angular2/router', "../../../common/auth-check
             },
             function (router_1_1) {
                 router_1 = router_1_1;
-            },
-            function (auth_check_1_1) {
-                auth_check_1 = auth_check_1_1;
             },
             function (table_directive_1_1) {
                 table_directive_1 = table_directive_1_1;
@@ -47,7 +44,7 @@ System.register(['angular2/core', 'angular2/router', "../../../common/auth-check
                 GroupsComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     this._groupsService.groups$.subscribe(function (groups) { return _this.groups = groups; });
-                    this._groupsService.getGroups(1, false, true);
+                    this._groupsService.getGroups(1, true, true);
                 };
                 GroupsComponent.prototype.onSubmit = function () {
                     var _this = this;
@@ -66,9 +63,6 @@ System.register(['angular2/core', 'angular2/router', "../../../common/auth-check
                         templateUrl: 'app/components/userManagement/groups/groups.component.html',
                         styleUrls: ['app/components/userManagement/groups/groups.component.css'],
                         directives: [router_1.ROUTER_DIRECTIVES, table_directive_1.TableDirective, messages_directive_1.MessagesDirective]
-                    }),
-                    router_1.CanActivate(function (next, previous) {
-                        return auth_check_1.authCheck(next, previous);
                     }), 
                     __metadata('design:paramtypes', [group_service_1.GroupService])
                 ], GroupsComponent);

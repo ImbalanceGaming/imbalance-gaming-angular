@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', "../../common/auth-check", "../../directives/tables/table.directive", "../../directives/messages/messages.directive", "../../services/project.service"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', "../../../directives/tables/table.directive", "../../../directives/messages/messages.directive", "../../../services/project.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', "../../common/auth-check", 
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, auth_check_1, table_directive_1, messages_directive_1, project_service_1;
+    var core_1, router_1, table_directive_1, messages_directive_1, project_service_1;
     var ProjectsComponent;
     return {
         setters:[
@@ -19,9 +19,6 @@ System.register(['angular2/core', 'angular2/router', "../../common/auth-check", 
             },
             function (router_1_1) {
                 router_1 = router_1_1;
-            },
-            function (auth_check_1_1) {
-                auth_check_1 = auth_check_1_1;
             },
             function (table_directive_1_1) {
                 table_directive_1 = table_directive_1_1;
@@ -44,7 +41,7 @@ System.register(['angular2/core', 'angular2/router', "../../common/auth-check", 
                 ProjectsComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     this._projectService.projects$.subscribe(function (groups) { return _this.projects = groups; });
-                    this._projectService.getProjects(1, false, true);
+                    this._projectService.getProjects(1, true, true);
                 };
                 ProjectsComponent.prototype.pageChanged = function (event) {
                     this._projectService.getProjects(event, true, true);
@@ -56,12 +53,9 @@ System.register(['angular2/core', 'angular2/router', "../../common/auth-check", 
                 ProjectsComponent = __decorate([
                     core_1.Component({
                         selector: 'projects',
-                        templateUrl: 'app/components/projects/projects.component.html',
-                        styleUrls: ['app/components/projects/projects.component.css'],
+                        templateUrl: 'app/components/projects/allProjects/projects.component.html',
+                        styleUrls: ['app/components/projects/allProjects/projects.component.css'],
                         directives: [router_1.ROUTER_DIRECTIVES, table_directive_1.TableDirective, messages_directive_1.MessagesDirective]
-                    }),
-                    router_1.CanActivate(function (next, previous) {
-                        return auth_check_1.authCheck(next, previous);
                     }), 
                     __metadata('design:paramtypes', [project_service_1.ProjectService])
                 ], ProjectsComponent);

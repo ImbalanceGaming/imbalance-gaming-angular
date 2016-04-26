@@ -1,4 +1,7 @@
 import {User} from "./user";
+import {ProjectPackage} from "./project-packages";
+import {ProjectHistory} from "./project-history";
+import {Server} from "./server";
 
 export class Project {
 
@@ -6,30 +9,30 @@ export class Project {
     private _key : string;
     private _name : string;
     private _description : string;
-    private _status : string;
     private _url: string;
-    private _git_url: string;
     private _lead_user : User;
     private _lead_user_id : number;
+    private _packages: Array<ProjectPackage>;
+    private _history: Array<ProjectHistory>;
+    private _servers: Array<Server>;
 
     constructor(
         id?: number,
         key?: string,
         name?: string,
         description?: string,
-        status?: string,
-        url?: string,
-        git_url?: string
+        url?: string
     ) {
         this._id = id || null;
         this._key = key || '';
         this._name = name || '';
         this._description = description || '';
-        this._status = status || '';
         this._url = url || '';
-        this._git_url = git_url || '';
         this._lead_user = new User();
         this._lead_user_id = this._lead_user.id || null;
+        this._packages = [];
+        this._history = [];
+        this._servers = [];
     }
 
     get id():number {
@@ -64,14 +67,6 @@ export class Project {
         this._description = value;
     }
 
-    get status():string {
-        return this._status;
-    }
-
-    set status(value:string) {
-        this._status = value;
-    }
-
     get lead_user():User {
         return this._lead_user;
     }
@@ -96,12 +91,28 @@ export class Project {
         this._url = value;
     }
 
-    get git_url():string {
-        return this._git_url;
+    get packages():Array<ProjectPackage> {
+        return this._packages;
     }
 
-    set git_url(value:string) {
-        this._git_url = value;
+    set packages(value:Array<ProjectPackage>) {
+        this._packages = value;
+    }
+
+    get history():Array<ProjectHistory> {
+        return this._history;
+    }
+
+    set history(value:Array<ProjectHistory>) {
+        this._history = value;
+    }
+
+    get servers():Array<Server> {
+        return this._servers;
+    }
+
+    set servers(value:Array<Server>) {
+        this._servers = value;
     }
     
 }

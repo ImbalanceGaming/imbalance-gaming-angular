@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/add/operator/share', '../models/user', "./api.service", "../directives/messages/messages.service", "../directives/tables/table.service", "./table-data.service"], function(exports_1, context_1) {
+System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', '../models/user', "./api.service", "../directives/messages/messages.service", "../directives/tables/table.service", "./table-data.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, Observable_1, router_1, user_1, api_service_1, messages_service_1, table_service_1, table_data_service_1;
+    var core_1, Observable_1, user_1, api_service_1, messages_service_1, table_service_1, table_data_service_1;
     var UserService;
     return {
         setters:[
@@ -19,9 +19,6 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
             },
             function (Observable_1_1) {
                 Observable_1 = Observable_1_1;
-            },
-            function (router_1_1) {
-                router_1 = router_1_1;
             },
             function (_1) {},
             function (user_1_1) {
@@ -41,10 +38,9 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
             }],
         execute: function() {
             UserService = (function () {
-                function UserService(_apiService, _router, _messageService, _tableService, _tableDataService) {
+                function UserService(_apiService, _messageService, _tableService, _tableDataService) {
                     var _this = this;
                     this._apiService = _apiService;
-                    this._router = _router;
                     this._messageService = _messageService;
                     this._tableService = _tableService;
                     this._tableDataService = _tableDataService;
@@ -69,6 +65,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
                     this._user.avatar = userData.avatar;
                     this._user.twitter_username = userData.twitter_username;
                     this._user.facebook = userData.facebook;
+                    this._user.has_dev_area = userData.has_dev_area;
                     this._userObserver.next(this._user);
                 };
                 UserService.prototype.create = function (userData) {
@@ -87,6 +84,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
                     user.avatar = userData.avatar;
                     user.twitter_username = userData.twitter_username;
                     user.facebook = userData.facebook;
+                    user.has_dev_area = userData.has_dev_area;
                     return user;
                 };
                 UserService.prototype.get = function (id) {
@@ -114,6 +112,10 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
                             }
                         });
                     }
+                };
+                UserService.prototype.getUserWithPermissions = function () {
+                    return this._apiService.getPromiseWithAuth('findPermissionsForUser/' + this._user.id)
+                        .then(function (data) { return data; }, function (error) { return console.log(error); });
                 };
                 UserService.prototype.set = function (user) {
                     this._user = user;
@@ -179,7 +181,8 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
                         email: user.email,
                         forename: user.forename,
                         surname: user.surname,
-                        username: user.username
+                        username: user.username,
+                        has_dev_area: user.has_dev_area
                     };
                 };
                 UserService.prototype.setActiveStatus = function (id) {
@@ -201,18 +204,6 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
                             _this.updateUserInUsers(userObject);
                         });
                     });
-                };
-                /*
-                 @todo Move this into a better place
-                 */
-                UserService.prototype.loggedInCheck = function () {
-                    var _this = this;
-                    // Check that the user is logged in by first checking that they have
-                    // a token set and if so is that token still valid
-                    if (localStorage.getItem('jwt')) {
-                        this._apiService.getWithAuth('loginUser')
-                            .subscribe(function (data) { return _this.setUserDetails(data); }, function (error) { return _this._router.navigate(['Login']); });
-                    }
                 };
                 UserService.prototype.findUsers = function (searchTerm) {
                     return this._apiService.getPromiseWithAuth('findUsers/' + searchTerm)
@@ -275,6 +266,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
                         user.avatar = userInfo.avatar;
                         user.twitter_username = userInfo.twitter_username;
                         user.facebook = userInfo.facebook;
+                        user.has_dev_area = userInfo.has_dev_area;
                         this._users.push(user);
                     }
                     this.setUsers(this._users);
@@ -291,7 +283,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'angular2/router', 'rxjs/ad
                 };
                 UserService = __decorate([
                     core_1.Injectable(), 
-                    __metadata('design:paramtypes', [api_service_1.ApiService, router_1.Router, messages_service_1.MessagesService, table_service_1.TableService, table_data_service_1.TableDataService])
+                    __metadata('design:paramtypes', [api_service_1.ApiService, messages_service_1.MessagesService, table_service_1.TableService, table_data_service_1.TableDataService])
                 ], UserService);
                 return UserService;
             }());

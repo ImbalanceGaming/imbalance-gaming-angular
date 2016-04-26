@@ -1,8 +1,5 @@
 import {Component}                          from 'angular2/core';
-import {CanActivate, Router, RouteParams, ROUTER_DIRECTIVES}   from 'angular2/router';
-
-import {authCheck}            from "../../../../common/auth-check"
-import {ComponentInstruction} from "../../../../../node_modules/angular2/src/router/instruction";
+import {Router, RouteParams, ROUTER_DIRECTIVES}   from 'angular2/router';
 
 import {FormButtonInterface}    from "../../../../directives/form-buttons/form-button.interface";
 import {DynamicFormDirective}   from "../../../../directives/dynamic-form/normalForm/dynamic-form.directive";
@@ -19,10 +16,6 @@ import {ProjectService} from "../../../../services/project.service";
     templateUrl: 'app/components/userManagement/groups/groupDetail/group-detail.component.html',
     styleUrls: ['app/components/userManagement/groups/groupDetail/group-detail.component.css'],
     directives: [DynamicFormDirective, MessagesDirective, ROUTER_DIRECTIVES, DynamicModalFormDirective]
-})
-
-@CanActivate((next: ComponentInstruction, previous: ComponentInstruction) => {
-    return authCheck(next, previous);
 })
 
 export class GroupDetailComponent {

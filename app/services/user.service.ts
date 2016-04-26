@@ -1,7 +1,6 @@
 import {Injectable}                 from 'angular2/core';
 import {Observable}                 from 'rxjs/Observable';
 import {Observer}                   from 'rxjs/Observer';
-import {Router}                     from 'angular2/router';
 import 'rxjs/add/operator/share';
 
 import {User}                       from '../models/user';
@@ -25,7 +24,6 @@ export class UserService implements ServiceInterface {
 
     constructor(
         private _apiService:ApiService,
-        private _router:Router,
         private _messageService:MessagesService,
         private _tableService:TableService,
         private _tableDataService:TableDataService
@@ -51,6 +49,7 @@ export class UserService implements ServiceInterface {
         this._user.avatar = userData.avatar;
         this._user.twitter_username = userData.twitter_username;
         this._user.facebook = userData.facebook;
+        this._user.has_dev_area = userData.has_dev_area;
         this._userObserver.next(this._user);
 
     }
@@ -72,6 +71,7 @@ export class UserService implements ServiceInterface {
         user.avatar = userData.avatar;
         user.twitter_username = userData.twitter_username;
         user.facebook = userData.facebook;
+        user.has_dev_area = userData.has_dev_area;
         return user;
 
     }
@@ -105,6 +105,16 @@ export class UserService implements ServiceInterface {
                 }
             });
         }
+
+    }
+
+    getUserWithPermissions() : Promise {
+
+        return this._apiService.getPromiseWithAuth('findPermissionsForUser/'+this._user.id)
+            .then(
+                data => {return data},
+                error => console.log(error)
+            );
 
     }
 
@@ -196,7 +206,8 @@ export class UserService implements ServiceInterface {
             email : user.email,
             forename : user.forename,
             surname : user.surname,
-            username : user.username
+            username : user.username,
+            has_dev_area: user.has_dev_area
         };
 
     }
@@ -224,23 +235,6 @@ export class UserService implements ServiceInterface {
                 });
             }
         );
-
-    }
-    
-    /*
-     @todo Move this into a better place
-     */
-    loggedInCheck() {
-        
-        // Check that the user is logged in by first checking that they have
-        // a token set and if so is that token still valid
-        if (localStorage.getItem('jwt')) {
-            this._apiService.getWithAuth('loginUser')
-                .subscribe(
-                    data => this.setUserDetails(data),
-                    error => this._router.navigate(['Login'])
-                );
-        }
 
     }
 
@@ -317,6 +311,7 @@ export class UserService implements ServiceInterface {
             user.avatar = userInfo.avatar;
             user.twitter_username = userInfo.twitter_username;
             user.facebook = userInfo.facebook;
+            user.has_dev_area = userInfo.has_dev_area;
 
             this._users.push(user);
         }

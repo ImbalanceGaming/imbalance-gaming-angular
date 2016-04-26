@@ -4,6 +4,7 @@ import {Router, ROUTER_DIRECTIVES}     from 'angular2/router';
 import {UserService}    from '../../services/user.service';
 import {ApiService}     from '../../services/api.service';
 import {HelpersService} from "../../services/helpers.service";
+import {ModuleService} from "../../services/module.service";
 
 @Component({
     selector: 'my-login',
@@ -25,7 +26,8 @@ export class LoginComponent {
         private _apiService:ApiService,
         private _router:Router,
         private _userService:UserService,
-        private _helpersService:HelpersService
+        private _helpersService:HelpersService,
+        private _moduleService:ModuleService
     ) {
         this.title = 'Login';
         this._submitted = false;
@@ -57,7 +59,10 @@ export class LoginComponent {
                 .subscribe(
                     data => this._userService.setUserDetails(data),
                     error => this.loginError = this._helpersService.processErrors(error),
-                    () => this._router.navigate(['Dashboard'])
+                    () => {
+                        this._router.navigate(['Dashboard']);
+                        this._moduleService.setPermissions();
+                    }
                 );
         }
     }

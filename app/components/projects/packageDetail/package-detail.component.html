@@ -1,0 +1,66 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>{{title}}</h3>
+                </div>
+                <div class="col-md-4">
+                    <message-controls></message-controls>
+                    <dynamic-form
+                            *ngIf="formData.length > 0 && formButtonData.length > 0"
+                            [questions]="formData"
+                            [formButtonData]="formButtonData"
+                            (saveEmitter)="saveChanges($event)"
+                            (deleteEmitter)="deletePackage()"
+                            (cancelEmitter)="cancelEdit()"
+                    ></dynamic-form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h3>Commands</h3>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <td colspan="6" class="table-button">
+                    <span class="pull-right">
+                        <dynamic-modal-form
+                                *ngIf="commandsFormData.length > 0"
+                                [modalHeader]="'Add Command'"
+                                [buttonText]="'Add Command'"
+                                [questions]="commandsFormData"
+                                (saveEmitter)="onAddCommand($event)"
+                        ></dynamic-modal-form>
+                    </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Command</th>
+                    <th>Order</th>
+                    <th>Run On</th>
+                    <th>Command Type</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody *ngIf="projectPackage.commands.length > 0">
+                <tr *ngFor="#command of projectPackage.commands">
+                    <td>{{command.command}}</td>
+                    <td>{{command.order}}</td>
+                    <td>{{command.run_on}}</td>
+                    <td>{{command.command_type}}</td>
+                    <td><a class="link-click" (click)="deleteCommand(command.id)">remove</a></td>
+                </tr>
+                </tbody>
+                <tbody *ngIf="projectPackage.commands.length == 0">
+                <tr>
+                    <td colspan="3">
+                        This package dosn't have any commands yet.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

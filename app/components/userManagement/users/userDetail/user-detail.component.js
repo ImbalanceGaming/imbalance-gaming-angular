@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', "../../../../common/auth-check", "../../../../models/user", "../../../../services/user.service", "../../../../directives/dynamic-form/normalForm/dynamic-form.directive", "../../../../services/form-data.service", "../../../../directives/messages/messages.directive"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', "../../../../models/user", "../../../../services/user.service", "../../../../directives/dynamic-form/normalForm/dynamic-form.directive", "../../../../services/form-data.service", "../../../../directives/messages/messages.directive"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', "../../../../common/auth-ch
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, auth_check_1, user_1, user_service_1, dynamic_form_directive_1, form_data_service_1, messages_directive_1;
+    var core_1, router_1, user_1, user_service_1, dynamic_form_directive_1, form_data_service_1, messages_directive_1;
     var UserDetail;
     return {
         setters:[
@@ -19,9 +19,6 @@ System.register(['angular2/core', 'angular2/router', "../../../../common/auth-ch
             },
             function (router_1_1) {
                 router_1 = router_1_1;
-            },
-            function (auth_check_1_1) {
-                auth_check_1 = auth_check_1_1;
             },
             function (user_1_1) {
                 user_1 = user_1_1;
@@ -72,6 +69,7 @@ System.register(['angular2/core', 'angular2/router', "../../../../common/auth-ch
                     this.user.forename = formData.forename;
                     this.user.surname = formData.surname;
                     this.user.role = formData.role;
+                    this.user.has_dev_area = formData.has_dev_area;
                     this._userService.update(this.user);
                 };
                 UserDetail.prototype.cancelEdit = function () {
@@ -87,9 +85,6 @@ System.register(['angular2/core', 'angular2/router', "../../../../common/auth-ch
                         templateUrl: 'app/components/userManagement/users/userDetail/user-detail.component.html',
                         styleUrls: ['app/components/userManagement/users/userDetail/user-detail.component.css'],
                         directives: [dynamic_form_directive_1.DynamicFormDirective, messages_directive_1.MessagesDirective]
-                    }),
-                    router_1.CanActivate(function (next, previous) {
-                        return auth_check_1.authCheck(next, previous);
                     }), 
                     __metadata('design:paramtypes', [user_service_1.UserService, router_1.RouteParams, router_1.Router, form_data_service_1.FormDataService])
                 ], UserDetail);

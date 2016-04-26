@@ -1,3 +1,7 @@
-.form {
-    margin-bottom: 20px;
+.header-btn {
+    margin-top: 15px;
+}
+hr {
+    margin: 0px;
+    border: 1px solid #ddd;
 }

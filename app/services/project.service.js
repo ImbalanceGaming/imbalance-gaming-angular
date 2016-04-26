@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', "../models/project", "./api.service", "../directives/messages/messages.service", "../directives/tables/table.service", "./table-data.service", "./user.service"], function(exports_1, context_1) {
+System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', "../models/project", "./api.service", "../directives/messages/messages.service", "../directives/tables/table.service", "./table-data.service", "./user.service", "../models/project-package", "../models/project-history", "../models/server"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, Observable_1, project_1, api_service_1, messages_service_1, table_service_1, table_data_service_1, user_service_1;
+    var core_1, Observable_1, project_1, api_service_1, messages_service_1, table_service_1, table_data_service_1, user_service_1, project_package_1, project_history_1, server_1;
     var ProjectService;
     return {
         setters:[
@@ -38,6 +38,15 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
             },
             function (user_service_1_1) {
                 user_service_1 = user_service_1_1;
+            },
+            function (project_package_1_1) {
+                project_package_1 = project_package_1_1;
+            },
+            function (project_history_1_1) {
+                project_history_1 = project_history_1_1;
+            },
+            function (server_1_1) {
+                server_1 = server_1_1;
             }],
         execute: function() {
             ProjectService = (function () {
@@ -57,9 +66,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                     project.key = projectData.key;
                     project.name = projectData.name;
                     project.description = projectData.description;
-                    project.status = projectData.status;
                     project.url = projectData.url;
-                    project.git_url = projectData.git_url;
                     return project;
                 };
                 ProjectService.prototype.get = function (id) {
@@ -112,7 +119,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                 };
                 ProjectService.prototype.update = function (project) {
                     var _this = this;
-                    this._apiService.patch('projects/' + project.id, this.generateData(project)).subscribe(function (data) {
+                    return this._apiService.patchPromise('projects/' + project.id, this.generateData(project)).then(function (data) {
                         _this._messageService.addMessage({
                             success: data.success.message,
                             error: null
@@ -147,10 +154,8 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                         key: project.key,
                         name: project.name,
                         description: project.description,
-                        status: project.status,
                         url: project.url,
-                        git_url: project.git_url,
-                        lead_user_id: project.lead_user_id
+                        lead_user_id: project.lead_user_id,
                     };
                 };
                 ProjectService.prototype.deploy = function (id) {
@@ -186,18 +191,47 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                     var _this = this;
                     if (buildTableData === void 0) { buildTableData = false; }
                     this._projects = [];
-                    for (var key in projectsData.data) {
+                    var _loop_1 = function(key) {
                         var projectInfo = void 0;
                         var projectLeadUser = void 0;
+                        var projectPackages = void 0;
+                        var projectHistory = void 0;
+                        var projectServers = void 0;
                         if (projectsData.data.hasOwnProperty(key)) {
                             projectInfo = projectsData.data[key].project;
                             projectLeadUser = projectsData.data[key].lead_user;
+                            projectPackages = projectsData.data[key].project_packages;
+                            projectHistory = projectsData.data[key].project_history;
+                            projectServers = projectsData.data[key].servers;
                         }
-                        var project = this.create(projectInfo);
+                        var project = this_1.create(projectInfo);
                         if (projectLeadUser != null) {
-                            project.lead_user = this._userService.create(projectLeadUser);
+                            project.lead_user = this_1._userService.create(projectLeadUser);
                         }
-                        this._projects.push(project);
+                        if (projectPackages.length > 0) {
+                            projectPackages.forEach(function (packageData) {
+                                var projectPackage = new project_package_1.ProjectPackage(packageData.id, packageData.name, packageData.repository, packageData.deploy_branch, packageData.deploy_location);
+                                projectPackage.project = project;
+                                project.packages.push(projectPackage);
+                            });
+                        }
+                        if (projectHistory.length > 0) {
+                            projectHistory.forEach(function (historyData) {
+                                var projectHistory = new project_history_1.ProjectHistory(historyData.id, historyData.deployment_date, historyData.committer, historyData.commit, historyData.status);
+                                project.history.push(projectHistory);
+                            });
+                        }
+                        if (projectServers.length > 0) {
+                            projectServers.forEach(function (serverData) {
+                                var server = new server_1.Server(serverData.id, serverData.name, serverData.address);
+                                project.servers.push(server);
+                            });
+                        }
+                        this_1._projects.push(project);
+                    };
+                    var this_1 = this;
+                    for (var key in projectsData.data) {
+                        _loop_1(key);
                     }
                     this.set(this._projects);
                     if (buildTableData) {
