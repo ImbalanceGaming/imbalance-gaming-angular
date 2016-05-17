@@ -71,4 +71,8 @@ export class DynamicModalFormQuestionDirective {
         }
     }
 
+    onSelectChange(value) {
+        (<Control>this.form.controls[this.question.key]).updateValue(value);
+    }
+
 }

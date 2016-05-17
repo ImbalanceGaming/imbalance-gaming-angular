@@ -84,10 +84,10 @@ System.register(['angular2/core', 'angular2/router', "../../../../directives/dyn
                 PermissionDetailComponent.prototype.saveChanges = function (formData) {
                     this.permission.name = formData.name;
                     this.permission.description = formData.description;
-                    this.permission.view = formData.view;
-                    this.permission.add = formData.add;
-                    this.permission.edit = formData.edit;
-                    this.permission.delete = formData.delete;
+                    this.permission.view = formData.view ? true : false;
+                    this.permission.add = formData.add ? true : false;
+                    this.permission.edit = formData.edit ? true : false;
+                    this.permission.delete = formData.delete ? true : false;
                     this._permissionService.update(this.permission);
                 };
                 PermissionDetailComponent.prototype.cancelEdit = function () {

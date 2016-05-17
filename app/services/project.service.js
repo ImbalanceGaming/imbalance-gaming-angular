@@ -120,15 +120,18 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                 ProjectService.prototype.update = function (project) {
                     var _this = this;
                     return this._apiService.patchPromise('projects/' + project.id, this.generateData(project)).then(function (data) {
-                        _this._messageService.addMessage({
-                            success: data.success.message,
-                            error: null
-                        });
-                    }, function (error) {
-                        _this._messageService.addMessage({
-                            success: null,
-                            error: error.message
-                        });
+                        if (data.success) {
+                            _this._messageService.addMessage({
+                                success: data.success.message,
+                                error: null
+                            });
+                        }
+                        else {
+                            _this._messageService.addMessage({
+                                success: null,
+                                error: data.error.message
+                            });
+                        }
                     });
                 };
                 ProjectService.prototype.delete = function (project) {
@@ -158,18 +161,21 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                         lead_user_id: project.lead_user_id,
                     };
                 };
-                ProjectService.prototype.deploy = function (id) {
+                ProjectService.prototype.deploy = function (projectId, serverId, userId) {
                     var _this = this;
-                    this._apiService.getWithAuth('deployProject/' + id).subscribe(function (data) {
-                        _this._messageService.addMessage({
-                            success: data.success.message,
-                            error: null
-                        });
-                    }, function (error) {
-                        _this._messageService.addMessage({
-                            success: null,
-                            error: error.message
-                        });
+                    return this._apiService.getPromiseWithAuth('deployProject/' + projectId + '?serverID=' + serverId + '&userID=' + userId).then(function (data) {
+                        if (data.success) {
+                            _this._messageService.addMessage({
+                                success: data.success.message,
+                                error: null
+                            });
+                        }
+                        else {
+                            _this._messageService.addMessage({
+                                success: null,
+                                error: data.error.message
+                            });
+                        }
                     });
                 };
                 ProjectService.prototype.findProjects = function (searchTerm) {
@@ -217,7 +223,7 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                         }
                         if (projectHistory.length > 0) {
                             projectHistory.forEach(function (historyData) {
-                                var projectHistory = new project_history_1.ProjectHistory(historyData.id, historyData.deployment_date, historyData.committer, historyData.commit, historyData.status);
+                                var projectHistory = new project_history_1.ProjectHistory(historyData.id, historyData.deployment_date, historyData.user, historyData.server, historyData.status);
                                 project.history.push(projectHistory);
                             });
                         }

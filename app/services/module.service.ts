@@ -198,8 +198,6 @@ export class ModuleService implements ServiceInterface {
             this.setModule(module);
         });
     }
-    
-    
 
     private buildModules(modulesData: any, buildTableData = false) {
 

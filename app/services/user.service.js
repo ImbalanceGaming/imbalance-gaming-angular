@@ -49,6 +49,9 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                     this.user$ = Observable_1.Observable.create(function (observer) { return _this._userObserver = observer; }).share();
                     this.users$ = Observable_1.Observable.create(function (observer) { return _this._usersObserver = observer; }).share();
                 }
+                UserService.prototype.updateUserObserver = function () {
+                    this._userObserver.next(this._user);
+                };
                 UserService.prototype.setUserDetails = function (userData) {
                     this._user.email = userData.email;
                     this._user.id = userData.id;

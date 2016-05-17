@@ -5,6 +5,8 @@ import {ApiService} from "./api.service";
 import {UserService} from "./user.service";
 import {ModuleService} from "./module.service";
 import {Module} from "../models/module";
+import {User} from "../models/user";
+import {MessagesService} from "../directives/messages/messages.service";
 
 @Injectable()
 export class AuthService {
@@ -16,7 +18,8 @@ export class AuthService {
         private _router:Router,
         private _apiService:ApiService,
         private _userService:UserService,
-        private _moduleService:ModuleService
+        private _moduleService:ModuleService,
+        private _messageService:MessagesService
     ) {
 
     }
@@ -60,6 +63,68 @@ export class AuthService {
 
     }
 
+    login(loginData: any) {
+        this._apiService.post('login', loginData)
+            .subscribe(
+                data => {
+                    this.saveJwt(data.token);
+                },
+                error => {
+                    this._messageService.addMessage({
+                        success: null,
+                        error: error.message
+                    })
+                }
+            );
+    }
+
+    logout() {
+        let user = new User();
+        this._userService.set(user);
+        localStorage.clear();
+        this._router.navigate(['Login']);
+    }
+
+    activate(id) {
+        let data = {id:id};
+
+        this._apiService.post('activate', data).subscribe(
+            data => {
+                this._messageService.addMessage({
+                    success: data.success.message,
+                    error: null
+                })
+            },
+            error => {
+                this._messageService.addMessage({
+                    success: null,
+                    error: error.message
+                })
+            }
+        )
+    }
+
+    register(regData: any) {
+        //noinspection TypeScriptUnresolvedVariable
+        return this._apiService.postPromise('register', regData).then(
+            data => {
+                if (data.success) {
+                    this._messageService.addMessage({
+                        success: data.success.message,
+                        error: null
+                    });
+                    return true;
+                } else {
+                    this._messageService.addMessage({
+                        success: null,
+                        error: data.error.message
+                    });
+                    return false;
+                }
+            }
+        );
+    }
+
     private keyValid(userData) {
 
         if (!this._validUser) {
@@ -74,6 +139,28 @@ export class AuthService {
 
     private keyInvalid() {
         this._router.navigate(['Login'])
+    }
+
+    private saveJwt(jwt) {
+        if (jwt != null) {
+            localStorage.setItem('jwt', jwt);
+            this._apiService.getWithAuth('loginUser')
+                .subscribe(
+                    data => {
+                        this._userService.setUserDetails(data);
+                    },
+                    error => {
+                        this._messageService.addMessage({
+                            success: null,
+                            error: error.message
+                        })
+                    },
+                    () => {
+                        this._router.navigate(['Projects']);
+                        this._moduleService.setPermissions();
+                    }
+                );
+        }
     }
 
 

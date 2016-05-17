@@ -538,8 +538,6 @@ System.register(['angular2/core', "../directives/dynamic-form/models/question-dr
                             })
                         ];
                         return questionData.sort(function (a, b) { return a.order - b.order; });
-                    }, function (error) {
-                        return [];
                     });
                 };
                 FormDataService.prototype.getDefaultButtons = function () {

@@ -13,6 +13,7 @@ import {UserService}                from "./user.service";
 import {ProjectPackage} from "../models/project-package";
 import {ProjectHistory} from "../models/project-history";
 import {Server} from "../models/server";
+import {User} from "../models/user";
 
 @Injectable()
 export class ProjectService implements ServiceInterface {
@@ -106,20 +107,21 @@ export class ProjectService implements ServiceInterface {
 
     }
 
-    update(project: Project) : Promise {
+    update(project: Project) {
 
         return this._apiService.patchPromise('projects/'+project.id, this.generateData(project)).then(
             data => {
-                this._messageService.addMessage({
-                    success: data.success.message,
-                    error: null
-                })
-            },
-            error => {
-                this._messageService.addMessage({
-                    success: null,
-                    error: error.message
-                })
+                if (data.success) {
+                    this._messageService.addMessage({
+                        success: data.success.message,
+                        error: null
+                    })
+                } else {
+                    this._messageService.addMessage({
+                        success: null,
+                        error: data.error.message
+                    })
+                }
             }
         );
 
@@ -161,20 +163,21 @@ export class ProjectService implements ServiceInterface {
 
     }
 
-    deploy(id: number) {
+    deploy(projectId: number, serverId: number, userId: number) {
 
-        this._apiService.getWithAuth('deployProject/'+id).subscribe(
+        return this._apiService.getPromiseWithAuth('deployProject/'+projectId+'?serverID='+serverId+'&userID='+userId).then(
             data => {
-                this._messageService.addMessage({
-                    success: data.success.message,
-                    error: null
-                })
-            },
-            error => {
-                this._messageService.addMessage({
-                    success: null,
-                    error: error.message
-                })
+                if (data.success) {
+                    this._messageService.addMessage({
+                        success: data.success.message,
+                        error: null
+                    })
+                } else {
+                    this._messageService.addMessage({
+                        success: null,
+                        error: data.error.message
+                    })
+                }
             }
         );
 
@@ -245,8 +248,8 @@ export class ProjectService implements ServiceInterface {
                     let projectHistory = new ProjectHistory(
                         historyData.id,
                         historyData.deployment_date,
-                        historyData.committer,
-                        historyData.commit,
+                        historyData.user,
+                        historyData.server,
                         historyData.status
                     );
                     project.history.push(projectHistory);

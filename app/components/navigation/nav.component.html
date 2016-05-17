@@ -8,7 +8,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" [routerLink]="['/Dashboard']">{{title}}</a>
+            <!--<a class="navbar-brand" [routerLink]="['/Dashboard']">{{title}}</a>-->
+            <span class="navbar-brand">{{title}}</span>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -28,19 +29,20 @@
                     <!--</ul>-->
                 <!--</li>-->
             </ul>
-            <!--<ul class="nav navbar-nav navbar-right">-->
-                <!--<li><a href="#">Link</a></li>-->
-                <!--<li class="dropdown">-->
-                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>-->
-                    <!--<ul class="dropdown-menu">-->
-                        <!--<li><a href="#">Action</a></li>-->
-                        <!--<li><a href="#">Another action</a></li>-->
-                        <!--<li><a href="#">Something else here</a></li>-->
-                        <!--<li role="separator" class="divider"></li>-->
-                        <!--<li><a href="#">Separated link</a></li>-->
-                    <!--</ul>-->
-                <!--</li>-->
-            <!--</ul>-->
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle menu" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <!--<span>{{user?.forename}} {{user?.surname}}</span>-->
+                        <img src="app/resources/images/avatar17411_1.gif" width="30" height="30">
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Profile</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a (click)="logout()">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div><!-- /.navbar-collapse -->
     </div>
 </nav>

@@ -17,4 +17,11 @@
 }
 .navbar-blue .navbar-brand {
     font-size: 20px;
+    color: #FFFFFF;
+}
+.menu {
+    padding-bottom: 0;
+}
+.menu > span {
+    padding-bottom: 0;
 }

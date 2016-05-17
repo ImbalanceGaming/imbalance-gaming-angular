@@ -86,6 +86,9 @@ System.register(['angular2/core', 'angular2/common', "../models/question-base"],
                         this.form.controls[this.question.key].updateValue(true);
                     }
                 };
+                DynamicModalFormQuestionDirective.prototype.onSelectChange = function (value) {
+                    this.form.controls[this.question.key].updateValue(value);
+                };
                 __decorate([
                     core_1.Input(), 
                     __metadata('design:type', question_base_1.QuestionBase)

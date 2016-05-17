@@ -68,6 +68,16 @@ export class ApiService {
 
     }
 
+    postPromise(action:string, data:any) {
+        let body = JSON.stringify(data);
+
+        return this.http.post(this._connectionUrl + action, body, {headers: contentHeaders})
+            .toPromise()
+            .then(res => res.json())
+            //.do(data => console.log(data)) // eyeball results in the console
+            .catch(ApiService.handleError);
+    }
+
     postWithAuth(action:string, data:any) {
 
         let body = JSON.stringify(data);

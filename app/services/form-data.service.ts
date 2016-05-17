@@ -575,9 +575,6 @@ export class FormDataService {
                     ];
 
                     return questionData.sort((a, b) => a.order - b.order);
-                },
-                error => {
-                    return []
                 }
             );
 

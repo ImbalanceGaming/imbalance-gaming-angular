@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../../services/user.service', '../../services/api.service', '../../models/user', "../../services/helpers.service"], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../../models/user', "../../services/auth.service", "../../directives/messages/messages.directive"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, user_service_1, api_service_1, user_1, helpers_service_1;
+    var core_1, router_1, user_1, auth_service_1, messages_directive_1;
     var RegistrationComponent;
     return {
         setters:[
@@ -20,46 +20,37 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
             function (router_1_1) {
                 router_1 = router_1_1;
             },
-            function (user_service_1_1) {
-                user_service_1 = user_service_1_1;
-            },
-            function (api_service_1_1) {
-                api_service_1 = api_service_1_1;
-            },
             function (user_1_1) {
                 user_1 = user_1_1;
             },
-            function (helpers_service_1_1) {
-                helpers_service_1 = helpers_service_1_1;
+            function (auth_service_1_1) {
+                auth_service_1 = auth_service_1_1;
+            },
+            function (messages_directive_1_1) {
+                messages_directive_1 = messages_directive_1_1;
             }],
         execute: function() {
             RegistrationComponent = (function () {
-                function RegistrationComponent(_userService, _apiService, _routeParams, _helpersService) {
-                    var _this = this;
-                    this._userService = _userService;
-                    this._apiService = _apiService;
+                function RegistrationComponent(_routeParams, _authService, _router) {
                     this._routeParams = _routeParams;
-                    this._helpersService = _helpersService;
+                    this._authService = _authService;
+                    this._router = _router;
                     this.title = 'Registration';
                     this.user = new user_1.User();
-                    this._userService.user$.subscribe(function (updatedUser) { return _this.user = updatedUser; });
-                    this.regSuccess = null;
+                    this.regSuccess = false;
                     this.activating = false;
-                    this.regError = {
-                        error: false
-                    };
                     // Uncomment below for testing
-                    //this.user.username = 'chris';
-                    //this.user.email = 'chrispratt1985@gmail.com';
-                    //this.regPassword = '10Banana12';
-                    //this.user.forename = 'Christopher';
-                    //this.user.surname = 'Pratt';
+                    // this.user.username = 'chris';
+                    // this.user.email = 'chrispratt1985@gmail.com';
+                    // this.regPassword = '10Banana12';
+                    // this.user.forename = 'Christopher';
+                    // this.user.surname = 'Pratt';
                 }
                 RegistrationComponent.prototype.ngOnInit = function () {
                     if (this._routeParams.get('id')) {
                         var id = +this._routeParams.get('id');
                         this.activating = true;
-                        this.activate(id);
+                        this._authService.activate(id);
                     }
                 };
                 RegistrationComponent.prototype.onSubmit = function () {
@@ -71,23 +62,23 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
                         forename: this.user.forename,
                         surname: this.user.surname
                     };
-                    //noinspection TypeScriptUnresolvedVariable
-                    this._apiService.post('register', data).subscribe(function (data) { return _this.regSuccess = data.success.message; }, function (error) { return _this.regError = _this._helpersService.processErrors(error); }, function () {
-                        _this.regError.error = false;
+                    this._authService.register(data).then(function (complete) {
+                        if (complete) {
+                            _this.regSuccess = true;
+                        }
                     });
                 };
-                RegistrationComponent.prototype.activate = function (id) {
-                    var _this = this;
-                    var data = { id: id };
-                    this._apiService.post('activate', data).subscribe(function (data) { return null; }, function (error) { return _this.regError = _this._helpersService.processErrors(error); });
+                RegistrationComponent.prototype.onBack = function () {
+                    this._router.navigate(['Login']);
                 };
                 RegistrationComponent = __decorate([
                     core_1.Component({
                         selector: 'my-registration',
                         templateUrl: 'app/components/registration/registration.component.html',
-                        styleUrls: ['app/components/registration/registration.component.css']
+                        styleUrls: ['app/components/registration/registration.component.css'],
+                        directives: [messages_directive_1.MessagesDirective]
                     }), 
-                    __metadata('design:paramtypes', [user_service_1.UserService, api_service_1.ApiService, router_1.RouteParams, helpers_service_1.HelpersService])
+                    __metadata('design:paramtypes', [router_1.RouteParams, auth_service_1.AuthService, router_1.Router])
                 ], RegistrationComponent);
                 return RegistrationComponent;
             }());

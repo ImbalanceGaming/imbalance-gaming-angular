@@ -132,12 +132,12 @@ System.register(['angular2/core', 'angular2/router', '../services/api.service', 
                         ]
                     }),
                     router_1.RouteConfig([
-                        { path: '/dashboard', as: 'Dashboard', component: dashboard_component_1.DashboardComponent, useAsDefault: true },
+                        { path: '/dashboard', as: 'Dashboard', component: dashboard_component_1.DashboardComponent },
                         { path: '/login', as: 'Login', component: login_component_1.LoginComponent },
                         { path: '/signup', as: 'Signup', component: registration_component_1.RegistrationComponent },
                         { path: '/activate/:id', as: 'Activate', component: registration_component_1.RegistrationComponent },
                         { path: '/usermanagement/...', as: 'UserManagement', component: user_management_component_1.UserManagementComponent },
-                        { path: '/projects/...', as: 'Projects', component: project_router_component_1.ProjectRouterComponent },
+                        { path: '/projects/...', as: 'Projects', component: project_router_component_1.ProjectRouterComponent, useAsDefault: true },
                     ]), 
                     __metadata('design:paramtypes', [user_service_1.UserService, module_service_1.ModuleService, auth_service_1.AuthService])
                 ], AppComponent);

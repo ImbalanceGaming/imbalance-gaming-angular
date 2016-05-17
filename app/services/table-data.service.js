@@ -105,7 +105,6 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                             { value: 'Project Lead', show: true },
                             { value: 'Project URL', show: true },
                             { value: 'Packages', show: true },
-                            { value: 'Deploy', show: false },
                         ];
                         projects.forEach(function (project) {
                             this.table.body.rows.push({
@@ -118,8 +117,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                                         value: project.lead_user ? project.lead_user.forename + ' ' + project.lead_user.surname : 'None',
                                         detailCell: false, clickEvent: false },
                                     { value: project.url ? project.url : 'N/A', detailCell: false, clickEvent: false },
-                                    { value: project.packages.length, detailCell: false, clickEvent: false },
-                                    { value: 'deploy', detailCell: false, clickEvent: true },
+                                    { value: project.packages.length, detailCell: false, clickEvent: false }
                                 ]
                             });
                         }, _this);

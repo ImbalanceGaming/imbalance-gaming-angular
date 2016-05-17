@@ -78,7 +78,6 @@ System.register(['angular2/core', 'angular2/router', "../../../directives/dynami
                     this._router.navigate(['../ProjectDetail', { id: this._projectId }]);
                 };
                 PackageDetailComponent.prototype.onAddCommand = function (formData) {
-                    console.log(formData);
                     var command = new project_package_command_1.ProjectPackageCommand(0, formData.command, formData.order, formData.run_on, formData.command_type, this.projectPackage.id);
                     this._packageCommandService.add(command).then(this.getProjectPackageData());
                 };

@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', '../../services/user.service'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', '../../services/user.service', "../../services/auth.service"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, user_service_1;
+    var core_1, router_1, user_service_1, auth_service_1;
     var NavComponent;
     return {
         setters:[
@@ -22,16 +22,23 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
             },
             function (user_service_1_1) {
                 user_service_1 = user_service_1_1;
+            },
+            function (auth_service_1_1) {
+                auth_service_1 = auth_service_1_1;
             }],
         execute: function() {
             NavComponent = (function () {
-                function NavComponent(_userService) {
+                function NavComponent(_userService, _authService) {
                     this._userService = _userService;
+                    this._authService = _authService;
                     this.title = 'IGMS';
                 }
                 NavComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     this._userService.user$.subscribe(function (updatedUser) { return _this.user = updatedUser; });
+                };
+                NavComponent.prototype.logout = function () {
+                    this._authService.logout();
                 };
                 __decorate([
                     core_1.Input(), 
@@ -44,7 +51,7 @@ System.register(['angular2/core', 'angular2/router', '../../services/user.servic
                         templateUrl: 'app/components/navigation/nav.component.html',
                         styleUrls: ['app/components/navigation/nav.component.css'],
                     }), 
-                    __metadata('design:paramtypes', [user_service_1.UserService])
+                    __metadata('design:paramtypes', [user_service_1.UserService, auth_service_1.AuthService])
                 ], NavComponent);
                 return NavComponent;
             }());

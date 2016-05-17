@@ -11,7 +11,7 @@
         </div>
 
         <select class="form-control" [id]="question.key" *ngSwitchWhen="'dropdown'"
-                [ngControl]="question.key">
+                [ngControl]="question.key" (change)="onSelectChange($event.target.value)">
             <option *ngFor="#opt of question.options" [value]="opt.key" [selected]="opt.selected">{{opt.value}}</option>
         </select>
 

@@ -125,7 +125,6 @@ export class TableDataService {
                 <TableHeader>{value: 'Project Lead', show: true},
                 <TableHeader>{value: 'Project URL', show: true},
                 <TableHeader>{value: 'Packages', show: true},
-                <TableHeader>{value: 'Deploy', show: false},
             ];
 
             projects.forEach(function (project:Project) {
@@ -139,8 +138,7 @@ export class TableDataService {
                             value: project.lead_user?project.lead_user.forename + ' ' + project.lead_user.surname:'None',
                             detailCell: false, clickEvent: false},
                         <TableCell>{value: project.url?project.url:'N/A', detailCell: false, clickEvent: false},
-                        <TableCell>{value: project.packages.length, detailCell: false, clickEvent: false},
-                        <TableCell>{value: 'deploy', detailCell: false, clickEvent: true},
+                        <TableCell>{value: project.packages.length, detailCell: false, clickEvent: false}
                     ]
                 })
             }, this);

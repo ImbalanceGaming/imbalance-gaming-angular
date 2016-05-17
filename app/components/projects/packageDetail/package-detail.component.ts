@@ -69,8 +69,6 @@ export class PackageDetailComponent {
 
     onAddCommand(formData) {
 
-        console.log(formData);
-
         let command = new ProjectPackageCommand(
             0,
             formData.command,

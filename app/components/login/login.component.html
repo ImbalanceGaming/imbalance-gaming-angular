@@ -1,9 +1,7 @@
 <div class="container login">
     <h3>{{title}}</h3>
 
-    <div [hidden]="!loginError.error" class="alert alert-danger">
-        {{loginError.message}}
-    </div>
+    <message-controls></message-controls>
     <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
         <div class="form-group">
             <label for="email">Email</label>

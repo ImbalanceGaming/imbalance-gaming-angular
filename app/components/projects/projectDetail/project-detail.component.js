@@ -64,6 +64,8 @@ System.register(['angular2/core', 'angular2/router', "../../../services/form-dat
                 ProjectDetailComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     this._projectService.projects$.subscribe(function (projects) { return _this.projects = projects; });
+                    this._userService.user$.subscribe(function (user) { return _this._loggedInUser = user; });
+                    this._userService.updateUserObserver();
                     this.getProjectData();
                 };
                 ProjectDetailComponent.prototype.saveProjectChanges = function (formData) {
@@ -100,6 +102,10 @@ System.register(['angular2/core', 'angular2/router', "../../../services/form-dat
                 ProjectDetailComponent.prototype.deletePackage = function (id) {
                     var _this = this;
                     this._packageService.delete(new project_package_1.ProjectPackage(id)).then(function () { return _this.getProjectData(); });
+                };
+                ProjectDetailComponent.prototype.deploy = function (projectId, serverId) {
+                    var _this = this;
+                    this._projectService.deploy(projectId, serverId, this._loggedInUser.id).then(function () { return _this.getProjectData(); });
                 };
                 ProjectDetailComponent.prototype.getProjectData = function () {
                     var _this = this;

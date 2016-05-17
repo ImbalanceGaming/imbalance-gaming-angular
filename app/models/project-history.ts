@@ -2,8 +2,8 @@ export class ProjectHistory {
 
     private _id: number;
     private _deployment_date: string;
-    private _committer: string;
-    private _commit: string;
+    private _user: string;
+    private _server: string;
     private _status: string;
 
     constructor(
@@ -15,8 +15,8 @@ export class ProjectHistory {
     ) {
         this._id = id || null;
         this._deployment_date = deployment_date || '';
-        this._committer = committer || '';
-        this._commit = commit || '';
+        this._user = committer || '';
+        this._server = commit || '';
         this._status = status || '';
     }
 
@@ -36,20 +36,20 @@ export class ProjectHistory {
         this._deployment_date = value;
     }
 
-    get committer():string {
-        return this._committer;
+    get user():string {
+        return this._user;
     }
 
-    set committer(value:string) {
-        this._committer = value;
+    set user(value:string) {
+        this._user = value;
     }
 
-    get commit():string {
-        return this._commit;
+    get server():string {
+        return this._server;
     }
 
-    set commit(value:string) {
-        this._commit = value;
+    set server(value:string) {
+        this._server = value;
     }
 
     get status():string {

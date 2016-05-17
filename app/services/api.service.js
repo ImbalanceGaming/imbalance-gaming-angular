@@ -78,6 +78,13 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-
                         .map(function (res) { return res.json(); })
                         .catch(ApiService.handleError);
                 };
+                ApiService.prototype.postPromise = function (action, data) {
+                    var body = JSON.stringify(data);
+                    return this.http.post(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })
+                        .toPromise()
+                        .then(function (res) { return res.json(); })
+                        .catch(ApiService.handleError);
+                };
                 ApiService.prototype.postWithAuth = function (action, data) {
                     var body = JSON.stringify(data);
                     return this._authHttp.post(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })

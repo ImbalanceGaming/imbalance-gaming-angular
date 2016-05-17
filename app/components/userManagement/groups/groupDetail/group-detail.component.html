@@ -57,7 +57,7 @@
             </tbody>
             <tbody *ngIf="group.users.length == 0">
             <tr>
-                <td colspan="3">
+                <td colspan="6">
                     This group does not have any users assigned
                 </td>
             </tr>
@@ -88,7 +88,6 @@
                 <td>Key</td>
                 <td>Name</td>
                 <td>Description</td>
-                <td>status</td>
                 <td></td>
             </tr>
             </thead>
@@ -97,13 +96,12 @@
                 <td><a [routerLink]="['/Projects', 'ProjectDetail', {id: project.id}]">{{project.key}}</a></td>
                 <td>{{project.name}}</td>
                 <td>{{project.description}}</td>
-                <td>{{project.status}}</td>
                 <td><a class="link-click" (click)="onRemoveProject(project.id)">remove</a></td>
             </tr>
             </tbody>
             <tbody *ngIf="group.projects.length == 0">
             <tr>
-                <td colspan="3">
+                <td colspan="5">
                     This group does not have any projects assigned
                 </td>
             </tr>

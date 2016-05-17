@@ -32,6 +32,10 @@ export class UserService implements ServiceInterface {
         this.users$ = Observable.create(observer => this._usersObserver = observer).share();
     }
 
+    updateUserObserver() {
+        this._userObserver.next(this._user);
+    }
+
     setUserDetails(userData) {
 
         this._user.email = userData.email;

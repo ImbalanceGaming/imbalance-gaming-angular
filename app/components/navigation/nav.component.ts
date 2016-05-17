@@ -3,6 +3,7 @@ import {ROUTER_DIRECTIVES}  from 'angular2/router';
 
 import {User}           from '../../models/user';
 import {UserService}    from '../../services/user.service';
+import {AuthService} from "../../services/auth.service";
 
 @Component({
     selector: 'app-nav',
@@ -25,11 +26,15 @@ export class NavComponent {
     public title:string;
     public user : User;
 
-    constructor(private _userService:UserService) {
+    constructor(private _userService:UserService, private _authService:AuthService) {
         this.title = 'IGMS';
     }
 
     ngOnInit() {
         this._userService.user$.subscribe(updatedUser => this.user = updatedUser);
+    }
+
+    logout() {
+        this._authService.logout();
     }
 }

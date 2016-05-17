@@ -39,8 +39,4 @@ export class ProjectsComponent {
         return event;
     }
 
-    deploy(id: number) {
-        this._projectService.deploy(id);
-    }
-
 }

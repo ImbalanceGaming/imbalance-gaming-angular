@@ -47,9 +47,6 @@ System.register(['angular2/core', 'angular2/router', "../../../directives/tables
                     this._projectService.getProjects(event, true, true);
                     return event;
                 };
-                ProjectsComponent.prototype.deploy = function (id) {
-                    this._projectService.deploy(id);
-                };
                 ProjectsComponent = __decorate([
                     core_1.Component({
                         selector: 'projects',

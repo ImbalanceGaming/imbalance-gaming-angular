@@ -9,8 +9,8 @@ System.register([], function(exports_1, context_1) {
                 function ProjectHistory(id, deployment_date, committer, commit, status) {
                     this._id = id || null;
                     this._deployment_date = deployment_date || '';
-                    this._committer = committer || '';
-                    this._commit = commit || '';
+                    this._user = committer || '';
+                    this._server = commit || '';
                     this._status = status || '';
                 }
                 Object.defineProperty(ProjectHistory.prototype, "id", {
@@ -33,22 +33,22 @@ System.register([], function(exports_1, context_1) {
                     enumerable: true,
                     configurable: true
                 });
-                Object.defineProperty(ProjectHistory.prototype, "committer", {
+                Object.defineProperty(ProjectHistory.prototype, "user", {
                     get: function () {
-                        return this._committer;
+                        return this._user;
                     },
                     set: function (value) {
-                        this._committer = value;
+                        this._user = value;
                     },
                     enumerable: true,
                     configurable: true
                 });
-                Object.defineProperty(ProjectHistory.prototype, "commit", {
+                Object.defineProperty(ProjectHistory.prototype, "server", {
                     get: function () {
-                        return this._commit;
+                        return this._server;
                     },
                     set: function (value) {
-                        this._commit = value;
+                        this._server = value;
                     },
                     enumerable: true,
                     configurable: true

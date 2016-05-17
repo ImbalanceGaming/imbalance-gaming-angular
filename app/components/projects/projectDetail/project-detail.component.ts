@@ -10,6 +10,7 @@ import {UserService} from "../../../services/user.service";
 import {DynamicModalFormDirective} from "../../../directives/dynamic-form/modalForm/dynamic-modal-form.directive";
 import {ProjectPackage} from "../../../models/project-package";
 import {ProjectPackageService} from "../../../services/project-package.service";
+import {User} from "../../../models/user";
 
 @Component({
     selector: 'group-detail',
@@ -29,12 +30,15 @@ export class ProjectDetailComponent {
     formButtonData:Array<FormButtonInterface> = [];
     searchReturn:Array<any>;
 
+    private _loggedInUser: User;
+
     constructor(private _projectService:ProjectService,
                 private _routeParams:RouteParams,
                 private _router:Router,
                 private _formDataService:FormDataService,
                 private _userService:UserService,
-                private _packageService:ProjectPackageService) {
+                private _packageService:ProjectPackageService
+    ) {
         this.title = 'Project Detail';
         this.project = new Project();
     }
@@ -42,6 +46,8 @@ export class ProjectDetailComponent {
     ngOnInit() {
 
         this._projectService.projects$.subscribe(projects => this.projects = projects);
+        this._userService.user$.subscribe(user => this._loggedInUser = user);
+        this._userService.updateUserObserver();
         this.getProjectData();
 
     }
@@ -86,6 +92,10 @@ export class ProjectDetailComponent {
 
     deletePackage(id: number) {
         this._packageService.delete(new ProjectPackage(id)).then(() => this.getProjectData());
+    }
+
+    deploy(projectId: number, serverId: number) {
+        this._projectService.deploy(projectId, serverId, this._loggedInUser.id).then(() => this.getProjectData());
     }
 
     private getProjectData() {

@@ -21,7 +21,6 @@ import {RegistrationComponent}      from "./registration/registration.component"
 import {ProjectRouterComponent}     from "./projects/project-router.component";
 
 import {Module} from "../models/module";
-import {Menu}   from "../models/menu";
 import {ModuleSectionService} from "../services/module-section.service";
 import {PermissionService} from "../services/permission.service";
 import {User} from "../models/user";
@@ -54,12 +53,12 @@ import {AuthService} from "../services/auth.service";
 })
 
 @RouteConfig([
-    {path: '/dashboard', as: 'Dashboard', component: DashboardComponent, useAsDefault: true},
+    {path: '/dashboard', as: 'Dashboard', component: DashboardComponent},
     {path: '/login', as: 'Login', component: LoginComponent},
     {path: '/signup', as: 'Signup', component: RegistrationComponent},
     {path: '/activate/:id', as: 'Activate', component: RegistrationComponent},
     {path: '/usermanagement/...', as: 'UserManagement', component: UserManagementComponent},
-    {path: '/projects/...', as: 'Projects', component: ProjectRouterComponent},
+    {path: '/projects/...', as: 'Projects', component: ProjectRouterComponent, useAsDefault: true},
 ])
 
 //Main class for application

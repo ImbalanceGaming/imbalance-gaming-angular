@@ -1,54 +1,48 @@
 import {Component}  from 'angular2/core';
 import {Router, RouteParams}     from 'angular2/router';
 
-import {UserService}    from '../../services/user.service';
-import {ApiService}     from '../../services/api.service';
 import {User}           from '../../models/user';
-import {HelpersService} from "../../services/helpers.service";
+import {AuthService} from "../../services/auth.service";
+import {MessagesDirective} from "../../directives/messages/messages.directive";
 
 @Component({
     selector: 'my-registration',
     templateUrl: 'app/components/registration/registration.component.html',
-    styleUrls: ['app/components/registration/registration.component.css']
+    styleUrls: ['app/components/registration/registration.component.css'],
+    directives: [MessagesDirective]
 })
 
 export class RegistrationComponent {
 
     public title    : string;
-    public regError : any;
-    public regSuccess : string;
+    public regSuccess : boolean;
     public regPassword : string;
     public activating : boolean;
-    public user     : User;
+    public user : User;
 
     constructor(
-        private _userService:UserService,
-        private _apiService:ApiService,
         private _routeParams: RouteParams,
-        private _helpersService:HelpersService
+        private _authService: AuthService,
+        private _router: Router
     ) {
         this.title = 'Registration';
         this.user = new User();
-        this._userService.user$.subscribe(updatedUser => this.user = updatedUser);
-        this.regSuccess = null;
+        this.regSuccess = false;
         this.activating = false;
-        this.regError = {
-            error: false
-        };
 
         // Uncomment below for testing
-        //this.user.username = 'chris';
-        //this.user.email = 'chrispratt1985@gmail.com';
-        //this.regPassword = '10Banana12';
-        //this.user.forename = 'Christopher';
-        //this.user.surname = 'Pratt';
+        // this.user.username = 'chris';
+        // this.user.email = 'chrispratt1985@gmail.com';
+        // this.regPassword = '10Banana12';
+        // this.user.forename = 'Christopher';
+        // this.user.surname = 'Pratt';
     }
 
     ngOnInit() {
         if (this._routeParams.get('id')) {
             let id = +this._routeParams.get('id');
             this.activating = true;
-            this.activate(id);
+            this._authService.activate(id);
         }
     }
 
@@ -61,23 +55,15 @@ export class RegistrationComponent {
             surname : this.user.surname
         };
 
-        //noinspection TypeScriptUnresolvedVariable
-        this._apiService.post('register', data).subscribe(
-            data => this.regSuccess = data.success.message,
-            error => this.regError = this._helpersService.processErrors(error),
-            () => {
-                this.regError.error = false
+        this._authService.register(data).then(complete => {
+            if (complete) {
+                this.regSuccess = true;
             }
-        );
+        });
     }
 
-    private activate(id) {
-        let data = {id:id};
-
-        this._apiService.post('activate', data).subscribe(
-            data => null,
-            error => this.regError = this._helpersService.processErrors(error)
-        )
+    onBack() {
+        this._router.navigate(['Login']);
     }
 
 }

@@ -172,16 +172,16 @@
                             <thead>
                             <tr>
                                 <td>Started</td>
-                                <td>Committer</td>
-                                <td>Commit</td>
+                                <td>User</td>
+                                <td>Server</td>
                                 <td>Status</td>
                             </tr>
                             </thead>
                             <tbody *ngIf="project.history.length > 0">
                             <tr *ngFor="#history of project.history">
                                 <td>{{history.deployment_date}}</td>
-                                <td>{{history.committer}}</td>
-                                <td>{{history.commit}}</td>
+                                <td>{{history.user}}</td>
+                                <td>{{history.server}}</td>
                                 <td *ngIf="history.status === 'Finished'">
                                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Finished
                                 </td>
@@ -216,7 +216,7 @@
                             <tr *ngFor="#server of project.servers">
                                 <td>{{server.name}}</td>
                                 <td>{{server.address}}</td>
-                                <td><a href="#">Deploy</a></td>
+                                <td><a class="link-click" (click)="deploy(project.id, server.id)">Deploy</a></td>
                             </tr>
                             </tbody>
                             <tbody *ngIf="project.servers.length == 0">
