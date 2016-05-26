@@ -59,7 +59,8 @@ System.register(['angular2/core', 'angular2/router', "../../../directives/dynami
                     this.projectPackage = new project_package_1.ProjectPackage();
                 }
                 PackageDetailComponent.prototype.ngOnInit = function () {
-                    // this._packageService.projectPackage$.subscribe(projectPackage => this.projectPackage = projectPackage);
+                    var _this = this;
+                    this._packageService.projectPackage$.subscribe(function (projectPackage) { return _this.projectPackage = projectPackage; });
                     this._projectId = +this._routeParams.get('packageId');
                     this.getProjectPackageData();
                 };

@@ -42,7 +42,7 @@ export class PackageDetailComponent {
 
     ngOnInit() {
 
-        // this._packageService.projectPackage$.subscribe(projectPackage => this.projectPackage = projectPackage);
+        this._packageService.projectPackage$.subscribe(projectPackage => this.projectPackage = projectPackage);
         this._projectId = +this._routeParams.get('packageId');
         this.getProjectPackageData();
 

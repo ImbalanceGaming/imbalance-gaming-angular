@@ -26,9 +26,10 @@
                                 </div>
                             </div>
                         </div>
-                        <table class="table">
-                            <thead></thead>
-                            <tbody>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead></thead>
+                                <tbody>
                                 <tr>
                                     <td style="white-space: nowrap">Key</td>
                                     <td>{{project.key}}</td>
@@ -49,8 +50,10 @@
                                     <td style="white-space: nowrap">Project URL</td>
                                     <td><a href="project.url">{{project.url}}</a></td>
                                 </tr>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                     <div class="col-md-3">
                         <h3>Deployments</h3>
@@ -59,16 +62,16 @@
                             <tbody>
                             <tr>
                                 <td>Today's</td>
-                                <td>0</td>
+                                <td>{{project.deploymentStats.today}}</td>
                             </tr>
                             <tr>
                                 <td>This Week</td>
-                                <td>2</td>
+                                <td>{{project.deploymentStats.week}}</td>
                             </tr>
-                            <tr>
-                                <td>Last Duration</td>
-                                <td>36 sec</td>
-                            </tr>
+                            <!--<tr>-->
+                                <!--<td>Last Duration</td>-->
+                                <!--<td>{{project.deploymentStats.duration}} sec</td>-->
+                            <!--</tr>-->
                             </tbody>
                         </table>
                     </div>

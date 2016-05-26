@@ -1,12 +1,15 @@
-System.register(["./user"], function(exports_1, context_1) {
+System.register(["./user", "./project-deployment-stats"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var user_1;
+    var user_1, project_deployment_stats_1;
     var Project;
     return {
         setters:[
             function (user_1_1) {
                 user_1 = user_1_1;
+            },
+            function (project_deployment_stats_1_1) {
+                project_deployment_stats_1 = project_deployment_stats_1_1;
             }],
         execute: function() {
             Project = (function () {
@@ -21,6 +24,7 @@ System.register(["./user"], function(exports_1, context_1) {
                     this._packages = [];
                     this._history = [];
                     this._servers = [];
+                    this._deploymentStats = new project_deployment_stats_1.ProjectDeploymentStats();
                 }
                 Object.defineProperty(Project.prototype, "id", {
                     get: function () {
@@ -118,6 +122,16 @@ System.register(["./user"], function(exports_1, context_1) {
                     },
                     set: function (value) {
                         this._servers = value;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Object.defineProperty(Project.prototype, "deploymentStats", {
+                    get: function () {
+                        return this._deploymentStats;
+                    },
+                    set: function (value) {
+                        this._deploymentStats = value;
                     },
                     enumerable: true,
                     configurable: true

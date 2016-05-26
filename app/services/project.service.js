@@ -203,12 +203,14 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                         var projectPackages = void 0;
                         var projectHistory = void 0;
                         var projectServers = void 0;
+                        var projectDeploymentStats = void 0;
                         if (projectsData.data.hasOwnProperty(key)) {
                             projectInfo = projectsData.data[key].project;
                             projectLeadUser = projectsData.data[key].lead_user;
                             projectPackages = projectsData.data[key].project_packages;
                             projectHistory = projectsData.data[key].project_history;
                             projectServers = projectsData.data[key].servers;
+                            projectDeploymentStats = projectsData.data[key].deployment_stats;
                         }
                         var project = this_1.create(projectInfo);
                         if (projectLeadUser != null) {
@@ -233,6 +235,9 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                                 project.servers.push(server);
                             });
                         }
+                        project.deploymentStats.today = projectDeploymentStats.today;
+                        project.deploymentStats.week = projectDeploymentStats.week;
+                        project.deploymentStats.duration = projectDeploymentStats.duration;
                         this_1._projects.push(project);
                     };
                     var this_1 = this;

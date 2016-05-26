@@ -1,7 +1,8 @@
 import {User} from "./user";
-import {ProjectPackage} from "./project-packages";
+import {ProjectPackage} from "./project-package";
 import {ProjectHistory} from "./project-history";
 import {Server} from "./server";
+import {ProjectDeploymentStats} from "./project-deployment-stats";
 
 export class Project {
 
@@ -15,6 +16,7 @@ export class Project {
     private _packages: Array<ProjectPackage>;
     private _history: Array<ProjectHistory>;
     private _servers: Array<Server>;
+    private _deploymentStats: ProjectDeploymentStats;
 
     constructor(
         id?: number,
@@ -33,6 +35,7 @@ export class Project {
         this._packages = [];
         this._history = [];
         this._servers = [];
+        this._deploymentStats = new ProjectDeploymentStats();
     }
 
     get id():number {
@@ -113,6 +116,14 @@ export class Project {
 
     set servers(value:Array<Server>) {
         this._servers = value;
+    }
+
+    get deploymentStats():ProjectDeploymentStats {
+        return this._deploymentStats;
+    }
+
+    set deploymentStats(value:ProjectDeploymentStats) {
+        this._deploymentStats = value;
     }
     
 }

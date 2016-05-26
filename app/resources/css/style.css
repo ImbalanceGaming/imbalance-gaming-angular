@@ -39,6 +39,10 @@ html, body {
     width: 15px;
 }
 
+@-moz-document url-prefix() {
+    fieldset { display: table-cell; }
+}
+
 /********************/
 /** Custom Gutters **/
 /********************/

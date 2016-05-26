@@ -214,6 +214,7 @@ export class ProjectService implements ServiceInterface {
             let projectPackages;
             let projectHistory;
             let projectServers;
+            let projectDeploymentStats;
 
             if (projectsData.data.hasOwnProperty(key)) {
                 projectInfo = projectsData.data[key].project;
@@ -221,6 +222,7 @@ export class ProjectService implements ServiceInterface {
                 projectPackages = projectsData.data[key].project_packages;
                 projectHistory = projectsData.data[key].project_history;
                 projectServers = projectsData.data[key].servers;
+                projectDeploymentStats = projectsData.data[key].deployment_stats;
             }
 
             let project = this.create(projectInfo);
@@ -266,6 +268,10 @@ export class ProjectService implements ServiceInterface {
                     project.servers.push(server);
                 });
             }
+
+            project.deploymentStats.today = projectDeploymentStats.today;
+            project.deploymentStats.week = projectDeploymentStats.week;
+            project.deploymentStats.duration = projectDeploymentStats.duration;
 
             this._projects.push(project);
         }
