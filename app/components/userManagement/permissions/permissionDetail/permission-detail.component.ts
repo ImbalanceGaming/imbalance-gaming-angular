@@ -1,5 +1,5 @@
-import {Component}                          from 'angular2/core';
-import {Router, RouteParams, ROUTER_DIRECTIVES}   from 'angular2/router';
+import {Component}                          from '@angular/core';
+import {Router, ROUTER_DIRECTIVES, ActivatedRoute}   from '@angular/router';
 
 import {FormButtonInterface}    from "../../../../directives/form-buttons/form-button.interface";
 import {DynamicFormDirective}   from "../../../../directives/dynamic-form/normalForm/dynamic-form.directive";
@@ -36,8 +36,10 @@ export class PermissionDetailComponent {
     moduleSectionModalFormData: Array<any> = [];
     moduleSectionSearchReturn: Array<any> = [];
 
+    private sub: any;
+
     constructor(
-        private _routeParams: RouteParams,
+        private _route: ActivatedRoute,
         private _router: Router,
         private _formDataService: FormDataService,
         private _permissionService: PermissionService,
@@ -63,6 +65,10 @@ export class PermissionDetailComponent {
         this._permissionService.permissions$.subscribe(permissions => this.permissions = permissions);
         this.updateForm();
 
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     saveChanges(formData) {
@@ -148,24 +154,29 @@ export class PermissionDetailComponent {
     }
 
     private updateForm() {
-        let id = +this._routeParams.get('id');
-        let page = +this._routeParams.get('page');
-        this._permissionService.getPermissions(page, true).then(() => {
-            this._permissionService.get(id).then(permission => {
-                this.permission = permission;
-                this._formDataService.getPermissionDetailData(permission)
-                    .then(formData => this.formData = formData);
-                this._formDataService.getDefaultButtons()
-                    .then(formButtonData => this.formButtonData = formButtonData);
 
-                this._formDataService.getAddUserData()
-                    .then(formData => this.userModalFormData = formData);
-                this._formDataService.getAddGroupData()
-                    .then(formData => this.groupModalFormData = formData);
-                this._formDataService.getAddModuleSectionData()
-                    .then(formData => this.moduleSectionModalFormData = formData);
+        this.sub = this._route.params.subscribe(params => {
+            let id = +params['id']; // (+) converts string 'id' to a number
+            let page = +params['page'];
+
+            this._permissionService.getPermissions(page, true).then(() => {
+                this._permissionService.get(id).then(permission => {
+                    this.permission = permission;
+                    this._formDataService.getPermissionDetailData(permission)
+                        .then(formData => this.formData = formData);
+                    this._formDataService.getDefaultButtons()
+                        .then(formButtonData => this.formButtonData = formButtonData);
+
+                    this._formDataService.getAddUserData()
+                        .then(formData => this.userModalFormData = formData);
+                    this._formDataService.getAddGroupData()
+                        .then(formData => this.groupModalFormData = formData);
+                    this._formDataService.getAddModuleSectionData()
+                        .then(formData => this.moduleSectionModalFormData = formData);
+                });
             });
         });
+
     }
 
 

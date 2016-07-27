@@ -12,16 +12,16 @@
                     <form class="users-form" (ngSubmit)="onSubmit()" #usersForm="ngForm" *ngIf="active">
                         <div class="form-group form-inline">
                             <label class="sr-only" for="user1Email">Email</label>
-                            <input id="user1Email" type="text" class="form-control" required ngControl="user1Email"
-                                   #user1Email="ngForm" [(ngModel)]="user1.email" placeholder="Email Address">
+                            <input id="user1Email" type="text" class="form-control" required name="user1Email"
+                                   #user1Email="ngModel" [(ngModel)]="user1.email" placeholder="Email Address">
 
                             <label class="sr-only" for="user1Forename">Forename</label>
-                            <input id="user1Forename" type="text" class="form-control" required ngControl="user1Forename"
-                                   #user1Forename="ngForm" [(ngModel)]="user1.forename" placeholder="Forename">
+                            <input id="user1Forename" type="text" class="form-control" required name="user1Forename"
+                                   #user1Forename="ngModel" [(ngModel)]="user1.forename" placeholder="Forename">
 
                             <label class="sr-only" for="user1Surname">Surname</label>
-                            <input id="user1Surname" type="text" class="form-control" required ngControl="user1Surname"
-                                   #user1Surname="ngForm" [(ngModel)]="user1.surname" placeholder="Surname">
+                            <input id="user1Surname" type="text" class="form-control" required name="user1Surname"
+                                   #user1Surname="ngModel" [(ngModel)]="user1.surname" placeholder="Surname">
 
                             <div [hidden]="
                     (user1Email.valid || user1Email.pristine) &&
@@ -42,16 +42,16 @@
                         </div>
                         <div class="form-group form-inline">
                             <label class="sr-only" for="user2Email">Email</label>
-                            <input id="user2Email" type="text" class="form-control" ngControl="user2Email"
-                                   #user2Email="ngForm" [(ngModel)]="user2.email" placeholder="Email Address">
+                            <input id="user2Email" type="text" class="form-control" name="user2Email"
+                                   #user2Email="ngModel" [(ngModel)]="user2.email" placeholder="Email Address">
 
                             <label class="sr-only" for="user2Forename">Forename</label>
-                            <input id="user2Forename" type="text" class="form-control" ngControl="user2Forename"
-                                   #user2Forename="ngForm" [(ngModel)]="user2.forename" placeholder="Forename">
+                            <input id="user2Forename" type="text" class="form-control" name="user2Forename"
+                                   #user2Forename="ngModel" [(ngModel)]="user2.forename" placeholder="Forename">
 
                             <label class="sr-only" for="user2Surname">Surname</label>
-                            <input id="user2Surname" type="text" class="form-control" ngControl="user2Surname"
-                                   #user2Surname="ngForm" [(ngModel)]="user2.surname" placeholder="Surname">
+                            <input id="user2Surname" type="text" class="form-control" name="user2Surname"
+                                   #user2Surname="ngModel" [(ngModel)]="user2.surname" placeholder="Surname">
 
                             <div [hidden]="
                     (user2Email.valid || user2Email.pristine) &&
@@ -73,16 +73,16 @@
 
                         <div class="form-group form-inline">
                             <label class="sr-only" for="user3Email">Email</label>
-                            <input id="user3Email" type="text" class="form-control" ngControl="user3Email"
-                                   #user3Email="ngForm" [(ngModel)]="user3.email" placeholder="Email Address">
+                            <input id="user3Email" type="text" class="form-control" name="user3Email"
+                                   #user3Email="ngModel" [(ngModel)]="user3.email" placeholder="Email Address">
 
                             <label class="sr-only" for="user3Forename">Forename</label>
-                            <input id="user3Forename" type="text" class="form-control" ngControl="user3Forename"
-                                   #user3Forename="ngForm" [(ngModel)]="user3.forename" placeholder="Forename">
+                            <input id="user3Forename" type="text" class="form-control" name="user3Forename"
+                                   #user3Forename="ngModel" [(ngModel)]="user3.forename" placeholder="Forename">
 
                             <label class="sr-only" for="user3Surname">Surname</label>
-                            <input id="user3Surname" type="text" class="form-control" ngControl="user3Surname"
-                                   #user3Surname="ngForm" [(ngModel)]="user3.surname" placeholder="Surname">
+                            <input id="user3Surname" type="text" class="form-control" name="user3Surname"
+                                   #user3Surname="ngModel" [(ngModel)]="user3.surname" placeholder="Surname">
 
                             <div [hidden]="
                     (user3Email.valid || user3Email.pristine) &&

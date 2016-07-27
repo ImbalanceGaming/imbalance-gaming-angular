@@ -5,8 +5,8 @@
     <form class="reg-form" (ngSubmit)="onSubmit()" #regForm="ngForm">
         <div class="form-group">
             <label for="username">Username</label>
-            <input id="username" type="text" class="form-control" required [(ngModel)]="user.username" ngControl="username"
-                   #username="ngForm" placeholder="Username">
+            <input id="username" type="text" class="form-control" required [(ngModel)]="user.username" name="username"
+                   #username="ngModel" placeholder="Username">
 
             <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
                 Username is required
@@ -15,8 +15,8 @@
 
         <div class="form-group">
             <label for="email">Email</label>
-            <input id="email" type="text" class="form-control" required [(ngModel)]="user.email" ngControl="email"
-                   #email="ngForm" placeholder="Email">
+            <input id="email" type="text" class="form-control" required [(ngModel)]="user.email" name="email"
+                   #email="ngModel" placeholder="Email">
 
             <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
                 Email is required
@@ -26,7 +26,7 @@
         <div class="form-group">
             <label for="password">Password</label>
             <input id="password" type="password" class="form-control" required [(ngModel)]="regPassword"
-                   ngControl="password" #password="ngForm" placeholder="password">
+                   name="password" #password="ngModel" placeholder="password">
 
             <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
                 Password is required
@@ -36,7 +36,7 @@
         <div class="form-group">
             <label for="forename">First Name</label>
             <input id="forename" type="text" class="form-control" required [(ngModel)]="user.forename"
-                   ngControl="forename" #forename="ngForm" placeholder="First Name">
+                   name="forename" #forename="ngModel" placeholder="First Name">
 
             <div [hidden]="forename.valid || forename.pristine" class="alert alert-danger">
                 Forename is required
@@ -46,7 +46,7 @@
         <div class="form-group">
             <label for="surname">Surname</label>
             <input id="surname" type="text" class="form-control" required [(ngModel)]="user.surname"
-                   ngControl="surname" #surname="ngForm" placeholder="surname">
+                   name="surname" #surname="ngModel" placeholder="surname">
 
             <div [hidden]="surname.valid || surname.pristine" class="alert alert-danger">
                 Surname is required

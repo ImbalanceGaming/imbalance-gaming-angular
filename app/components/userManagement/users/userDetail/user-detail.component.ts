@@ -1,5 +1,5 @@
-import {Component}              from 'angular2/core';
-import {Router, RouteParams}    from 'angular2/router';
+import {Component}              from '@angular/core';
+import {Router, ActivatedRoute}    from '@angular/router';
 
 import {User}                   from "../../../../models/user";
 import {UserService}            from "../../../../services/user.service";
@@ -23,9 +23,11 @@ export class UserDetail {
     formData : Array<any> = [];
     formButtonData : Array<FormButtonInterface> = [];
 
+    private sub: any;
+
     constructor(
         private _userService:UserService,
-        private _routeParams: RouteParams,
+        private _route: ActivatedRoute,
         private _router: Router,
         private _formDataService: FormDataService
     ) {
@@ -36,18 +38,26 @@ export class UserDetail {
     ngOnInit() {
 
         this._userService.users$.subscribe(updatedUser => this.users = updatedUser);
-        let id = +this._routeParams.get('id');
-        let page = +this._routeParams.get('page');
-        this._userService.getUsers(page, true).then(() => {
-            this._userService.get(id).then(user => {
-                this.user = user;
-                this._formDataService.getUserDetailData(user)
-                    .then(formData => this.formData = formData);
-                this._formDataService.getDefaultButtons()
-                    .then(formButtonData => this.formButtonData = formButtonData);
+        this.sub = this._route.params.subscribe(params => {
+            let id = +params['id']; // (+) converts string 'id' to a number
+            let page = +params['page'];
+
+            this._userService.getUsers(page, true).then(() => {
+                this._userService.get(id).then(user => {
+                    this.user = user;
+                    this._formDataService.getUserDetailData(user)
+                        .then(formData => this.formData = formData);
+                    this._formDataService.getDefaultButtons()
+                        .then(formButtonData => this.formButtonData = formButtonData);
+                });
             });
         });
 
+
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     saveChanges(formData) {

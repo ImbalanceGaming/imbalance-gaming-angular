@@ -46,7 +46,7 @@
             </tr>
             </thead>
             <tbody *ngIf="permission.users.length > 0">
-            <tr *ngFor="#user of permission.users">
+            <tr *ngFor="let user of permission.users">
                 <td><a [routerLink]="['\UserDetail', {id: user.id}]">{{user.forename}} {{user.surname}}</a></td>
                 <td>{{user.role}}</td>
                 <td>{{user.username}}</td>
@@ -91,7 +91,7 @@
             </tr>
             </thead>
             <tbody *ngIf="permission.groups.length > 0">
-            <tr *ngFor="#group of permission.groups">
+            <tr *ngFor="let group of permission.groups">
                 <td>{{group?.name}}</td>
                 <td>{{group?.description}}</td>
                 <td><a class="link-click" (click)="onRemoveGroup(group.id)">remove</a></td>
@@ -133,7 +133,7 @@
             </tr>
             </thead>
             <tbody *ngIf="permission.module_sections.length > 0">
-            <tr *ngFor="#moduleSection of permission.module_sections">
+            <tr *ngFor="let moduleSection of permission.module_sections">
                 <td>{{moduleSection?.name}}</td>
                 <td>{{moduleSection?.description}}</td>
                 <td><a class="link-click" (click)="onRemoveModuleSection(moduleSection.id)">remove</a></td>

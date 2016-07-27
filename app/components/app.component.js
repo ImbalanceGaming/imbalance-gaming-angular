@@ -1,150 +1,94 @@
-System.register(['angular2/core', 'angular2/router', '../services/api.service', '../services/user.service', '../services/nav.service', '../services/module.service', "../services/helpers.service", "../services/form-data.service", "../directives/messages/messages.service", "../services/table-data.service", "../directives/tables/table.service", "../services/project.service", "../services/group.service", './dashboard/dashboard.component', './login/login.component', './navigation/nav.component', './userManagement/user.management.component', "./registration/registration.component", "./projects/project-router.component", "../models/module", "../services/module-section.service", "../services/permission.service", "../models/user", "../services/auth.service"], function(exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = (this && this.__metadata) || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1, router_1, api_service_1, user_service_1, nav_service_1, module_service_1, helpers_service_1, form_data_service_1, messages_service_1, table_data_service_1, table_service_1, project_service_1, group_service_1, dashboard_component_1, login_component_1, nav_component_1, user_management_component_1, registration_component_1, project_router_component_1, module_1, module_section_service_1, permission_service_1, user_1, auth_service_1;
-    var AppComponent;
-    return {
-        setters:[
-            function (core_1_1) {
-                core_1 = core_1_1;
-            },
-            function (router_1_1) {
-                router_1 = router_1_1;
-            },
-            function (api_service_1_1) {
-                api_service_1 = api_service_1_1;
-            },
-            function (user_service_1_1) {
-                user_service_1 = user_service_1_1;
-            },
-            function (nav_service_1_1) {
-                nav_service_1 = nav_service_1_1;
-            },
-            function (module_service_1_1) {
-                module_service_1 = module_service_1_1;
-            },
-            function (helpers_service_1_1) {
-                helpers_service_1 = helpers_service_1_1;
-            },
-            function (form_data_service_1_1) {
-                form_data_service_1 = form_data_service_1_1;
-            },
-            function (messages_service_1_1) {
-                messages_service_1 = messages_service_1_1;
-            },
-            function (table_data_service_1_1) {
-                table_data_service_1 = table_data_service_1_1;
-            },
-            function (table_service_1_1) {
-                table_service_1 = table_service_1_1;
-            },
-            function (project_service_1_1) {
-                project_service_1 = project_service_1_1;
-            },
-            function (group_service_1_1) {
-                group_service_1 = group_service_1_1;
-            },
-            function (dashboard_component_1_1) {
-                dashboard_component_1 = dashboard_component_1_1;
-            },
-            function (login_component_1_1) {
-                login_component_1 = login_component_1_1;
-            },
-            function (nav_component_1_1) {
-                nav_component_1 = nav_component_1_1;
-            },
-            function (user_management_component_1_1) {
-                user_management_component_1 = user_management_component_1_1;
-            },
-            function (registration_component_1_1) {
-                registration_component_1 = registration_component_1_1;
-            },
-            function (project_router_component_1_1) {
-                project_router_component_1 = project_router_component_1_1;
-            },
-            function (module_1_1) {
-                module_1 = module_1_1;
-            },
-            function (module_section_service_1_1) {
-                module_section_service_1 = module_section_service_1_1;
-            },
-            function (permission_service_1_1) {
-                permission_service_1 = permission_service_1_1;
-            },
-            function (user_1_1) {
-                user_1 = user_1_1;
-            },
-            function (auth_service_1_1) {
-                auth_service_1 = auth_service_1_1;
-            }],
-        execute: function() {
-            AppComponent = (function () {
-                function AppComponent(_userService, _moduleService, _authService) {
-                    this._userService = _userService;
-                    this._moduleService = _moduleService;
-                    this._authService = _authService;
-                    this.user = new user_1.User();
-                    this.module = new module_1.Module();
-                    this._moduleName = 'Management Module';
-                    // this.appRoutes = this.getAppRoutes();
-                }
-                AppComponent.prototype.ngOnInit = function () {
-                    var _this = this;
-                    this._userService.user$.subscribe(function (user) { return _this.user = user; });
-                    this._moduleService.module$.subscribe(function (module) { return _this.module = module; });
-                    this._moduleService.getModule(this._moduleName).then(function () {
-                        _this._authService.setup(_this._moduleName);
-                    });
-                };
-                AppComponent = __decorate([
-                    core_1.Component({
-                        selector: 'IGMS',
-                        viewProviders: [nav_service_1.NavService],
-                        templateUrl: 'app/components/app.component.html',
-                        encapsulation: core_1.ViewEncapsulation.None,
-                        directives: [
-                            nav_component_1.NavComponent,
-                            router_1.ROUTER_DIRECTIVES
-                        ],
-                        providers: [
-                            api_service_1.ApiService,
-                            helpers_service_1.HelpersService,
-                            form_data_service_1.FormDataService,
-                            table_data_service_1.TableDataService,
-                            messages_service_1.MessagesService,
-                            table_service_1.TableService,
-                            user_service_1.UserService,
-                            project_service_1.ProjectService,
-                            group_service_1.GroupService,
-                            module_service_1.ModuleService,
-                            module_section_service_1.ModuleSectionService,
-                            permission_service_1.PermissionService,
-                            auth_service_1.AuthService
-                        ]
-                    }),
-                    router_1.RouteConfig([
-                        { path: '/dashboard', as: 'Dashboard', component: dashboard_component_1.DashboardComponent },
-                        { path: '/login', as: 'Login', component: login_component_1.LoginComponent },
-                        { path: '/signup', as: 'Signup', component: registration_component_1.RegistrationComponent },
-                        { path: '/activate/:id', as: 'Activate', component: registration_component_1.RegistrationComponent },
-                        { path: '/usermanagement/...', as: 'UserManagement', component: user_management_component_1.UserManagementComponent },
-                        { path: '/projects/...', as: 'Projects', component: project_router_component_1.ProjectRouterComponent, useAsDefault: true },
-                    ]), 
-                    __metadata('design:paramtypes', [user_service_1.UserService, module_service_1.ModuleService, auth_service_1.AuthService])
-                ], AppComponent);
-                return AppComponent;
-            }());
-            exports_1("AppComponent", AppComponent);
-        }
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
+var api_service_1 = require('../services/api.service');
+var user_service_1 = require('../services/user.service');
+var module_service_1 = require('../services/module.service');
+var form_data_service_1 = require("../services/form-data.service");
+var messages_service_1 = require("../directives/messages/messages.service");
+var table_data_service_1 = require("../services/table-data.service");
+var table_service_1 = require("../directives/tables/table.service");
+var project_service_1 = require("../services/project.service");
+var group_service_1 = require("../services/group.service");
+var nav_component_1 = require('./navigation/nav.component');
+var module_1 = require("../models/module");
+var module_section_service_1 = require("../services/module-section.service");
+var permission_service_1 = require("../services/permission.service");
+var user_1 = require("../models/user");
+var auth_service_1 = require("../services/auth.service");
+var dashboard_component_1 = require("./dashboard/dashboard.component");
+var login_component_1 = require("./login/login.component");
+var registration_component_1 = require("./registration/registration.component");
+var user_management_component_1 = require("./userManagement/user-management.component");
+var users_component_1 = require("./userManagement/users/users.component");
+var project_router_component_1 = require("./projects/project-router.component");
+var projects_component_1 = require("./projects/allProjects/projects.component");
+var project_detail_component_1 = require("./projects/projectDetail/project-detail.component");
+var package_detail_component_1 = require("./projects/packageDetail/package-detail.component");
+var AppComponent = (function () {
+    function AppComponent(_userService, _moduleService, _authService) {
+        this._userService = _userService;
+        this._moduleService = _moduleService;
+        this._authService = _authService;
+        this.user = new user_1.User();
+        this.module = new module_1.Module();
+        this._moduleName = 'Management Module';
     }
-});
+    AppComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this._userService.user$.subscribe(function (user) { return _this.user = user; });
+        this._moduleService.module$.subscribe(function (module) { return _this.module = module; });
+        this._authService.loggedInCheck();
+        this._moduleService.getModule(this._moduleName).then(function () {
+            _this._authService.setup(_this._moduleName);
+        });
+    };
+    AppComponent = __decorate([
+        core_1.Component({
+            selector: 'IGMS',
+            templateUrl: 'app/components/app.component.html',
+            directives: [
+                nav_component_1.NavComponent,
+                router_1.ROUTER_DIRECTIVES
+            ],
+            providers: [
+                api_service_1.ApiService,
+                form_data_service_1.FormDataService,
+                table_data_service_1.TableDataService,
+                messages_service_1.MessagesService,
+                table_service_1.TableService,
+                user_service_1.UserService,
+                project_service_1.ProjectService,
+                group_service_1.GroupService,
+                module_service_1.ModuleService,
+                module_section_service_1.ModuleSectionService,
+                permission_service_1.PermissionService,
+                auth_service_1.AuthService
+            ],
+            precompile: [
+                dashboard_component_1.DashboardComponent,
+                login_component_1.LoginComponent,
+                registration_component_1.RegistrationComponent,
+                user_management_component_1.UserManagementComponent,
+                users_component_1.UsersComponent,
+                project_router_component_1.ProjectRouterComponent,
+                projects_component_1.ProjectsComponent,
+                project_detail_component_1.ProjectDetailComponent,
+                package_detail_component_1.PackageDetailComponent
+            ]
+        }), 
+        __metadata('design:paramtypes', [user_service_1.UserService, module_service_1.ModuleService, auth_service_1.AuthService])
+    ], AppComponent);
+    return AppComponent;
+}());
+exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map

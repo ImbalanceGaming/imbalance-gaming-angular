@@ -1,5 +1,5 @@
-import {Component}              from 'angular2/core';
-import {Router, RouteParams}    from 'angular2/router';
+import {Component}              from '@angular/core';
+import {Router, ActivatedRoute}    from '@angular/router';
 
 import {DynamicFormDirective} from "../../../directives/dynamic-form/normalForm/dynamic-form.directive";
 import {MessagesDirective} from "../../../directives/messages/messages.directive";
@@ -28,10 +28,11 @@ export class PackageDetailComponent {
     commandsFormData : Array<any> = [];
 
     private _projectId: number;
+    private sub: any;
 
     constructor(
         private _packageService:ProjectPackageService,
-        private _routeParams: RouteParams,
+        private _route: ActivatedRoute,
         private _router: Router,
         private _formDataService: FormDataService,
         private _packageCommandService: ProjectPackageCommandService
@@ -43,7 +44,11 @@ export class PackageDetailComponent {
     ngOnInit() {
 
         this._packageService.projectPackage$.subscribe(projectPackage => this.projectPackage = projectPackage);
-        this._projectId = +this._routeParams.get('packageId');
+
+        this.sub = this._route.params.subscribe(params => {
+            this._projectId = +params['packageId'];
+        });
+
         this.getProjectPackageData();
 
     }
@@ -77,29 +82,33 @@ export class PackageDetailComponent {
             formData.command_type,
             this.projectPackage.id
         );
-        this._packageCommandService.add(command).then(this.getProjectPackageData());
+        this._packageCommandService.add(command).then(() => this.getProjectPackageData());
 
     }
 
     deleteCommand(id:number) {
 
         let command = new ProjectPackageCommand(id);
-        this._packageCommandService.delete(command).then(this.getProjectPackageData());
+        this._packageCommandService.delete(command).then(() => this.getProjectPackageData());
 
     }
 
     private getProjectPackageData() {
-        let id = +this._routeParams.get('id');
 
-        this._packageService.getProjectPackage(id).then(() => {
-            this.projectPackage = this._packageService.getPackage();
-            this._formDataService.getPackageDetailData(this.projectPackage)
-                .then(formData => this.formData = formData);
-            this._formDataService.getPackageCommandCreateData()
-                .then(formData => this.commandsFormData = formData);
-            this._formDataService.getDefaultButtons()
-                .then(formButtonData => this.formButtonData = formButtonData);
+        this.sub = this._route.params.subscribe(params => {
+            let id = +params['id']; // (+) converts string 'id' to a number
+
+            this._packageService.getProjectPackage(id).then(() => {
+                this.projectPackage = this._packageService.getPackage();
+                this._formDataService.getPackageDetailData(this.projectPackage)
+                    .then(formData => this.formData = formData);
+                this._formDataService.getPackageCommandCreateData()
+                    .then(formData => this.commandsFormData = formData);
+                this._formDataService.getDefaultButtons()
+                    .then(formButtonData => this.formButtonData = formButtonData);
+            });
         });
+
     }
 
 }

@@ -1,5 +1,5 @@
-import {Component, Input}   from 'angular2/core';
-import {ROUTER_DIRECTIVES}  from 'angular2/router';
+import {Component, Input}   from '@angular/core';
+import {ROUTER_DIRECTIVES}  from '@angular/router';
 
 import {User}           from '../../models/user';
 import {UserService}    from '../../services/user.service';
@@ -10,14 +10,6 @@ import {AuthService} from "../../services/auth.service";
     directives: [ROUTER_DIRECTIVES],
     templateUrl: 'app/components/navigation/nav.component.html',
     styleUrls: ['app/components/navigation/nav.component.css'],
-  //  template: `
-  //  <nav>
-  //    <a *ngFor="#route of routes"
-  //      [routerLink]="route.path">
-  //      {{route.name}}
-  //    </a>
-  //  </nav>
-  //`
 })
 
 export class NavComponent {

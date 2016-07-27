@@ -1,5 +1,5 @@
-import {Component}                          from 'angular2/core';
-import {Router, RouteParams, ROUTER_DIRECTIVES}   from 'angular2/router';
+import {Component}                          from '@angular/core';
+import {Router, ROUTER_DIRECTIVES, ActivatedRoute}   from '@angular/router';
 
 import {FormButtonInterface}    from "../../../directives/form-buttons/form-button.interface";
 import {FormDataService}        from "../../../services/form-data.service";
@@ -31,9 +31,10 @@ export class ProjectDetailComponent {
     searchReturn:Array<any>;
 
     private _loggedInUser: User;
+    private sub: any;
 
     constructor(private _projectService:ProjectService,
-                private _routeParams:RouteParams,
+                private _route:ActivatedRoute,
                 private _router:Router,
                 private _formDataService:FormDataService,
                 private _userService:UserService,
@@ -52,6 +53,10 @@ export class ProjectDetailComponent {
 
     }
 
+    ngOnDestroy() {
+        this.sub.unsubscribe();
+    }
+
     saveProjectChanges(formData) {
 
         this.project.description = formData.description;
@@ -65,7 +70,7 @@ export class ProjectDetailComponent {
 
     deleteProject() {
         this._projectService.delete(this.project);
-        this._router.navigate(['/Projects', 'AllProjects']);
+        this._router.navigate(['/projects/allProjects']);
     }
 
     onSearch(searchValue:string) {
@@ -87,7 +92,7 @@ export class ProjectDetailComponent {
     }
 
     editPackage(id:number) {
-        this._router.navigate(['../PackageDetail', {id: id, packageId: this.project.id}])
+        this._router.navigate(['/projects/packageDetail/'+id, {packageId: this.project.id}])
     }
 
     deletePackage(id: number) {
@@ -99,20 +104,24 @@ export class ProjectDetailComponent {
     }
 
     private getProjectData() {
-        let id = +this._routeParams.get('id');
-        let page = +this._routeParams.get('page');
 
-        this._projectService.getProjects(page, true).then(() => {
-            this._projectService.get(id).then(project => {
-                this.project = project;
-                this._formDataService.getProjectDetailData(project)
-                    .then(formData => this.editProjectFormData = formData);
-                this._formDataService.getPackageCreateData()
-                    .then(formData => this.addPackageFormData = formData);
-                this._formDataService.getDefaultButtons()
-                    .then(formButtonData => this.formButtonData = formButtonData);
+        this.sub = this._route.params.subscribe(params => {
+            let id = +params['id']; // (+) converts string 'id' to a number
+            let page = +params['page'];
+
+            this._projectService.getProjects(page, true).then(() => {
+                this._projectService.get(id).then(project => {
+                    this.project = project;
+                    this._formDataService.getProjectDetailData(project)
+                        .then(formData => this.editProjectFormData = formData);
+                    this._formDataService.getPackageCreateData()
+                        .then(formData => this.addPackageFormData = formData);
+                    this._formDataService.getDefaultButtons()
+                        .then(formButtonData => this.formButtonData = formButtonData);
+                });
             });
         });
+
     }
 
 }

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "system",
+    "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -11,9 +11,9 @@
   },
   "exclude": [
     "node_modules",
-    "lib",
-    "typings/main",
-    "typings/main.d.ts",
+//    "lib",
+//    "typings/main",
+//    "typings/main.d.ts",
     "api"
   ]
 }

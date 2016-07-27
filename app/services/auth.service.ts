@@ -1,5 +1,5 @@
-import {Injectable} from 'angular2/core';
-import {Router}     from 'angular2/router';
+import {Injectable} from '@angular/core';
+import {Router}     from '@angular/router';
 
 import {ApiService} from "./api.service";
 import {UserService} from "./user.service";
@@ -11,7 +11,8 @@ import {MessagesService} from "../directives/messages/messages.service";
 @Injectable()
 export class AuthService {
 
-    private _validUser = false;
+    validUser = false;
+
     private _module: Module = new Module();
 
     constructor(
@@ -50,12 +51,12 @@ export class AuthService {
         if(this._module.permission.view) {
             return true;
         } else {
-            this._router.navigate(['Login'])
+            this._router.navigate(['/login'])
         }
 
     }
 
-    getPagePermissions(sectionName: string) : Promise {
+    getPagePermissions(sectionName: string) {
 
         return this._moduleService.getSection(sectionName).then(moduleSection => {
             return moduleSection.permission;
@@ -82,7 +83,7 @@ export class AuthService {
         let user = new User();
         this._userService.set(user);
         localStorage.clear();
-        this._router.navigate(['Login']);
+        this._router.navigate(['/login']);
     }
 
     activate(id) {
@@ -127,8 +128,8 @@ export class AuthService {
 
     private keyValid(userData) {
 
-        if (!this._validUser) {
-            this._validUser = true;
+        if (!this.validUser) {
+            this.validUser = true;
             this._userService.setUserDetails(userData);
             this._moduleService.setPermissions().then(() => {
                 this.moduleAccess();
@@ -138,7 +139,7 @@ export class AuthService {
     }
 
     private keyInvalid() {
-        this._router.navigate(['Login'])
+        this._router.navigate(['/login'])
     }
 
     private saveJwt(jwt) {
@@ -156,7 +157,7 @@ export class AuthService {
                         })
                     },
                     () => {
-                        this._router.navigate(['Projects']);
+                        this._router.navigate(['/dashboard']);
                         this._moduleService.setPermissions();
                     }
                 );

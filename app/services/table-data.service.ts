@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 
 import {Table} from "../directives/tables/interfaces/table.interface";
 import {User} from "../models/user";
@@ -32,7 +32,7 @@ export class TableDataService {
         users: Array<User>,
         updateTableConfig:boolean = true,
         paginatorData?: any
-    ) : Promise {
+    ) {
 
         return Promise.resolve(users).then(users => {
             if (updateTableConfig) {
@@ -74,7 +74,7 @@ export class TableDataService {
         groups: Array<Group>,
         updateTableConfig:boolean = true,
         paginatorData?: any
-    ) : Promise {
+    ) {
 
         return Promise.resolve(groups).then(groups => {
 
@@ -108,12 +108,12 @@ export class TableDataService {
         projects: Array<Project>,
         updateTableConfig:boolean = true,
         paginatorData?: any
-    ) : Promise {
+    ) {
 
         return Promise.resolve(projects).then(projects => {
 
             if (updateTableConfig) {
-                this.updateTableConfig(paginatorData, 'projects-paginator', 'ProjectDetail');
+                this.updateTableConfig(paginatorData, 'projects-paginator', 'projectDetail');
             }
 
             this.table.body.rows = [];
@@ -176,7 +176,7 @@ export class TableDataService {
         permissions: Array<Permission>,
         updateTableConfig:boolean = true,
         paginatorData?: any
-    ) : Promise {
+    ) {
 
         return Promise.resolve(permissions).then(permissions => {
 

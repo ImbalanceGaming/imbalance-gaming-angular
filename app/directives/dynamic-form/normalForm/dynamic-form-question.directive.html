@@ -1,27 +1,31 @@
-<div [ngFormModel]="form">
+<div [formGroup]="form">
+
     <label *ngIf="question.type != 'hidden' && question.controlType != 'checkbox'" [attr.for]="question.key">{{question.label}}</label>
+
     <div [ngSwitch]="question.controlType">
-        <input class="form-control" *ngSwitchWhen="'textbox'" [ngControl]="question.key"
+        <input class="form-control" *ngSwitchCase="'textbox'" [formControlName]="question.key"
                [id]="question.key" [type]="question.type" [readonly]="question.read_only">
 
         <div *ngIf="searchReturn && question.search_box" class="list-group">
-            <a *ngFor="#return of searchReturn" (click)="selectLead(return)" class="list-group-item">
+            <a *ngFor="let return of searchReturn" (click)="selectLead(return)" class="list-group-item">
                 {{return.name}}
             </a>
         </div>
 
-        <select class="form-control" [id]="question.key" *ngSwitchWhen="'dropdown'"
-                [ngControl]="question.key">
-            <option *ngFor="#opt of question.options" [value]="opt.key" [selected]="opt.selected">{{opt.value}}</option>
+        <select class="form-control" [id]="question.key" *ngSwitchCase="'dropdown'"
+                [formControlName]="question.key">
+            <option *ngFor="let opt of question.options" [value]="opt.key" [selected]="opt.selected">{{opt.value}}</option>
         </select>
 
-        <div class="checkbox" *ngSwitchWhen="'checkbox'">
+        <div class="checkbox" *ngSwitchCase="'checkbox'">
             <label>
-                <input [ngControl]="question.key"
+                <input [formControlName]="question.key"
                        [id]="question.key" [type]="question.type" [checked]="question.checked == 1" (change)="checkboxChange()">
                 <strong>{{question.label}}</strong>
             </label>
         </div>
     </div>
+
     <div class="alert alert-danger" *ngIf="!isValid">{{question.label}} is required</div>
+
 </div>

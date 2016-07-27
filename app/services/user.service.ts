@@ -1,4 +1,4 @@
-import {Injectable}                 from 'angular2/core';
+import {Injectable}                 from '@angular/core';
 import {Observable}                 from 'rxjs/Observable';
 import {Observer}                   from 'rxjs/Observer';
 import 'rxjs/add/operator/share';
@@ -80,7 +80,7 @@ export class UserService implements ServiceInterface {
 
     }
 
-    get(id: number) : Promise {
+    get(id: number) {
 
         return Promise.resolve(this._users).then(
             users => users.filter(user => user.id === id)[0]
@@ -88,7 +88,7 @@ export class UserService implements ServiceInterface {
 
     }
 
-    getUsers(page:number = 1, queryAPI:boolean = false, buildTableData:boolean = false) : Promise {
+    getUsers(page:number = 1, queryAPI:boolean = false, buildTableData:boolean = false) {
 
         if (this._users.length === 0 || queryAPI) {
             return this._apiService.getPromiseWithAuth('users?page='+page)
@@ -112,7 +112,7 @@ export class UserService implements ServiceInterface {
 
     }
 
-    getUserWithPermissions() : Promise {
+    getUserWithPermissions() {
 
         return this._apiService.getPromiseWithAuth('findPermissionsForUser/'+this._user.id)
             .then(

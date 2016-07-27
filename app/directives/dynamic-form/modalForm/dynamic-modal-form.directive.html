@@ -5,8 +5,8 @@
             <h4 class="modal-title">{{modalHeader}}</h4>
         </modal-header>
         <modal-body>
-            <form class="form" (ngSubmit)="onSubmit()" [ngFormModel]="form" #dynamicForm="ngForm">
-                <div *ngFor="#question of questions" class="form-group">
+            <form class="form" (ngSubmit)="onSubmit()" [formGroup]="form" #dynamicForm="ngForm">
+                <div *ngFor="let question of questions" class="form-group">
                     <df-question
                             [question]="question"
                             [form]="form"

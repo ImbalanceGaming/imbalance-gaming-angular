@@ -94,7 +94,7 @@
                         </div>
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist" *ngIf="project.packages.length > 0">
-                            <template ngFor #package [ngForOf]="project.packages" #index="index">
+                            <template ngFor let-package [ngForOf]="project.packages" let-index="index">
                                 <li role="presentation" [class.active]="index == 0">
                                     <a href="#{{package.id}}" aria-controls="home" role="tab" data-toggle="tab">
                                         {{package.name}}
@@ -106,7 +106,7 @@
 
                         <!-- Tab panes -->
                         <div *ngIf="project.packages.length > 0" class="tab-content">
-                            <template ngFor #package [ngForOf]="project.packages" #index="index">
+                            <template ngFor let-package [ngForOf]="project.packages" let-index="index">
                                 <div role="tabpane" [class.active]="index == 0" class="tab-pane" id="{{package.id}}">
                                     <table class="table">
                                         <thead></thead>
@@ -181,7 +181,7 @@
                             </tr>
                             </thead>
                             <tbody *ngIf="project.history.length > 0">
-                            <tr *ngFor="#history of project.history">
+                            <tr *ngFor="let history of project.history">
                                 <td>{{history.deployment_date}}</td>
                                 <td>{{history.user}}</td>
                                 <td>{{history.server}}</td>
@@ -216,7 +216,7 @@
                             </tr>
                             </thead>
                             <tbody *ngIf="project.servers.length > 0">
-                            <tr *ngFor="#server of project.servers">
+                            <tr *ngFor="let server of project.servers">
                                 <td>{{server.name}}</td>
                                 <td>{{server.address}}</td>
                                 <td><a class="link-click" (click)="deploy(project.id, server.id)">Deploy</a></td>

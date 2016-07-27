@@ -1,5 +1,5 @@
-import {Component}  from 'angular2/core';
-import {Router, RouteParams}     from 'angular2/router';
+import {Component}  from '@angular/core';
+import {Router, ActivatedRoute}     from '@angular/router';
 
 import {User}           from '../../models/user';
 import {AuthService} from "../../services/auth.service";
@@ -14,14 +14,16 @@ import {MessagesDirective} from "../../directives/messages/messages.directive";
 
 export class RegistrationComponent {
 
-    public title    : string;
-    public regSuccess : boolean;
-    public regPassword : string;
-    public activating : boolean;
-    public user : User;
+    title    : string;
+    regSuccess : boolean;
+    regPassword : string;
+    activating : boolean;
+    user : User;
+
+    private sub: any;
 
     constructor(
-        private _routeParams: RouteParams,
+        private _route: ActivatedRoute,
         private _authService: AuthService,
         private _router: Router
     ) {
@@ -39,11 +41,17 @@ export class RegistrationComponent {
     }
 
     ngOnInit() {
-        if (this._routeParams.get('id')) {
-            let id = +this._routeParams.get('id');
-            this.activating = true;
-            this._authService.activate(id);
-        }
+        this.sub = this._route.params.subscribe(params => {
+            let id = +params['id']; // (+) converts string 'id' to a number
+            if (id) {
+                this.activating = true;
+                this._authService.activate(id);
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     onSubmit() {
@@ -63,7 +71,7 @@ export class RegistrationComponent {
     }
 
     onBack() {
-        this._router.navigate(['Login']);
+        this._router.navigate(['/login']);
     }
 
 }

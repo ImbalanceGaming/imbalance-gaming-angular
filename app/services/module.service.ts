@@ -1,4 +1,4 @@
-import {Injectable}         from 'angular2/core';
+import {Injectable}         from '@angular/core';
 import {Observer}           from "rxjs/Observer";
 import {Observable}         from "rxjs/Observable";
 import 'rxjs/add/operator/share';
@@ -68,7 +68,7 @@ export class ModuleService implements ServiceInterface {
         );
     }
 
-    getModules(page: number = 1, queryAPI:boolean = false, buildTableData:boolean = false) : Promise {
+    getModules(page: number = 1, queryAPI:boolean = false, buildTableData:boolean = false) {
 
         if (this._modules.length === 0 || queryAPI) {
             return this._apiService.getPromiseWithAuth('modules?page='+page)
@@ -92,7 +92,7 @@ export class ModuleService implements ServiceInterface {
 
     }
 
-    getModule(moduleName: string) : Promise {
+    getModule(moduleName: string) {
 
         return this._apiService.getPromiseWithAuth('getModule/'+moduleName)
             .then(
@@ -193,7 +193,7 @@ export class ModuleService implements ServiceInterface {
 
     }
 
-    setPermissions() : Promise {
+    setPermissions() {
         return this._permissionService.getUserAccessLevel(this._module).then(module => {
             this.setModule(module);
         });

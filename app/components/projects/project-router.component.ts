@@ -1,18 +1,11 @@
-import {Component}      from 'angular2/core';
-import {ROUTER_DIRECTIVES, RouteConfig, CanActivate, RouterOutlet, Router} from 'angular2/router';
-
-import {authCheck}              from "../../common/auth-check"
-import {ComponentInstruction}   from "../../../node_modules/angular2/src/router/instruction";
+import {Component}      from '@angular/core';
+import {ROUTER_DIRECTIVES, RouterOutlet, Router} from '@angular/router';
 
 import {UserService}        from '../../services/user.service';
-import {ProjectsComponent} from "./allProjects/projects.component";
-import {ProjectDetailComponent} from "./projectDetail/project-detail.component";
 import {DynamicModalFormDirective} from "../../directives/dynamic-form/modalForm/dynamic-modal-form.directive";
 import {FormDataService} from "../../services/form-data.service";
 import {Project} from "../../models/project";
 import {ProjectService} from "../../services/project.service";
-import {AuthService} from "../../services/auth.service";
-import {PackageDetailComponent} from "./packageDetail/package-detail.component";
 import {ProjectPackageService} from "../../services/project-package.service";
 
 @Component({
@@ -21,16 +14,6 @@ import {ProjectPackageService} from "../../services/project-package.service";
     styleUrls: ['app/components/projects/project-router.component.css'],
     directives: [RouterOutlet, ROUTER_DIRECTIVES, DynamicModalFormDirective],
     providers: [ProjectPackageService]
-})
-
-@RouteConfig([
-    {path: '/allProjects', name: 'AllProjects', component: ProjectsComponent, useAsDefault: true},
-    {path: '/projectDetail/:id', name: 'ProjectDetail', component: ProjectDetailComponent},
-    {path: '/packageDetail/:id', name: 'PackageDetail', component: PackageDetailComponent}
-])
-
-@CanActivate((next:ComponentInstruction, previous:ComponentInstruction) => {
-    return authCheck(next, previous);
 })
 
 export class ProjectRouterComponent {
@@ -42,7 +25,6 @@ export class ProjectRouterComponent {
 
     constructor(
         private _userService:UserService,
-        private _authService:AuthService,
         private _formDataService: FormDataService,
         private _projectService: ProjectService,
         private _router: Router
@@ -51,7 +33,6 @@ export class ProjectRouterComponent {
     }
 
     ngOnInit() {
-        this._authService.loggedInCheck();
         this._formDataService.getProjectCreateData()
             .then(formData => this.formData = formData);
     }
@@ -69,7 +50,7 @@ export class ProjectRouterComponent {
         this._projectService.add(this.project);
         this.project = new Project();
 
-        this._router.navigate(['Projects']);
+        this._router.navigate(['/projects']);
 
     }
 

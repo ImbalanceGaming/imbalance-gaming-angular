@@ -1,5 +1,5 @@
-import {Component}                          from 'angular2/core';
-import {Router, RouteParams, ROUTER_DIRECTIVES}   from 'angular2/router';
+import {Component}                          from '@angular/core';
+import {Router, ROUTER_DIRECTIVES, ActivatedRoute}   from '@angular/router';
 
 import {FormButtonInterface}    from "../../../../directives/form-buttons/form-button.interface";
 import {DynamicFormDirective}   from "../../../../directives/dynamic-form/normalForm/dynamic-form.directive";
@@ -32,9 +32,11 @@ export class GroupDetailComponent {
     projectModalFormData: Array<any> = [];
     projectSearchReturn: Array<any> = [];
 
+    private sub: any;
+
     constructor(
         private _groupService: GroupService,
-        private _routeParams: RouteParams,
+        private _route: ActivatedRoute,
         private _router: Router,
         private _formDataService: FormDataService,
         private _userService:UserService,
@@ -55,6 +57,10 @@ export class GroupDetailComponent {
         this._groupService.groups$.subscribe(groups => this.groups = groups);
         this.updateForm();
 
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     saveChanges(formData) {
@@ -116,17 +122,22 @@ export class GroupDetailComponent {
     }
 
     private updateForm() {
-        let id = +this._routeParams.get('id');
-        let page = +this._routeParams.get('page');
-        this._groupService.getGroups(page, true).then(() => {
-            this._groupService.get(id).then(group => {
-                this.group = group;
-                this._formDataService.getGroupDetailData(group)
-                    .then(formData => this.formData = formData);
-                this._formDataService.getDefaultButtons()
-                    .then(formButtonData => this.formButtonData = formButtonData);
+
+        this.sub = this._route.params.subscribe(params => {
+            let id = +params['id']; // (+) converts string 'id' to a number
+            let page = +params['page'];
+
+            this._groupService.getGroups(page, true).then(() => {
+                this._groupService.get(id).then(group => {
+                    this.group = group;
+                    this._formDataService.getGroupDetailData(group)
+                        .then(formData => this.formData = formData);
+                    this._formDataService.getDefaultButtons()
+                        .then(formButtonData => this.formButtonData = formButtonData);
+                });
             });
         });
+
     }
 
 

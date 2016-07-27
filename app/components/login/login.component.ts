@@ -1,11 +1,12 @@
-import {Component}  from 'angular2/core';
-import {ROUTER_DIRECTIVES}     from 'angular2/router';
+import {Component}  from '@angular/core';
+import {ROUTER_DIRECTIVES}     from '@angular/router';
+import {NgForm}     from '@angular/forms';
 
 import {AuthService} from "../../services/auth.service";
 import {MessagesDirective} from "../../directives/messages/messages.directive";
 
 @Component({
-    selector: 'my-login',
+    selector: 'login',
     templateUrl: 'app/components/login/login.component.html',
     styleUrls: ['app/components/login/login.component.css'],
     directives: [ROUTER_DIRECTIVES, MessagesDirective]

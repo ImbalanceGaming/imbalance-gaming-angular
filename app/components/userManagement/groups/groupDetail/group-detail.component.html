@@ -46,7 +46,7 @@
             </tr>
             </thead>
             <tbody *ngIf="group.users.length > 0">
-            <tr *ngFor="#user of group.users">
+            <tr *ngFor="let user of group.users">
                 <td><a [routerLink]="['\UserDetail', {id: user.id}]">{{user.forename}} {{user.surname}}</a></td>
                 <td>{{user.role}}</td>
                 <td>{{user.username}}</td>
@@ -92,7 +92,7 @@
             </tr>
             </thead>
             <tbody *ngIf="group.projects.length > 0">
-            <tr *ngFor="#project of group.projects">
+            <tr *ngFor="let project of group.projects">
                 <td><a [routerLink]="['/Projects', 'ProjectDetail', {id: project.id}]">{{project.key}}</a></td>
                 <td>{{project.name}}</td>
                 <td>{{project.description}}</td>

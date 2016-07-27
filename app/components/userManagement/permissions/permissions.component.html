@@ -10,12 +10,12 @@
                 <form class="group-form" (ngSubmit)="onSubmit()" #groupForm="ngForm" *ngIf="active">
                     <div class="form-group form-inline">
                         <label class="sr-only" for="name">Permission Name</label>
-                        <input id="name" type="text" class="form-control" required ngControl="name"
-                               #name="ngForm" [(ngModel)]="permission.name" placeholder="Permission Name">
+                        <input id="name" type="text" class="form-control" required name="name"
+                               #name="ngModel" [(ngModel)]="permission.name" placeholder="Permission Name">
 
                         <label class="sr-only" for="description">Permission Description</label>
-                        <input id="description" type="text" class="form-control" ngControl="description"
-                               #description="ngForm" [(ngModel)]="permission.description" placeholder="Permission Description">
+                        <input id="description" type="text" class="form-control" name="description"
+                               #description="ngModel" [(ngModel)]="permission.description" placeholder="Permission Description">
 
                         <div [hidden]="(name.valid || name.pristine)" class="alert alert-danger">
                             <div [hidden]="name.valid || name.pristine">

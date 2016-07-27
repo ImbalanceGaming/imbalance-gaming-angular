@@ -1,4 +1,4 @@
-<div *ngFor="#message of messages; #i = index" class="message alert alert-dismissible col-md-12"
+<div *ngFor="let message of messages; let i = index" class="message alert alert-dismissible col-md-12"
      [class.alert-danger]="message.error" [class.alert-success]="message.success">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeMessage(i)">
         <span aria-hidden="true">&times;</span>

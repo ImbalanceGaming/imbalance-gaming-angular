@@ -1,13 +1,14 @@
-import {Injectable}   from 'angular2/core';
-import {ControlGroup, FormBuilder, Validators} from 'angular2/common';
+import {Injectable}   from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+
 import {QuestionBase} from "./models/question-base";
 
 @Injectable()
 export class QuestionControlService {
 
-    constructor(private _fb:FormBuilder) {}
+    constructor() {}
 
-    toControlGroup(questions:QuestionBase<any>[]) {
+    toFormGroup(questions:QuestionBase<any>[]) {
 
         let group = {};
 
@@ -20,11 +21,12 @@ export class QuestionControlService {
                     }
                 })
             } else {
-                group[question.key] = question.required ? [question.value || '', Validators.required] : question.value || '';
+                group[question.key] = question.required ?
+                    new FormControl(question.value || '', Validators.required) : new FormControl(question.value || '');
             }
         });
-        
-        return this._fb.group(group);
+
+        return new FormGroup(group);
 
     }
 

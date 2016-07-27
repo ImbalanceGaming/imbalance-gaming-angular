@@ -3,17 +3,17 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th *ngFor="#header of tableData.headers">
+                    <th *ngFor="let header of tableData.headers">
                         <span *ngIf="header.show">{{header.value}}</span>
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="#row of tableData.body.rows | paginate: tableData.paginationConfig">
-                    <td *ngFor="#cell of row.cells">
+                <tr *ngFor="let row of tableData.body.rows | paginate: tableData.paginationConfig">
+                    <td *ngFor="let cell of row.cells">
                         <a *ngIf="cell.detailCell"
-                           [routerLink]="[tableData.detailURL,
-                           {id: row.rowId, page: tableData.paginationConfig.currentPage}]"
+                           [routerLink]="['../'+tableData.detailURL+'/'+row.rowId,
+                           {page: tableData.paginationConfig.currentPage}]"
                         >
                             {{cell?.value}}
                         </a>
@@ -49,7 +49,7 @@
                                 </span>
                         </a>
                     </li>
-                    <li *ngFor="#page of p.pages" [class.active]="p.getCurrent() === page.value">
+                    <li *ngFor="let page of p.pages" [class.active]="p.getCurrent() === page.value">
                         <a (click)="p.setCurrent(page.value)" *ngIf="p.getCurrent() !== page.value">
                             {{ page.label }}
                                 <span class="sr-only">

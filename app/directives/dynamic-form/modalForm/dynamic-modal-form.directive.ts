@@ -1,5 +1,5 @@
-import {Component, Input, Output, EventEmitter} from 'angular2/core';
-import {ControlGroup, Control}                           from 'angular2/common';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {FormGroup, REACTIVE_FORM_DIRECTIVES}    from '@angular/forms';
 import {MODAL_DIRECTIVES}                       from "ng2-bs3-modal/ng2-bs3-modal";
 
 import {QuestionControlService}             from "../question-control.service";
@@ -9,7 +9,7 @@ import {DynamicModalFormQuestionDirective}  from "./dynamic-modal-form-question.
 @Component({
     selector: 'dynamic-modal-form',
     templateUrl: 'app/directives/dynamic-form/modalForm/dynamic-modal-form.directive.html',
-    directives: [DynamicModalFormQuestionDirective, MODAL_DIRECTIVES],
+    directives: [DynamicModalFormQuestionDirective, MODAL_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
     providers: [QuestionControlService]
 })
 
@@ -22,13 +22,13 @@ export class DynamicModalFormDirective {
     @Output() saveEmitter: EventEmitter<any> = new EventEmitter();
     @Output() searchEmitter: EventEmitter<any> = new EventEmitter();
 
-    form: ControlGroup;
+    form: FormGroup;
 
     constructor(private _qcs:QuestionControlService) {
     }
 
     ngOnInit() {
-        this.form = this._qcs.toControlGroup(this.questions);
+        this.form = this._qcs.toFormGroup(this.questions);
     }
 
     onSubmit() {

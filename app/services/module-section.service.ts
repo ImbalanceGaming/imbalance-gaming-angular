@@ -1,4 +1,4 @@
-import {Injectable}         from 'angular2/core';
+import {Injectable}         from '@angular/core';
 import {Observer}           from "rxjs/Observer";
 import {Observable}         from "rxjs/Observable";
 import 'rxjs/add/operator/share';
@@ -47,7 +47,7 @@ export class ModuleSectionService implements ServiceInterface {
 
     }
 
-    getModuleSections(page: number = 1, queryAPI:boolean = false, buildTableData:boolean = false) : Promise {
+    getModuleSections(page: number = 1, queryAPI:boolean = false, buildTableData:boolean = false) {
 
         if (this._moduleSections.length === 0 || queryAPI) {
             return this._apiService.getPromiseWithAuth('moduleSections?page='+page)
@@ -81,7 +81,7 @@ export class ModuleSectionService implements ServiceInterface {
 
     add(moduleSection: ModuleSection) {
 
-        this._apiService.postWithAuth('modules', this.generateData(moduleSection)).subscribe(
+        this._apiService.postWithAuth('moduleSections', this.generateData(moduleSection)).subscribe(
             data => {
                 this._messageService.addMessage({
                     success: data.success.message,
@@ -105,7 +105,7 @@ export class ModuleSectionService implements ServiceInterface {
 
     update(moduleSection: ModuleSection) {
 
-        this._apiService.patch('modules/'+module.id, this.generateData(moduleSection)).subscribe(
+        this._apiService.patch('moduleSections/'+moduleSection.id, this.generateData(moduleSection)).subscribe(
             data => {
                 this._messageService.addMessage({
                     success: data.success.message,
@@ -124,7 +124,7 @@ export class ModuleSectionService implements ServiceInterface {
 
     delete(moduleSection: ModuleSection) {
 
-        this._apiService.delete('modules/'+module.id).subscribe(
+        this._apiService.delete('moduleSections/'+moduleSection.id).subscribe(
             data => {
                 this._messageService.addMessage({
                     success: data.success.message,

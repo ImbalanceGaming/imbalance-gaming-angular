@@ -1,6 +1,6 @@
-import {Component, Input, Output, EventEmitter}  from 'angular2/core';
+import {Component, Input, Output, EventEmitter}  from '@angular/core';
 import {MODAL_DIRECTIVES}                        from 'ng2-bs3-modal/ng2-bs3-modal';
-import {ControlGroup, NgForm}                            from "angular2/common";
+import {NgForm}                                  from '@angular/forms';
 
 import {FormButtonInterface}    from "./form-button.interface";
 

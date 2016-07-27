@@ -1,5 +1,5 @@
-<form class="form" (ngSubmit)="onSubmit()" [ngFormModel]="form">
-    <div *ngFor="#question of questions" class="form-group">
+<form class="form" (ngSubmit)="onSubmit()" [formGroup]="form">
+    <div *ngFor="let question of questions" class="form-group">
         <df-question
                 [question]="question"
                 [form]="form"

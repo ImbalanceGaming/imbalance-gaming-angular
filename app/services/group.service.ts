@@ -1,4 +1,4 @@
-import {Injectable}                 from 'angular2/core';
+import {Injectable}                 from '@angular/core';
 import {Observable}                 from 'rxjs/Observable';
 import {Observer}                   from 'rxjs/Observer';
 import 'rxjs/add/operator/share';
@@ -45,7 +45,7 @@ export class GroupService implements ServiceInterface {
 
     }
 
-    get(id: number) : Promise {
+    get(id: number) {
 
         return Promise.resolve(this._groups).then(
             groups => groups.filter(group => group.id === id)[0]
@@ -53,7 +53,7 @@ export class GroupService implements ServiceInterface {
 
     }
 
-    getGroups(page: number = 1, queryAPI:boolean = false, buildTableData:boolean = false) : Promise {
+    getGroups(page: number = 1, queryAPI:boolean = false, buildTableData:boolean = false) {
 
         if (this._groups.length === 0 || queryAPI) {
             return this._apiService.getPromiseWithAuth('groups?page='+page)
