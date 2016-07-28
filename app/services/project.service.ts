@@ -19,10 +19,13 @@ import {User} from "../models/user";
 export class ProjectService implements ServiceInterface {
 
     projects$: Observable<Array<Project>>;
+    project$: Observable<Project>;
 
     private _projectsObserver: Observer<Array<Project>>;
+    private _projectObserver: Observer<Project>;
 
     private _projects: Array<Project> = [];
+    private _project: Project = new Project();
 
     constructor(
         private _apiService:ApiService,
@@ -32,6 +35,7 @@ export class ProjectService implements ServiceInterface {
         private _tableDataService:TableDataService
     ) {
         this.projects$ = Observable.create(observer => this._projectsObserver = observer).share();
+        this.project$ = Observable.create(observer => this._projectObserver = observer).share();
     }
 
     create(projectData) : Project {
@@ -76,10 +80,35 @@ export class ProjectService implements ServiceInterface {
 
     }
 
+    pollProject(projectId:number, page:number = 1, buildTableData:boolean = false) {
+
+        return Observable
+            .interval(30000)
+            .flatMap(() => {
+                return this._apiService.getPromiseWithAuth('projects?page='+page)
+            })
+            .subscribe(
+                data => {
+                    this.buildProjects(data, buildTableData);
+                    this.get(projectId).then(project => {
+                        this.set(project);
+                    });
+                }
+            );
+
+    }
+
     set(projects: Array<Project>) {
 
         this._projects = projects;
         this._projectsObserver.next(this._projects);
+
+    }
+
+    set(project: Project) {
+
+        this._project = project;
+        this._projectObserver.next(this._project);
 
     }
 
@@ -167,6 +196,14 @@ export class ProjectService implements ServiceInterface {
 
         return this._apiService.getPromiseWithAuth('deployProject/'+projectId+'?serverID='+serverId+'&userID='+userId).then(
             data => {
+                // if (data.error) {
+                //     this._messageService.addMessage({
+                //         success: null,
+                //         error: data.error.message
+                //     })
+                // } else {
+                //
+                // }
                 if (data.success) {
                     this._messageService.addMessage({
                         success: data.success.message,

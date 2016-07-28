@@ -72,6 +72,16 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Observable', 'angular2-
                         .then(function (res) { return ApiService.refreshToken(res); })
                         .catch(ApiService.handleAuthError);
                 };
+                ApiService.prototype.getPoll = function (action) {
+                    var _this = this;
+                    return Observable_1.Observable
+                        .interval(50)
+                        .switchMap(function () { return _this._authHttp.get(_this._connectionUrl + action, {
+                        headers: headers_1.contentHeaders
+                    }); })
+                        .toPromise()
+                        .then(function (res) { return ApiService.refreshToken(res); });
+                };
                 ApiService.prototype.post = function (action, data) {
                     var body = JSON.stringify(data);
                     return this.http.post(this._connectionUrl + action, body, { headers: headers_1.contentHeaders })

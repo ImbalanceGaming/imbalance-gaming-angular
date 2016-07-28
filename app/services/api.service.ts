@@ -57,6 +57,18 @@ export class ApiService {
 
     }
 
+    getPoll(action:string) {
+
+        return Observable
+            .interval(50)
+            .switchMap(() => this._authHttp.get(this._connectionUrl + action, {
+                headers: contentHeaders
+            }))
+            .toPromise()
+            .then(res => ApiService.refreshToken(res));
+
+    }
+
     post(action:string, data:any) {
 
         let body = JSON.stringify(data);

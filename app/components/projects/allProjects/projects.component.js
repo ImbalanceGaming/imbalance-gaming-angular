@@ -40,7 +40,8 @@ System.register(['angular2/core', 'angular2/router', "../../../directives/tables
                 }
                 ProjectsComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    this._projectService.projects$.subscribe(function (groups) { return _this.projects = groups; });
+                    this._projectService.projects$.subscribe(function (projects) { return _this.projects = projects; });
+                    this._projectService.project$.subscribe(function (project) { return _this.project = project; });
                     this._projectService.getProjects(1, true, true);
                 };
                 ProjectsComponent.prototype.pageChanged = function (event) {

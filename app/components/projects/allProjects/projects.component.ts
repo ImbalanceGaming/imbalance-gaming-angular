@@ -30,7 +30,8 @@ export class ProjectsComponent {
     }
 
     ngOnInit() {
-        this._projectService.projects$.subscribe(groups => this.projects = groups);
+        this._projectService.projects$.subscribe(projects => this.projects = projects);
+        this._projectService.project$.subscribe(project => this.project = project);
         this._projectService.getProjects(1, true, true);
     }
 

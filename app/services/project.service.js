@@ -58,7 +58,9 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                     this._tableService = _tableService;
                     this._tableDataService = _tableDataService;
                     this._projects = [];
+                    this._project = new project_1.Project();
                     this.projects$ = Observable_1.Observable.create(function (observer) { return _this._projectsObserver = observer; }).share();
+                    this.project$ = Observable_1.Observable.create(function (observer) { return _this._projectObserver = observer; }).share();
                 }
                 ProjectService.prototype.create = function (projectData) {
                     var project = new project_1.Project;
@@ -95,9 +97,29 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                         });
                     }
                 };
+                ProjectService.prototype.pollProject = function (projectId, page, buildTableData) {
+                    var _this = this;
+                    if (page === void 0) { page = 1; }
+                    if (buildTableData === void 0) { buildTableData = false; }
+                    return Observable_1.Observable
+                        .interval(30000)
+                        .flatMap(function () {
+                        return _this._apiService.getPromiseWithAuth('projects?page=' + page);
+                    })
+                        .subscribe(function (data) {
+                        _this.buildProjects(data, buildTableData);
+                        _this.get(projectId).then(function (project) {
+                            _this.set(project);
+                        });
+                    });
+                };
                 ProjectService.prototype.set = function (projects) {
                     this._projects = projects;
                     this._projectsObserver.next(this._projects);
+                };
+                ProjectService.prototype.set = function (project) {
+                    this._project = project;
+                    this._projectObserver.next(this._project);
                 };
                 ProjectService.prototype.add = function (project) {
                     var _this = this;
@@ -164,6 +186,14 @@ System.register(['angular2/core', 'rxjs/Observable', 'rxjs/add/operator/share', 
                 ProjectService.prototype.deploy = function (projectId, serverId, userId) {
                     var _this = this;
                     return this._apiService.getPromiseWithAuth('deployProject/' + projectId + '?serverID=' + serverId + '&userID=' + userId).then(function (data) {
+                        // if (data.error) {
+                        //     this._messageService.addMessage({
+                        //         success: null,
+                        //         error: data.error.message
+                        //     })
+                        // } else {
+                        //
+                        // }
                         if (data.success) {
                             _this._messageService.addMessage({
                                 success: data.success.message,

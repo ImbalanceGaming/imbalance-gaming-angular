@@ -54,19 +54,27 @@ System.register(['angular2/core', 'angular2/router', "../../../services/form-dat
                     this._userService = _userService;
                     this._packageService = _packageService;
                     this.projects = [];
+                    this.project = new project_1.Project();
                     this.editProjectFormData = [];
                     this.addPackageFormData = [];
                     this.editPackageFormData = [];
                     this.formButtonData = [];
+                    this._deploymentTabActive = false;
                     this.title = 'Project Detail';
                     this.project = new project_1.Project();
                 }
                 ProjectDetailComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     this._projectService.projects$.subscribe(function (projects) { return _this.projects = projects; });
+                    this._projectService.project$.subscribe(function (project) { return _this.project = project; });
                     this._userService.user$.subscribe(function (user) { return _this._loggedInUser = user; });
                     this._userService.updateUserObserver();
+                    var id = +this._routeParams.get('id');
+                    var page = +this._routeParams.get('page');
                     this.getProjectData();
+                };
+                ProjectDetailComponent.prototype.ngOnDestroy = function () {
+                    this._pollObserver.unsubscribe();
                 };
                 ProjectDetailComponent.prototype.saveProjectChanges = function (formData) {
                     var _this = this;
@@ -105,24 +113,38 @@ System.register(['angular2/core', 'angular2/router', "../../../services/form-dat
                 };
                 ProjectDetailComponent.prototype.deploy = function (projectId, serverId) {
                     var _this = this;
-                    this._projectService.deploy(projectId, serverId, this._loggedInUser.id).then(function () { return _this.getProjectData(); });
+                    this._projectService.deploy(projectId, serverId, this._loggedInUser.id)
+                        .then(function () {
+                        _this.getProjectData();
+                        _this.deploymentTab.nativeElement.classesToAdd = 'active';
+                        _this.serverTab.nativeElement.classesToRemove = 'active';
+                    });
                 };
                 ProjectDetailComponent.prototype.getProjectData = function () {
                     var _this = this;
                     var id = +this._routeParams.get('id');
                     var page = +this._routeParams.get('page');
-                    this._projectService.getProjects(page, true).then(function () {
+                    return this._projectService.getProjects(page, true).then(function () {
                         _this._projectService.get(id).then(function (project) {
-                            _this.project = project;
+                            _this._projectService.set(project);
                             _this._formDataService.getProjectDetailData(project)
                                 .then(function (formData) { return _this.editProjectFormData = formData; });
                             _this._formDataService.getPackageCreateData()
                                 .then(function (formData) { return _this.addPackageFormData = formData; });
                             _this._formDataService.getDefaultButtons()
                                 .then(function (formButtonData) { return _this.formButtonData = formButtonData; });
+                            _this._pollObserver = _this._projectService.pollProject(id, page);
                         });
                     });
                 };
+                __decorate([
+                    core_1.ViewChild('deploymentTab'), 
+                    __metadata('design:type', core_1.ElementRef)
+                ], ProjectDetailComponent.prototype, "deploymentTab", void 0);
+                __decorate([
+                    core_1.ViewChild('serverTab'), 
+                    __metadata('design:type', core_1.ElementRef)
+                ], ProjectDetailComponent.prototype, "serverTab", void 0);
                 ProjectDetailComponent = __decorate([
                     core_1.Component({
                         selector: 'group-detail',
